@@ -1,0 +1,20 @@
+*{
+    font-family: SFMono-Medium,"SF Mono","Segoe UI Mono","Roboto Mono","Ubuntu Mono",Menlo,Consolas,Courier,monospace;
+
+    color: #494949;
+
+    background-color: #EAE7DC;
+    background-color: #D8C3A5;
+    background-color: #8E8D8A;
+    background-color: #E98074;
+    background-color: #E85A4F;
+}
+
+div.navbar{
+    width: 100vw;
+    height: 150px;
+    position: absolute;
+    top: 0;
+    background-color: #e3e0e0;
+    justify-content: space-between;
+}
