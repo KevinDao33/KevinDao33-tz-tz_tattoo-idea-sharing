@@ -1,4 +1,3 @@
-// globalStyles.js
 import { createGlobalStyle } from 'styled-components';
  
 const GlobalStyle = createGlobalStyle`
@@ -8,7 +7,6 @@ const GlobalStyle = createGlobalStyle`
     background: snow;
     color: #333333;
     font-family: SFMono-Medium,"SF Mono","Segoe UI Mono","Roboto Mono","Ubuntu Mono",Menlo,Consolas,Courier,monospace;
-    // font-size: 3rem;
     box-sizing: border-box;
   }
 `;

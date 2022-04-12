@@ -1,6 +1,9 @@
-import React from "react";
 import styled from "styled-components";
-import chatIcon from "./icon/chat-icon.png";
+
+const NavbarBlank = styled.div`
+  width: 100vw;
+  height: 100px;
+`;
 
 const NavbarWrapper = styled.div`
   width: 100vw;
@@ -25,7 +28,10 @@ const LogoWrapper = styled.div`
 `;
 
 const Searchbar = styled.input`
-  width: calc(100% - 70px - 15px - 20px - 10px - 10px - 20px - 50px - 15px - 15px - 50px - 15px - 15px);
+  width: calc(
+    100% - 70px - 15px - 20px - 10px - 10px - 20px - 50px - 15px - 15px - 50px -
+      15px - 15px
+  );
   height: 50px;
   border-radius: 30px;
   border: 1.5px solid #e3e0e0;
@@ -44,9 +50,6 @@ const Chat = styled.img`
   margin: auto 15px auto 15px;
   cursor: pointer;
 `;
-Chat.defaultProps = {
-  src: chatIcon,
-};
 
 const MemberPictureWrapper = styled.div`
   width: 50px;
@@ -57,19 +60,11 @@ const MemberPictureWrapper = styled.div`
   cursor: pointer;
 `;
 
-function Navbar() {
-  return (
-    <NavbarWrapper>
-      <LogoWrapper />
-      <Searchbar />
-      <Chat />
-      <MemberPictureWrapper />
-    </NavbarWrapper>
-  );
-}
-
-console.log("chatIcon", chatIcon);
-
-export default Navbar;
-
-//font-family-code: SFMono-Medium,"SF Mono","Segoe UI Mono","Roboto Mono","Ubuntu Mono",Menlo,Consolas,Courier,monospace;
+export {
+  NavbarBlank,
+  NavbarWrapper,
+  LogoWrapper,
+  Searchbar,
+  Chat,
+  MemberPictureWrapper,
+};
