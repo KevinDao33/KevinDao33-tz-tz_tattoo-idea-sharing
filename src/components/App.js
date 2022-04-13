@@ -2,6 +2,7 @@ import GlobalStyle from "../styles/globalStyles";
 import Navbar from "./Navbar";
 import Homapage from "./Homapage";
 import Profile from "./Profile";
+import CreateNewPin from "./CreateNewPin";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { initializeApp } from "firebase/app";
@@ -50,12 +51,10 @@ function App() {
   const getPins = async () => {
     const notesSnapshot = await getDocs(collection(db, "pin"));
     const pins = notesSnapshot.docs.map((doc) => doc.data());
-
-    console.log(pins);
     
     return pins;
   };
-  getPins();
+  // getPins();
 
   return (
     <>
@@ -65,6 +64,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Homapage />} />
           <Route path='/profile' element={<Profile />} />
+          <Route path='/create-pin' element={<CreateNewPin />} />
         </Routes>
       </BrowserRouter>
     </>
