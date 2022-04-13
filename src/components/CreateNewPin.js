@@ -3,33 +3,67 @@ import {
   CreateNewPinWrapper,
   PinDataUploadWrapper,
   NewPinDataWrapper,
+  PinImageUploadWrapper,
   NewPinDataTitle,
   NewPinDataInput,
   CreatePinButton,
+  UploadNewPinImageLabel,
+  UploadNewPinImageInput,
 } from "../styles/CreateNewPin.module";
 
 function CreateNewPin() {
+  const [pinName, setPinName] = useState();
+  const [pinDescription, setPinDescription] = useState();
+  const [pinLink, setPinLink] = useState();
+
+  const submitPinData = () => {
+    if (pinName && pinDescription && pinLink) {
+      console.log("pinName", pinName);
+      console.log("pinDescription", pinDescription);
+      console.log("pinLink", pinLink);
+    } else {
+      alert("please check if all fields are filled~");
+    }
+  };
+
   return (
     <CreateNewPinWrapper>
-      <PinDataUploadWrapper></PinDataUploadWrapper>
+      {/* Pin Image */}
+      <PinImageUploadWrapper>
+        <UploadNewPinImageLabel>
+          Upload Pin Image
+          <UploadNewPinImageInput
+            placeholder='Upload your Pin Image'
+            type='file'
+            accept='image/gif, image/jpeg, image/png'></UploadNewPinImageInput>
+        </UploadNewPinImageLabel>
+      </PinImageUploadWrapper>
 
+      {/* Pin Info */}
       <PinDataUploadWrapper>
         <NewPinDataWrapper>
-          {/* <NewPinDataTitle>Pin Name |</NewPinDataTitle> */}
-          <NewPinDataInput placeholder='Enter Pin Name'></NewPinDataInput>
+          <NewPinDataInput
+            placeholder='Enter Pin Name'
+            value={pinName}
+            onChange={(e) => setPinName(e.target.value)}></NewPinDataInput>
         </NewPinDataWrapper>
         <NewPinDataWrapper>
-          {/* <NewPinDataTitle>Pin Descrption |</NewPinDataTitle> */}
-          <NewPinDataInput placeholder='Enter Pin Desc'></NewPinDataInput>
+          <NewPinDataInput
+            placeholder='Enter Pin Desc'
+            value={pinDescription}
+            onChange={(e) =>
+              setPinDescription(e.target.value)
+            }></NewPinDataInput>
         </NewPinDataWrapper>
         <NewPinDataWrapper>
-          {/* <NewPinDataTitle>Pin Link |</NewPinDataTitle> */}
-          <NewPinDataInput placeholder='Enter Pin Link'></NewPinDataInput>
+          <NewPinDataInput
+            placeholder='Enter Pin Link'
+            value={pinLink}
+            onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
         </NewPinDataWrapper>
 
-        <CreatePinButton>Create</CreatePinButton>
+        <CreatePinButton onClick={submitPinData}>Create</CreatePinButton>
       </PinDataUploadWrapper>
-      
     </CreateNewPinWrapper>
   );
 }

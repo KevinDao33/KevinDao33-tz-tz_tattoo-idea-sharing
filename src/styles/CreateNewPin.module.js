@@ -22,6 +22,17 @@ const PinDataUploadWrapper = styled.div`
   align-items: flex-start;
 `;
 
+const PinImageUploadWrapper = styled.div`
+  width: 50%;
+  height: 100%;
+  border: 1px solid red;
+  border-radius: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+`;
+
 const NewPinDataWrapper = styled.div`
   width: 100%;
   border: 1px solid blue;
@@ -67,11 +78,43 @@ const CreatePinButton = styled.button`
   font-size: 1.5rem;
 `;
 
+const UploadNewPinImageLabel = styled.label`
+  width: 90%;
+  min-height: 300px;
+  min-width: 300px;
+  height: 80%;
+  border-radius: 30px;
+  border: none;
+  border-bottom: 1.5px solid #e3e0e0;
+  background-color: white;
+  padding-left: 20px;
+  cursor: copy;
+  margin: 20px 0 0 0;
+  color: lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-filter: drop-shadow(12px 12px 7px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(5px 5px 2px rgba(0, 0, 0, 0.2));
+  font-size: 1.5rem;
+
+  &:hover {
+    color: lightgreen;
+  }
+`;
+
+const UploadNewPinImageInput = styled.input`
+  display: none;
+`;
+
 export {
   CreateNewPinWrapper,
   PinDataUploadWrapper,
   NewPinDataWrapper,
+  PinImageUploadWrapper,
   NewPinDataTitle,
   NewPinDataInput,
   CreatePinButton,
+  UploadNewPinImageLabel,
+  UploadNewPinImageInput,
 };
