@@ -51,8 +51,8 @@ const allPins = [
 ];
 
 function Profile() {
-  const [showSection, setShowSection] = useState(0);
   // 0=> my pin/ 1=> my collection/ 2=> my schedual(artist only)
+  const [showSection, setShowSection] = useState(1);
   const [pins, setPins] = useState(allPins);
 
   const showMyPin = () => {
@@ -63,6 +63,25 @@ function Profile() {
   };
   const showMySchedule = () => {
     setShowSection(2);
+  };
+
+  const RenderUserSection = () => {
+    if (showSection === 0) {
+      return (
+        <AllPinsWrapper>
+          {pins &&
+            pins.map((pin, index) => (
+              <PinWrapper key={index}>
+                <PinImage src={pin.pinImage} />
+              </PinWrapper>
+            ))}
+        </AllPinsWrapper>
+      );
+    } else if (showSection === 1) {
+      return <div>welcome to collection</div>;
+    } else if (showSection === 2) {
+      return <div>welcom to my scheduel</div>;
+    }
   };
 
   return (
@@ -76,7 +95,6 @@ function Profile() {
           <Button>share</Button>
           <Button>edit</Button>
         </ButtonWeapper>
-
         <UserStuffWrapper>
           <ButtonWeapper>
             <SelectSection onClick={showMyPin}>my pin</SelectSection>
@@ -84,20 +102,7 @@ function Profile() {
               my collection
             </SelectSection>
           </ButtonWeapper>
-
-          {showSection === 0 ? (
-            <AllPinsWrapper>
-              {pins &&
-                pins.map((pin, index) => (
-                  <PinWrapper key={index}>
-                    <PinImage src={pin.pinImage} />
-                  </PinWrapper>
-                ))}
-            </AllPinsWrapper>
-          ) : (
-            <div>welcome to collection</div>
-          )}
-          
+          {RenderUserSection()}
         </UserStuffWrapper>
       </PorfileWrapper>
     </>
