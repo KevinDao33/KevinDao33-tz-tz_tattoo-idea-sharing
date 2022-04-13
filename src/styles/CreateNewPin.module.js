@@ -13,13 +13,14 @@ const CreateNewPinWrapper = styled.div`
 
 const PinDataUploadWrapper = styled.div`
   width: 50%;
-  height: 100%;
-  border: 1px solid blue;
+  border: 1px solid green;
   border-radius: 20px;
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 50px;
 `;
 
 const PinImageUploadWrapper = styled.div`
@@ -43,21 +44,13 @@ const NewPinDataWrapper = styled.div`
   align-items: center;
 `;
 
-const NewPinDataTitle = styled.label`
-  font-size: 1rem;
-  font-weight: normal;
-  color: gray;
-  margin: 10px 20px 10px 35px;
-`;
-
 const NewPinDataInput = styled.input`
   width: 100%;
-  max-width: 200px;
   min-width: 90px;
   height: 40px;
-  /* border-radius: 30px; */
+  border-radius: 30px;
   border: none;
-  border-bottom: 1.5px solid #e3e0e0;
+  margin: 20px;
   background-color: white;
   padding-left: 20px;
   cursor: text;
@@ -89,7 +82,7 @@ const UploadNewPinImageLabel = styled.label`
   background-color: white;
   padding-left: 20px;
   cursor: copy;
-  margin: 20px 0 0 0;
+  margin: 20px auto 0 auto;
   color: lightgray;
   display: flex;
   align-items: center;
@@ -97,6 +90,7 @@ const UploadNewPinImageLabel = styled.label`
   -webkit-filter: drop-shadow(12px 12px 7px rgba(0, 0, 0, 0.2));
   filter: drop-shadow(5px 5px 2px rgba(0, 0, 0, 0.2));
   font-size: 1.5rem;
+  position: relative;
 
   &:hover {
     color: lightgreen;
@@ -107,14 +101,25 @@ const UploadNewPinImageInput = styled.input`
   display: none;
 `;
 
+const PreviewImage = styled.img`
+  width: 90%;
+  min-width: 250px;
+  border-radius: 30px;
+  border: none;
+  margin: 20px auto 0 auto;
+  font-size: 1.5rem;
+  position: absolute;
+  top: 0;
+`;
+
 export {
   CreateNewPinWrapper,
   PinDataUploadWrapper,
   NewPinDataWrapper,
   PinImageUploadWrapper,
-  NewPinDataTitle,
   NewPinDataInput,
   CreatePinButton,
   UploadNewPinImageLabel,
   UploadNewPinImageInput,
+  PreviewImage,
 };

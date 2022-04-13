@@ -8,12 +8,15 @@ import {
   CreatePinButton,
   UploadNewPinImageLabel,
   UploadNewPinImageInput,
+  PreviewImage,
 } from "../styles/CreateNewPin.module";
 
 function CreateNewPin() {
   const [pinName, setPinName] = useState();
   const [pinDescription, setPinDescription] = useState();
   const [pinLink, setPinLink] = useState();
+  const [selectedFile, setSelectedFile] = useState();
+  const [preview, setPreview] = useState();
 
   const submitPinData = () => {
     if (!pinName || !pinDescription || !pinLink) {
@@ -27,6 +30,30 @@ function CreateNewPin() {
     console.log("pinLink", pinLink);
   };
 
+  // create a preview as a side effect, whenever selected file is changed
+  useEffect(() => {
+    if (!selectedFile) {
+      setPreview(undefined);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(selectedFile);
+    setPreview(objectUrl);
+
+    // prevent memory leak
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedFile]);
+
+  const onSelectFile = (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedFile(undefined);
+      return;
+    }
+
+    // I've kept this example simple by using the first image instead of multiple
+    setSelectedFile(e.target.files[0]);
+  };
+
   return (
     <CreateNewPinWrapper>
       {/* Pin Image */}
@@ -36,7 +63,9 @@ function CreateNewPin() {
           <UploadNewPinImageInput
             placeholder='Upload your Pin Image'
             type='file'
-            accept='image/gif, image/jpeg, image/png'></UploadNewPinImageInput>
+            accept='image/gif, image/jpeg, image/png, image/webp'
+            onChange={onSelectFile}></UploadNewPinImageInput>
+          {selectedFile && <PreviewImage src={preview} />}
         </UploadNewPinImageLabel>
       </PinImageUploadWrapper>
 
