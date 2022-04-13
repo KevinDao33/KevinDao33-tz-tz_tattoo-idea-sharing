@@ -61,13 +61,39 @@ const SelectSection = styled.p`
 `;
 
 const UserPin = styled.div`
-  border: 1px solid green;
   display: flex;
   flex-wrap: wrap;
   width: 100%;
   justify-content: flex-start;
   height: auto;
   min-height: 300px;
+`;
+
+const CollectionWarpper = styled.div`
+  width: 200px;
+  height: 270px;
+  border: 1px solid orange;
+  border-radius: 20px;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content:center; */
+  align-items: center;
+`;
+
+const CollectionImage = styled.div`
+  background-color: lightblue;
+  width: 200px;
+  height: 200px;
+  margin: 0 0 10px 0;
+  border-radius: 20px;
+`;
+
+const CollectionName = styled.h3`
+  color: gray;
+  font-size: 1.3rem;
+  text-align: center;
+  margin: 5px auto
 `;
 
 export {
@@ -80,4 +106,7 @@ export {
   UserStuffWrapper,
   SelectSection,
   UserPin,
+  CollectionWarpper,
+  CollectionImage,
+  CollectionName
 };

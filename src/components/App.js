@@ -29,6 +29,7 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
 };
 
+
 function App() {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore();
@@ -38,6 +39,7 @@ function App() {
   const getUser = async (id) => {
     const user = await getDoc(doc(db, "user", id));
     if (user.exists()) {
+   
       return user.data();
     } else {
       console.error("Note doesn't exist");

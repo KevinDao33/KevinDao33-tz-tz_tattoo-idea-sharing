@@ -9,6 +9,9 @@ import {
   UserStuffWrapper,
   SelectSection,
   UserPin,
+  CollectionWarpper,
+  CollectionImage,
+  CollectionName
 } from "../styles/Profile.module";
 import {
   AllPinsWrapper,
@@ -78,9 +81,16 @@ function Profile() {
         </AllPinsWrapper>
       );
     } else if (showSection === 1) {
-      return <div>welcome to collection</div>;
+      return (
+        <CollectionWarpper>
+        <CollectionImage></CollectionImage>
+        <CollectionName>arm ideas</CollectionName>
+        </CollectionWarpper>
+      );
     } else if (showSection === 2) {
-      return <div>welcom to my scheduel</div>;
+      return( 
+        <div>welcom to my scheduel</div>
+      );
     }
   };
 
