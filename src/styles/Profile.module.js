@@ -69,6 +69,14 @@ const UserPin = styled.div`
   min-height: 300px;
 `;
 
+const ALlCollectionsWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  border: 1px solid blue;
+  height: auto;
+`;
+
 const CollectionWarpper = styled.div`
   width: 200px;
   height: 270px;
@@ -93,7 +101,7 @@ const CollectionName = styled.h3`
   color: gray;
   font-size: 1.3rem;
   text-align: center;
-  margin: 5px auto
+  margin: 5px auto;
 `;
 
 export {
@@ -106,7 +114,8 @@ export {
   UserStuffWrapper,
   SelectSection,
   UserPin,
+  ALlCollectionsWrapper,
   CollectionWarpper,
   CollectionImage,
-  CollectionName
+  CollectionName,
 };

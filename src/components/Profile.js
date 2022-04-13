@@ -9,9 +9,10 @@ import {
   UserStuffWrapper,
   SelectSection,
   UserPin,
+  ALlCollectionsWrapper,
   CollectionWarpper,
   CollectionImage,
-  CollectionName
+  CollectionName,
 } from "../styles/Profile.module";
 import {
   AllPinsWrapper,
@@ -53,10 +54,32 @@ const allPins = [
   { pinImage: duck },
 ];
 
+const allCollectionList = [
+  {
+    arm: [
+      { pinId: "idididid", pinName: "Chicken", pinImageLink: "imageLink" },
+      { pinId: "ididi222", pinName: "Bear", pinImageLink: "imageLink222" },
+    ],
+  },
+  {
+    back: [
+      { pinId: "ididi333", pinName: "Wolf", pinImageLink: "imageLink333" },
+      { pinId: "ididi444", pinName: "Frog", pinImageLink: "imageLink444" },
+    ],
+  },
+  {
+    vintage: [
+      { pinId: "ididi555", pinName: "Tree", pinImageLink: "imageLink555" },
+      { pinId: "ididi666", pinName: "Flower", pinImageLink: "imageLink666" },
+    ],
+  },
+];
+
 function Profile() {
   // 0=> my pin/ 1=> my collection/ 2=> my schedual(artist only)
   const [showSection, setShowSection] = useState(1);
   const [pins, setPins] = useState(allPins);
+  const [collectionList, setCollectionList] = useState(allCollectionList);
 
   const showMyPin = () => {
     setShowSection(0);
@@ -82,15 +105,18 @@ function Profile() {
       );
     } else if (showSection === 1) {
       return (
-        <CollectionWarpper>
-        <CollectionImage></CollectionImage>
-        <CollectionName>arm ideas</CollectionName>
-        </CollectionWarpper>
+        <ALlCollectionsWrapper>
+          {collectionList &&
+            collectionList.map((collection, index) => (
+              <CollectionWarpper key={index}>
+                <CollectionImage></CollectionImage>
+                <CollectionName>{Object.keys(collection)}</CollectionName>
+              </CollectionWarpper>
+            ))}
+        </ALlCollectionsWrapper>
       );
     } else if (showSection === 2) {
-      return( 
-        <div>welcom to my scheduel</div>
-      );
+      return <div>welcom to my scheduel</div>;
     }
   };
 

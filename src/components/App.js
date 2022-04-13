@@ -51,9 +51,11 @@ function App() {
     const notesSnapshot = await getDocs(collection(db, "pin"));
     const pins = notesSnapshot.docs.map((doc) => doc.data());
 
+    console.log(pins);
+    
     return pins;
   };
-  // getPins();
+  getPins();
 
   return (
     <>
