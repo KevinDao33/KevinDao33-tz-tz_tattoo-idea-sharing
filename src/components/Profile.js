@@ -8,7 +8,11 @@ import {
   Button,
   UserStuffWrapper,
   SelectSection,
+<<<<<<< HEAD
   AllCollectionsWrapper,
+=======
+  ALlCollectionsWrapper,
+>>>>>>> 4a491e7 (complete an easy sign-in and sign-up page/ successfully GET pin-image-url from firebase storage after modifying its rules)
   CollectionWarpper,
   CollectionImage,
   CollectionName,

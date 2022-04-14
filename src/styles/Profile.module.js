@@ -60,7 +60,11 @@ const SelectSection = styled.p`
   border-bottom: 1px solid gray;
 `;
 
+<<<<<<< HEAD
 const AllCollectionsWrapper = styled.div`
+=======
+const ALlCollectionsWrapper = styled.div`
+>>>>>>> 4a491e7 (complete an easy sign-in and sign-up page/ successfully GET pin-image-url from firebase storage after modifying its rules)
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -104,7 +108,11 @@ export {
   Button,
   UserStuffWrapper,
   SelectSection,
+<<<<<<< HEAD
   AllCollectionsWrapper,
+=======
+  ALlCollectionsWrapper,
+>>>>>>> 4a491e7 (complete an easy sign-in and sign-up page/ successfully GET pin-image-url from firebase storage after modifying its rules)
   CollectionWarpper,
   CollectionImage,
   CollectionName,
