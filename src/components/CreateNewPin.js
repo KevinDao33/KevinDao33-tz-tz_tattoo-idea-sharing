@@ -82,6 +82,14 @@ function CreateNewPin() {
     console.log("pinLink", pinLink);
   };
 
+  const getPinImageUrl = () => {
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);   
+    getDownloadURL(ref(storage, "pinImages/leaf.png")).then((url) => {
+      console.log("url", url);
+    });
+  };
+
   useEffect(() => {
     if (!selectedFile) {
       setPreview(undefined);
@@ -139,6 +147,7 @@ function CreateNewPin() {
           }}>
           Create
         </CreatePinButton>
+        <button onClick={()=>{getPinImageUrl()}}>GET URL</button>
       </PinDataUploadWrapper>
     </CreateNewPinWrapper>
   );
