@@ -33,6 +33,47 @@ function CreateNewPin() {
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
 
+  async function handleImageUpload(e) {
+    const imageFile = e.target.files[0];
+    console.log("test");
+
+    // show image preview
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedFile(undefined);
+      return;
+    }
+    setSelectedFile(imageFile);
+
+    // compress image
+    console.log(`original size ${imageFile.size / 1024 / 1024} MB`);
+
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+    try {
+      const compressedFile = await imageCompression(imageFile, options);
+      console.log(`compressed size ${compressedFile.size / 1024 / 1024} MB`);
+
+      // convert pinImage from Blob to string and store in localStorage
+
+      console.log("compressedFile", compressedFile);
+
+      const reader = new FileReader();
+
+      reader.onload = (compressedFile) => {
+        localStorage.setItem("pinImage", compressedFile);
+      };
+
+      reader.readAsDataURL(compressedFile);
+      const convertedToSrting = localStorage.getItem("pinImage");
+      setPinImage(convertedToSrting);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const submitPinData = () => {
     if (!pinName || !pinDescription || !pinLink) {
       alert("please check if all fields are filled~");
@@ -66,42 +107,6 @@ function CreateNewPin() {
   //   const imageFile = e.target.files[0];
   //   setSelectedFile(imageFile);
   // };
-
-  async function handleImageUpload(e) {
-    const imageFile = e.target.files[0];
-    console.log('test');
-    
-    // show image preview
-    if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFile(undefined);
-      return;
-    }
-    setSelectedFile(imageFile);
-
-    // compress image
-    console.log(`original size ${imageFile.size / 1024 / 1024} MB`);
-
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-    };
-    try {
-      const compressedFile = await imageCompression(imageFile, options);
-      console.log(
-        `compressed size ${compressedFile.size / 1024 / 1024} MB`
-      ); 
-      
-      // await uploadToServer(compressedFile); // write your own logic
-
-      // setPinImage(compressedFile);
-      console.log('compressedFile', compressedFile);
-      
-
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore();
