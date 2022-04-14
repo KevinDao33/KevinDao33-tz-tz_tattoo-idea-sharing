@@ -30,12 +30,12 @@ function CreateNewPin() {
   const [pinDescription, setPinDescription] = useState();
   const [pinLink, setPinLink] = useState();
   const [pinImage, setPinImage] = useState();
+  const [isGetPinImage, setIsGetPinImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
 
   async function handleImageUpload(e) {
     const imageFile = e.target.files[0];
-    console.log("test");
 
     // show image preview
     if (!e.target.files || e.target.files.length === 0) {
@@ -57,18 +57,14 @@ function CreateNewPin() {
       console.log(`compressed size ${compressedFile.size / 1024 / 1024} MB`);
 
       // convert pinImage from Blob to string and store in localStorage
-
-      console.log("compressedFile", compressedFile);
+      // console.log("compressedFile", compressedFile);
 
       const reader = new FileReader();
-
-      reader.onload = (compressedFile) => {
-        localStorage.setItem("pinImage", compressedFile);
+      reader.onload = (event) => {
+        localStorage.setItem("uploadedImage", event.target.result);
       };
-
       reader.readAsDataURL(compressedFile);
-      const convertedToSrting = localStorage.getItem("pinImage");
-      setPinImage(convertedToSrting);
+      setIsGetPinImage(true);
     } catch (error) {
       console.log(error);
     }
@@ -98,39 +94,6 @@ function CreateNewPin() {
     // prevent memory leak
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
-
-  // const onSelectFile = (e) => {
-  //   if (!e.target.files || e.target.files.length === 0) {
-  //     setSelectedFile(undefined);
-  //     return;
-  //   }
-  //   const imageFile = e.target.files[0];
-  //   setSelectedFile(imageFile);
-  // };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore();
-
-  const getUser = async (id) => {
-    const user = await getDoc(doc(db, "user", id));
-    if (user.exists()) {
-      console.log("userData", user.data());
-
-      return user.data();
-    } else {
-      console.error("Note doesn't exist");
-    }
-  };
-  // getUser("M49BbsijmzC2W5TxBbg2");
-
-  const getPins = async () => {
-    const notesSnapshot = await getDocs(collection(db, "pin"));
-    const pins = notesSnapshot.docs.map((doc) => doc.data());
-    console.log("pins", pins);
-
-    return pins;
-  };
-  // getPins();
 
   return (
     <CreateNewPinWrapper>
@@ -170,7 +133,12 @@ function CreateNewPin() {
             onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
         </NewPinDataWrapper>
 
-        <CreatePinButton onClick={submitPinData}>Create</CreatePinButton>
+        <CreatePinButton
+          onClick={() => {
+            submitPinData(dataURItoBlob);
+          }}>
+          Create
+        </CreatePinButton>
       </PinDataUploadWrapper>
     </CreateNewPinWrapper>
   );
