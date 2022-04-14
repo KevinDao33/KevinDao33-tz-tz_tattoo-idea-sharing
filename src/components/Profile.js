@@ -15,6 +15,7 @@ import {
 } from "../styles/Profile.module";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
 
+
 import chicken from "../test-images/chicken.jpg";
 import kitty from "../test-images/kitty.jpg";
 import wolf from "../test-images/wolf.jpg";
@@ -69,6 +70,7 @@ const mockAllCollections = [
     ],
   },
 ];
+
 
 function Profile() {
   // myPin/ myCollection/ mySchedule(artist only)

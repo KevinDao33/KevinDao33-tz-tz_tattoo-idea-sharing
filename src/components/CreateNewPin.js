@@ -10,11 +10,26 @@ import {
   UploadNewPinImageInput,
   PreviewImage,
 } from "../styles/CreateNewPin.module";
+import imageCompression from "browser-image-compression";
+import MultiDownshift from "./MultiTagSelection";
+import { matchSorter } from "match-sorter";
+import glamorous, { Div } from "glamorous";
+
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
+  appId: process.env.REACT_APP_FIREBASE_APPID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
+};
 
 function CreateNewPin() {
   const [pinName, setPinName] = useState();
   const [pinDescription, setPinDescription] = useState();
   const [pinLink, setPinLink] = useState();
+  const [pinImage, setPinImage] = useState();
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
 
@@ -30,7 +45,6 @@ function CreateNewPin() {
     console.log("pinLink", pinLink);
   };
 
-  // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
     if (!selectedFile) {
       setPreview(undefined);
@@ -44,15 +58,74 @@ function CreateNewPin() {
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
-  const onSelectFile = (e) => {
+  // const onSelectFile = (e) => {
+  //   if (!e.target.files || e.target.files.length === 0) {
+  //     setSelectedFile(undefined);
+  //     return;
+  //   }
+  //   const imageFile = e.target.files[0];
+  //   setSelectedFile(imageFile);
+  // };
+
+  async function handleImageUpload(e) {
+    const imageFile = e.target.files[0];
+    console.log('test');
+    
+    // show image preview
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
       return;
     }
+    setSelectedFile(imageFile);
 
-    // I've kept this example simple by using the first image instead of multiple
-    setSelectedFile(e.target.files[0]);
+    // compress image
+    console.log(`original size ${imageFile.size / 1024 / 1024} MB`);
+
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+    try {
+      const compressedFile = await imageCompression(imageFile, options);
+      console.log(
+        `compressed size ${compressedFile.size / 1024 / 1024} MB`
+      ); 
+      
+      // await uploadToServer(compressedFile); // write your own logic
+
+      // setPinImage(compressedFile);
+      console.log('compressedFile', compressedFile);
+      
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore();
+
+  const getUser = async (id) => {
+    const user = await getDoc(doc(db, "user", id));
+    if (user.exists()) {
+      console.log("userData", user.data());
+
+      return user.data();
+    } else {
+      console.error("Note doesn't exist");
+    }
   };
+  // getUser("M49BbsijmzC2W5TxBbg2");
+
+  const getPins = async () => {
+    const notesSnapshot = await getDocs(collection(db, "pin"));
+    const pins = notesSnapshot.docs.map((doc) => doc.data());
+    console.log("pins", pins);
+
+    return pins;
+  };
+  // getPins();
 
   return (
     <CreateNewPinWrapper>
@@ -64,7 +137,7 @@ function CreateNewPin() {
             placeholder='Upload your Pin Image'
             type='file'
             accept='image/gif, image/jpeg, image/png, image/webp'
-            onChange={onSelectFile}></UploadNewPinImageInput>
+            onChange={handleImageUpload}></UploadNewPinImageInput>
           {selectedFile && <PreviewImage src={preview} />}
         </UploadNewPinImageLabel>
       </PinImageUploadWrapper>
