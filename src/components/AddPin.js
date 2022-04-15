@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import chicken from "../test-images/chicken.jpg";
 import {
   Overlay,
@@ -14,8 +14,14 @@ import {
   NameNewCollection,
 } from "../styles/AddPin.module";
 
-const Allcollections = ["arm ideas", "back ideas", "black & white", "vintage", "dootwork", "others"]
-
+const Allcollections = [
+  "arm ideas",
+  "back ideas",
+  "black & white",
+  "vintage",
+  "dootwork",
+  "others",
+];
 
 function AddPin(props) {
   const [collections, setCollections] = useState(Allcollections);
@@ -38,7 +44,6 @@ function AddPin(props) {
               <SaveButton>save</SaveButton>
             </AddToCollection>
           ))}
-
       </AddPinOptions>
 
       <CreateCollectionWrapper>

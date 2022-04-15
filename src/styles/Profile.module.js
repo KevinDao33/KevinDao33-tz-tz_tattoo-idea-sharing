@@ -29,7 +29,7 @@ const ShowFollow = styled.p`
   margin: 2px auto;
 `;
 
-const ButtonWeapper = styled.div`
+const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
   margin: 10px auto;
@@ -60,16 +60,7 @@ const SelectSection = styled.p`
   border-bottom: 1px solid gray;
 `;
 
-const UserPin = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  justify-content: flex-start;
-  height: auto;
-  min-height: 300px;
-`;
-
-const ALlCollectionsWrapper = styled.div`
+const AllCollectionsWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
@@ -109,12 +100,11 @@ export {
   UserImage,
   UserName,
   ShowFollow,
-  ButtonWeapper,
+  ButtonWrapper,
   Button,
   UserStuffWrapper,
   SelectSection,
-  UserPin,
-  ALlCollectionsWrapper,
+  AllCollectionsWrapper,
   CollectionWarpper,
   CollectionImage,
   CollectionName,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
   CreateNewPinWrapper,
   PinDataUploadWrapper,
@@ -17,13 +17,14 @@ function CreateNewPin() {
   const [pinLink, setPinLink] = useState();
 
   const submitPinData = () => {
-    if (pinName && pinDescription && pinLink) {
-      console.log("pinName", pinName);
-      console.log("pinDescription", pinDescription);
-      console.log("pinLink", pinLink);
-    } else {
+    if (!pinName || !pinDescription || !pinLink) {
       alert("please check if all fields are filled~");
+      return;
     }
+    // here's the pin-data that will be upload to firebase
+    console.log("pinName", pinName);
+    console.log("pinDescription", pinDescription);
+    console.log("pinLink", pinLink);
   };
 
   return (

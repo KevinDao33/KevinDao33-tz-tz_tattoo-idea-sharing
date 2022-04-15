@@ -1,24 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
   PorfileWrapper,
   UserImage,
   UserName,
   ShowFollow,
-  ButtonWeapper,
+  ButtonWrapper,
   Button,
   UserStuffWrapper,
   SelectSection,
-  UserPin,
-  ALlCollectionsWrapper,
+  AllCollectionsWrapper,
   CollectionWarpper,
   CollectionImage,
   CollectionName,
 } from "../styles/Profile.module";
-import {
-  AllPinsWrapper,
-  PinWrapper,
-  PinImage,
-} from "../styles/Homepage.module";
+import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
 
 import chicken from "../test-images/chicken.jpg";
 import kitty from "../test-images/kitty.jpg";
@@ -37,62 +32,66 @@ import skateboard from "../test-images/skateboard.jpg";
 import duck from "../test-images/duck.jpg";
 
 const allPins = [
-  { pinImage: chicken },
-  { pinImage: kitty },
-  { pinImage: wolf },
-  { pinImage: flower },
-  { pinImage: bear },
-  { pinImage: cherry },
-  { pinImage: death },
-  { pinImage: frog },
-  { pinImage: guitarfrog },
-  { pinImage: hands },
-  { pinImage: raccoon },
-  { pinImage: trex },
-  { pinImage: uglyflower },
-  { pinImage: skateboard },
-  { pinImage: duck },
+  {pinImage: chicken},
+  {pinImage: kitty},
+  {pinImage: wolf},
+  {pinImage: flower},
+  {pinImage: bear},
+  {pinImage: cherry},
+  {pinImage: death},
+  {pinImage: frog},
+  {pinImage: guitarfrog},
+  {pinImage: hands},
+  {pinImage: raccoon},
+  {pinImage: trex},
+  {pinImage: uglyflower},
+  {pinImage: skateboard},
+  {pinImage: duck},
 ];
 
-const allCollectionList = [
+const allCollectionsList = [
   {
     arm: [
-      { pinId: "idididid", pinName: "Chicken", pinImageLink: "imageLink" },
-      { pinId: "ididi222", pinName: "Bear", pinImageLink: "imageLink222" },
+      {pinId: "idididid", pinName: "Chicken", pinImageLink: "imageLink"},
+      {pinId: "ididi222", pinName: "Bear", pinImageLink: "imageLink222"},
     ],
   },
   {
     back: [
-      { pinId: "ididi333", pinName: "Wolf", pinImageLink: "imageLink333" },
-      { pinId: "ididi444", pinName: "Frog", pinImageLink: "imageLink444" },
+      {pinId: "ididi333", pinName: "Wolf", pinImageLink: "imageLink333"},
+      {pinId: "ididi444", pinName: "Frog", pinImageLink: "imageLink444"},
     ],
   },
   {
     vintage: [
-      { pinId: "ididi555", pinName: "Tree", pinImageLink: "imageLink555" },
-      { pinId: "ididi666", pinName: "Flower", pinImageLink: "imageLink666" },
+      {pinId: "ididi555", pinName: "Tree", pinImageLink: "imageLink555"},
+      {pinId: "ididi666", pinName: "Flower", pinImageLink: "imageLink666"},
     ],
   },
 ];
 
 function Profile() {
-  // 0=> my pin/ 1=> my collection/ 2=> my schedual(artist only)
-  const [showSection, setShowSection] = useState(1);
+  // myPin/ myCollection/ mySchedule(artist only)
+  const MY_PIN = "myPin";
+  const MY_COLLECTION = "myCollection";
+  const MY_SCHEDULE = "mySchedule";
+
+  const [showSection, setShowSection] = useState(MY_COLLECTION);
   const [pins, setPins] = useState(allPins);
-  const [collectionList, setCollectionList] = useState(allCollectionList);
+  const [collectionList, setCollectionList] = useState(allCollectionsList);
 
   const showMyPin = () => {
-    setShowSection(0);
+    setShowSection(MY_PIN);
   };
   const showMyCollection = () => {
-    setShowSection(1);
+    setShowSection(MY_COLLECTION);
   };
   const showMySchedule = () => {
-    setShowSection(2);
+    setShowSection(MY_SCHEDULE);
   };
 
-  const RenderUserSection = () => {
-    if (showSection === 0) {
+  const renderUserSection = () => {
+    if (showSection === MY_PIN) {
       return (
         <AllPinsWrapper>
           {pins &&
@@ -103,9 +102,9 @@ function Profile() {
             ))}
         </AllPinsWrapper>
       );
-    } else if (showSection === 1) {
+    } else if (showSection === MY_COLLECTION) {
       return (
-        <ALlCollectionsWrapper>
+        <AllCollectionsWrapper>
           {collectionList &&
             collectionList.map((collection, index) => (
               <CollectionWarpper key={index}>
@@ -113,35 +112,33 @@ function Profile() {
                 <CollectionName>{Object.keys(collection)}</CollectionName>
               </CollectionWarpper>
             ))}
-        </ALlCollectionsWrapper>
+        </AllCollectionsWrapper>
       );
-    } else if (showSection === 2) {
-      return <div>welcom to my scheduel</div>;
+    } else if (showSection === MY_SCHEDULE) {
+      return <div>welcome to my schedule</div>;
     }
   };
 
   return (
-    <>
-      <PorfileWrapper>
-        <UserImage></UserImage>
-        <UserName>Kevin Dao</UserName>
-        <ShowFollow>{2} following</ShowFollow>
-        <ShowFollow>{5} follower</ShowFollow>
-        <ButtonWeapper>
-          <Button>share</Button>
-          <Button>edit</Button>
-        </ButtonWeapper>
-        <UserStuffWrapper>
-          <ButtonWeapper>
-            <SelectSection onClick={showMyPin}>my pin</SelectSection>
-            <SelectSection onClick={showMyCollection}>
-              my collection
-            </SelectSection>
-          </ButtonWeapper>
-          {RenderUserSection()}
-        </UserStuffWrapper>
-      </PorfileWrapper>
-    </>
+    <PorfileWrapper>
+      <UserImage></UserImage>
+      <UserName>Kevin Dao</UserName>
+      <ShowFollow>{2} following</ShowFollow>
+      <ShowFollow>{5} follower</ShowFollow>
+      <ButtonWrapper>
+        <Button>share</Button>
+        <Button>edit</Button>
+      </ButtonWrapper>
+      <UserStuffWrapper>
+        <ButtonWrapper>
+          <SelectSection onClick={showMyPin}>my pin</SelectSection>
+          <SelectSection onClick={showMyCollection}>
+            my collection
+          </SelectSection>
+        </ButtonWrapper>
+        {renderUserSection()}
+      </UserStuffWrapper>
+    </PorfileWrapper>
   );
 }
 

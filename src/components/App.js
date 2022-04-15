@@ -3,10 +3,10 @@ import Navbar from "./Navbar";
 import Homapage from "./Homapage";
 import Profile from "./Profile";
 import CreateNewPin from "./CreateNewPin";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 
-import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage";
+import {initializeApp} from "firebase/app";
+import {getStorage} from "firebase/storage";
 import {
   getFirestore,
   collection,
@@ -30,7 +30,6 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
 };
 
-
 function App() {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore();
@@ -39,35 +38,33 @@ function App() {
   // will be used later when developing functions
   const getUser = async (id) => {
     const user = await getDoc(doc(db, "user", id));
-    if (user.exists()) {
-   
-      return user.data();
-    } else {
+    if (!user.exists()) {
       console.error("Note doesn't exist");
+      return;
     }
+
+    return user.data();
   };
   // getUser("M49BbsijmzC2W5TxBbg2");
 
   const getPins = async () => {
     const notesSnapshot = await getDocs(collection(db, "pin"));
     const pins = notesSnapshot.docs.map((doc) => doc.data());
-    
+
     return pins;
   };
   // getPins();
 
   return (
-    <>
-      <BrowserRouter>
-        <GlobalStyle />
-        <Navbar />
-        <Routes>
-          <Route path='/' element={<Homapage />} />
-          <Route path='/profile' element={<Profile />} />
-          <Route path='/create-pin' element={<CreateNewPin />} />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <GlobalStyle />
+      <Navbar />
+      <Routes>
+        <Route path='/' element={<Homapage />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/create-pin' element={<CreateNewPin />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
