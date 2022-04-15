@@ -4,12 +4,12 @@ import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {
   getAuth,
-  onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import {getDatabase, ref, set, onValue, child, get} from "firebase/database";
+import {Button} from "../styles/Profile.module";
+import {getDatabase, ref, set, child, get} from "firebase/database";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -38,6 +38,10 @@ const LoginWrapper = styled.div`
 `;
 
 function Login(props) {
+  const SIGN_IN = "sign_in";
+  const SIGN_UP = "sign_up";
+
+  const [isShowSignWhat, setIsShowSignWhat] = useState();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
@@ -45,11 +49,18 @@ function Login(props) {
 
   const redirect = useNavigate();
 
-  function signUp() {
+  const showSingIn = () => {
+    setIsShowSignWhat(SIGN_IN);
+  };
+
+  const showSingUp = () => {
+    setIsShowSignWhat(SIGN_UP);
+  };
+
+  const signUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        props.setLogin(true);
         console.log("hi", "user", user);
         writeUserData(user.uid);
       })
@@ -58,7 +69,6 @@ function Login(props) {
         const errorMessage = error.message;
         console.log("errorCode", errorCode);
         console.log("errorMessage", errorMessage);
-        props.setLogin(false);
 
         switch (errorCode) {
           case "auth/wrong-password":
@@ -70,18 +80,16 @@ function Login(props) {
           case "auth/weak-password":
             alert("密碼需至少六碼喔");
             break;
-
           default:
             alert("登入失敗QQ");
         }
       });
-  }
+  };
 
-  function signIn() {
+  const signIn = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        props.setLogin(true);
         console.log("hi", "user", user);
         getUserData(user.uid);
       })
@@ -90,7 +98,6 @@ function Login(props) {
         const errorMessage = error.message;
         console.log("errorCode", errorCode);
         console.log("errorMessage", errorMessage);
-        props.setLogin(false);
 
         switch (errorCode) {
           case "auth/wrong-password":
@@ -104,26 +111,18 @@ function Login(props) {
             alert("登入失敗QQ");
         }
       });
-  }
+  };
 
-  function logOut() {
-    signOut(auth)
-      .then(() => {
-        props.setLogin(false);
-      })
-      .catch((error) => {});
-  }
-
-  function writeUserData(userId) {
+  const writeUserData = (userId) => {
     const db = getDatabase();
     set(ref(db, "users/" + userId), {
       email: email,
-      password: password
+      password: password,
     });
     console.log("data written to database");
-  }
+  };
 
-  function getUserData(userId) {
+  const getUserData = (userId) => {
     const dbRef = ref(getDatabase());
     get(child(dbRef, `users/${userId}`))
       .then((snapshot) => {
@@ -136,13 +135,34 @@ function Login(props) {
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   return (
     <LoginWrapper>
-      {/* {props.login === true ? (
-        <button onClick={logOut}>Logout</button>
-      ) : ( */}
+      <Button onClick={showSingIn}>Sign In</Button>
+      <Button onClick={showSingUp}>Sign Up</Button>
+      {isShowSignWhat === SIGN_IN && (
+        <>
+          <label>email</label>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}></input>
+
+          <label>password</label>
+          <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}></input>
+
+          <button
+            onClick={async () => {
+              signIn();
+              props.login && redirect("/profile");
+            }}>
+            Sign In
+          </button>
+        </>
+      )}
+      {isShowSignWhat === SIGN_UP && (
         <>
           <label>name</label>
           <input
@@ -168,20 +188,13 @@ function Login(props) {
 
           <button
             onClick={async () => {
-              signIn();
-              props.login && redirect("/personal");
-            }}>
-            Login
-          </button>
-          <button
-            onClick={async () => {
               signUp();
-              props.login && redirect("/personal");
+              props.login && redirect("/profile");
             }}>
-            SignUp
+            Sign Up
           </button>
         </>
-      {/* )} */}
+      )}
     </LoginWrapper>
   );
 }
