@@ -12,8 +12,8 @@ import {
 } from "../styles/CreateNewPin.module";
 import imageCompression from "browser-image-compression";
 import MultiDownshift from "./MultiTagSelection";
-import { matchSorter } from "match-sorter";
-import glamorous, { Div } from "glamorous";
+import {matchSorter} from "match-sorter";
+import glamorous, {Div} from "glamorous";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -46,6 +46,8 @@ function CreateNewPin() {
 
     // compress image
     console.log(`original size ${imageFile.size / 1024 / 1024} MB`);
+    const imageName = imageFile.name.split(".");
+    localStorage.setItem("uploadedImageName", imageName[0]);
 
     const options = {
       maxSizeMB: 1,
@@ -57,8 +59,6 @@ function CreateNewPin() {
       console.log(`compressed size ${compressedFile.size / 1024 / 1024} MB`);
 
       // convert pinImage from Blob to string and store in localStorage
-      // console.log("compressedFile", compressedFile);
-
       const reader = new FileReader();
       reader.onload = (event) => {
         localStorage.setItem("uploadedImage", event.target.result);
@@ -82,11 +82,11 @@ function CreateNewPin() {
     console.log("pinLink", pinLink);
   };
 
-  const getPinImageUrl = () => {
+  const getPinImageUrl = (name) => {
     const app = initializeApp(firebaseConfig);
-    const storage = getStorage(app);   
-    getDownloadURL(ref(storage, "pinImages/leaf.png")).then((url) => {
-      console.log("url", url);
+    const storage = getStorage(app);
+    getDownloadURL(ref(storage, `pinImages/${name}`)).then((url) => {
+      setPinImage(url);
     });
   };
 
@@ -103,6 +103,23 @@ function CreateNewPin() {
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
+  async function testUpload() {
+    const uploadedImage = localStorage.getItem("uploadedImage");
+    const uploadedImageName = localStorage.getItem("uploadedImageName");
+    const result = dataURLtoBlob(uploadedImage);
+    const storage = getStorage();
+    const storageRef = ref(storage, `pinImages/${uploadedImageName}`);
+
+    try {
+      uploadBytes(storageRef, result).then((snapshot) => {
+        console.log("Uploaded image to firebase storage!");
+        getPinImageUrl(uploadedImageName);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <CreateNewPinWrapper>
       {/* Pin Image */}
@@ -116,6 +133,12 @@ function CreateNewPin() {
             onChange={handleImageUpload}></UploadNewPinImageInput>
           {selectedFile && <PreviewImage src={preview} />}
         </UploadNewPinImageLabel>
+        <CreatePinButton
+          onClick={() => {
+            testUpload();
+          }}>
+          Check Image
+        </CreatePinButton>
       </PinImageUploadWrapper>
 
       {/* Pin Info */}
@@ -143,11 +166,10 @@ function CreateNewPin() {
 
         <CreatePinButton
           onClick={() => {
-            submitPinData(dataURItoBlob);
+            submitPinData(dataURLtoBlob);
           }}>
           Create
         </CreatePinButton>
-        <button onClick={()=>{getPinImageUrl()}}>GET URL</button>
       </PinDataUploadWrapper>
     </CreateNewPinWrapper>
   );

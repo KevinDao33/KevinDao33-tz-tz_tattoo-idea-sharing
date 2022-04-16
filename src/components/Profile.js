@@ -1,18 +1,4 @@
 import React, {useState, useEffect} from "react";
-<<<<<<< HEAD
-=======
-import Login from "./Login";
-import {initializeApp} from "firebase/app";
-import {
-  getAuth,
-  onAuthStateChanged,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
-import {getDatabase, ref, set, onValue, child, get} from "firebase/database";
-
->>>>>>> 4452b56 (add name, photo input field at login-page/ direct to login-pgae if not login, to profile-page if login)
 import {
   PorfileWrapper,
   UserImage,
@@ -22,20 +8,12 @@ import {
   Button,
   UserStuffWrapper,
   SelectSection,
-<<<<<<< HEAD
   AllCollectionsWrapper,
-=======
-  ALlCollectionsWrapper,
->>>>>>> 4a491e7 (complete an easy sign-in and sign-up page/ successfully GET pin-image-url from firebase storage after modifying its rules)
   CollectionWarpper,
   CollectionImage,
   CollectionName,
 } from "../styles/Profile.module";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
-<<<<<<< HEAD
-
-=======
->>>>>>> 4452b56 (add name, photo input field at login-page/ direct to login-pgae if not login, to profile-page if login)
 
 import chicken from "../test-images/chicken.jpg";
 import kitty from "../test-images/kitty.jpg";
@@ -53,11 +31,7 @@ import uglyflower from "../test-images/ugly-flower.jpg";
 import skateboard from "../test-images/skateboard.jpg";
 import duck from "../test-images/duck.jpg";
 
-<<<<<<< HEAD
 const mockAllPins = [
-=======
-const allPins = [
->>>>>>> 4452b56 (add name, photo input field at login-page/ direct to login-pgae if not login, to profile-page if login)
   {pinImage: chicken},
   {pinImage: kitty},
   {pinImage: wolf},
@@ -75,28 +49,7 @@ const allPins = [
   {pinImage: duck},
 ];
 
-<<<<<<< HEAD
 const mockAllCollections = [
-=======
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
-  appId: process.env.REACT_APP_FIREBASE_APPID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
-
-const auth = getAuth();
-const database = getDatabase(app);
-
-const allCollectionList = [
->>>>>>> 4452b56 (add name, photo input field at login-page/ direct to login-pgae if not login, to profile-page if login)
   {
     arm: [
       {pinId: "idididid", pinName: "Chicken", pinImageLink: "imageLink"},
@@ -117,7 +70,6 @@ const allCollectionList = [
   },
 ];
 
-<<<<<<< HEAD
 
 function Profile() {
   // myPin/ myCollection/ mySchedule(artist only)
@@ -134,13 +86,6 @@ function Profile() {
     setPins(mockAllPins);
     setCollections(mockAllCollections);
   }, []);
-=======
-function Profile(props) {
-  // 0=> my pin/ 1=> my collection/ 2=> my schedual(artist only)
-  const [showSection, setShowSection] = useState(1);
-  const [pins, setPins] = useState(allPins);
-  const [collectionList, setCollectionList] = useState(allCollectionList);
->>>>>>> 4452b56 (add name, photo input field at login-page/ direct to login-pgae if not login, to profile-page if login)
 
   const showMyPin = () => {
     setShowSection(MY_PIN);
