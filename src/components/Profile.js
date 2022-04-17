@@ -12,6 +12,7 @@ import {
   CollectionWarpper,
   CollectionImage,
   CollectionName,
+  CreatePinButton,
 } from "../styles/Profile.module";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
 
@@ -115,6 +116,9 @@ function Profile() {
                 <PinImage src={pin.pinImage} />
               </PinWrapper>
             ))}
+          <NavLink to='/create-pin'>
+            <CreatePinButton>+</CreatePinButton>
+          </NavLink>
         </AllPinsWrapper>
       );
     } else if (showSection === MY_COLLECTION) {

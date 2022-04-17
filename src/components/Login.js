@@ -9,7 +9,16 @@ import {
   signOut,
 } from "firebase/auth";
 import {Button} from "../styles/Profile.module";
-import {getDatabase, ref, set, child, get} from "firebase/database";
+// import {getDatabase, ref, doc, child, get} from "firebase/database";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  addDoc,
+  collection,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -23,10 +32,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
-
 const auth = getAuth();
-const database = getDatabase(app);
+const db = getFirestore(app);
 
 const LoginWrapper = styled.div`
   margin: 20px auto 0 auto;
@@ -42,10 +49,12 @@ function Login(props) {
   const SIGN_UP = "sign_up";
 
   const [isShowSignWhat, setIsShowSignWhat] = useState();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [userPhoto, setUserPhoto] = useState("");
+  const [userRole, setUserRole] = useState("");
+  const [userLink, setUserLink] = useState("");
 
   const redirect = useNavigate();
 
@@ -58,7 +67,7 @@ function Login(props) {
   };
 
   const signUp = () => {
-    createUserWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("hi", "user", user);
@@ -87,7 +96,7 @@ function Login(props) {
   };
 
   const signIn = () => {
-    signInWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("hi", "user", user);
@@ -114,27 +123,37 @@ function Login(props) {
   };
 
   const writeUserData = (userId) => {
-    const db = getDatabase();
-    set(ref(db, "users/" + userId), {
-      email: email,
-      password: password,
+    setDoc(doc(db, "user/" + userId), {
+      email: userEmail,
+      password: userPassword,
+      name: userName,
+      link: userLink,
+      uid: userId,
+      follower: [],
+      following: [],
+      pic: userPhoto,
+      role: userRole,
     });
     console.log("data written to database");
   };
 
   const getUserData = (userId) => {
-    const dbRef = ref(getDatabase());
-    get(child(dbRef, `users/${userId}`))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          console.log(snapshot.val());
-        } else {
-          console.log("No data available");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    const unsub = onSnapshot(doc(db, "user/" + userId), (doc) => {
+      console.log("Current data: ", doc.data());
+    });
+
+    // const dbRef = ref(getDatabase());
+    // get(child(dbRef, `users/${userId}`))
+    //   .then((snapshot) => {
+    //     if (snapshot.exists()) {
+    //       console.log(snapshot.val());
+    //     } else {
+    //       console.log("No data available");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   };
 
   return (
@@ -145,13 +164,13 @@ function Login(props) {
         <>
           <label>email</label>
           <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}></input>
+            value={userEmail}
+            onChange={(e) => setUserEmail(e.target.value)}></input>
 
           <label>password</label>
           <input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}></input>
+            value={userPassword}
+            onChange={(e) => setUserPassword(e.target.value)}></input>
 
           <button
             onClick={async () => {
@@ -171,13 +190,13 @@ function Login(props) {
 
           <label>email</label>
           <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}></input>
+            value={userEmail}
+            onChange={(e) => setUserEmail(e.target.value)}></input>
 
           <label>password</label>
           <input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}></input>
+            value={userPassword}
+            onChange={(e) => setUserPassword(e.target.value)}></input>
 
           <label>photo</label>
           <input
@@ -185,6 +204,16 @@ function Login(props) {
             accept='image/gif, image/jpeg, image/png, image/webp'
             value={userPhoto}
             onChange={(e) => setUserPhoto(e.target.value)}></input>
+
+          <label>role</label>
+          <input
+            value={userRole}
+            onChange={(e) => setUserRole(e.target.value)}></input>
+
+          <label>link</label>
+          <input
+            value={userLink}
+            onChange={(e) => setUserLink(e.target.value)}></input>
 
           <button
             onClick={async () => {
