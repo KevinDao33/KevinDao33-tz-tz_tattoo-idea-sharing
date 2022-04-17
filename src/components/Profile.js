@@ -76,9 +76,15 @@ function Profile() {
   const MY_COLLECTION = "myCollection";
   const MY_SCHEDULE = "mySchedule";
 
-  const [showSection, setShowSection] = useState(MY_COLLECTION);
-  const [pins, setPins] = useState(allPins);
-  const [collectionList, setCollectionList] = useState(allCollectionsList);
+  const [showSection, setShowSection] = useState();
+  const [pins, setPins] = useState();
+  const [allCollections, setAllCollections] = useState();
+
+  useEffect(() => {
+    setShowSection(MY_COLLECTION);
+    setPins(allPins);
+    setAllCollections(allCollectionsList);
+  }, []);
 
   const showMyPin = () => {
     setShowSection(MY_PIN);
@@ -105,8 +111,8 @@ function Profile() {
     } else if (showSection === MY_COLLECTION) {
       return (
         <AllCollectionsWrapper>
-          {collectionList &&
-            collectionList.map((collection, index) => (
+          {allCollections &&
+            allCollections.map((collection, index) => (
               <CollectionWarpper key={index}>
                 <CollectionImage></CollectionImage>
                 <CollectionName>{Object.keys(collection)}</CollectionName>
