@@ -14,6 +14,7 @@ import imageCompression from "browser-image-compression";
 import MultiDownshift from "./MultiTagSelection";
 import {matchSorter} from "match-sorter";
 import glamorous, {Div} from "glamorous";
+import {onChildAdded} from "firebase/database";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -24,6 +25,10 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APPID,
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 function CreateNewPin() {
   const [pinName, setPinName] = useState();
@@ -80,6 +85,37 @@ function CreateNewPin() {
     console.log("pinName", pinName);
     console.log("pinDescription", pinDescription);
     console.log("pinLink", pinLink);
+  };
+
+  const writeUserData = () => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const collectionRefPin = collection(db, "pin");
+    const collectionRefUser = collection(db, "user", userInfo.id, "pin");
+
+    addDoc(collectionRefUser, {
+      pinAutor: {
+        email: userInfo.email,
+        name: userInfo.name,
+        uid: userInfo.id,
+      },
+      pinDesc: pinDescription,
+      pinName: pinName,
+      pinImage: pinImage,
+      pinLink: pinLink,
+      pinTags: ["vintage", "arm ideas", "black & white", "dot-work", "animal"],
+    });
+    addDoc(collectionRefPin, {
+      pinAutor: {
+        email: userInfo.email,
+        name: userInfo.name,
+        uid: userInfo.id,
+      },
+      pinDesc: pinDescription,
+      pinName: pinName,
+      pinImage: pinImage,
+      pinLink: pinLink,
+      pinTags: ["vintage", "arm ideas", "black & white", "dot-work", "animal"],
+    });
   };
 
   const getPinImageUrl = (name) => {
@@ -167,6 +203,7 @@ function CreateNewPin() {
         <CreatePinButton
           onClick={() => {
             submitPinData(dataURLtoBlob);
+            writeUserData();
           }}>
           Create
         </CreatePinButton>

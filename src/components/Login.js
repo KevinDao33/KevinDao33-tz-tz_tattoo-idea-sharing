@@ -9,7 +9,6 @@ import {
   signOut,
 } from "firebase/auth";
 import {Button} from "../styles/Profile.module";
-// import {getDatabase, ref, doc, child, get} from "firebase/database";
 import {
   getFirestore,
   doc,
@@ -19,6 +18,7 @@ import {
   getDoc,
   onSnapshot,
 } from "firebase/firestore";
+import LoginWrapper from "../styles/Login.module";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -34,15 +34,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore(app);
-
-const LoginWrapper = styled.div`
-  margin: 20px auto 0 auto;
-  width: 30%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-`;
 
 function Login(props) {
   const SIGN_IN = "sign_in";
@@ -70,7 +61,6 @@ function Login(props) {
     createUserWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
-        // console.log("hi", "user", user);
         writeUserData(user.uid);
         getUserData(user.uid);
       })
@@ -100,14 +90,13 @@ function Login(props) {
     signInWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log("hi", "user", user);
         getUserData(user.uid);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log("errorCode", errorCode);
-        console.log("errorMessage", errorMessage);
+        console.error("errorCode", errorCode);
+        console.error("errorMessage", errorMessage);
 
         switch (errorCode) {
           case "auth/wrong-password":
@@ -116,7 +105,6 @@ function Login(props) {
           case "auth/user-not-found":
             alert("帳號不存在喔");
             break;
-
           default:
             alert("登入失敗QQ");
         }
@@ -140,7 +128,6 @@ function Login(props) {
 
   const getUserData = (userId) => {
     const unsub = onSnapshot(doc(db, "user/" + userId), (doc) => {
-      console.log("Current data: ", doc.data());
       localStorage.setItem(
         "userInfo",
         JSON.stringify({
@@ -150,6 +137,8 @@ function Login(props) {
           following: doc.data().following,
           follower: doc.data().follower,
           pic: doc.data().pic,
+          id: doc.data().uid,
+          link: doc.data().link,
         })
       );
     });

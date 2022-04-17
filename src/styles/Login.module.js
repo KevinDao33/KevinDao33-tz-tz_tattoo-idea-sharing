@@ -1,19 +1,12 @@
 import styled from "styled-components";
 
-const ButtonWeapper = styled.div`
+const LoginWrapper = styled.div`
+  margin: 20px auto 0 auto;
+  width: 30%;
+  height: 100vh;
   display: flex;
-  flex-direction: row;
-  margin: 10px auto;
+  flex-direction: column;
+  flex-wrap: wrap;
 `;
 
-const Button = styled.button`
-  color: gray;
-  border: none;
-  border-radius: 30px;
-  padding: 10px;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
-  font-size: 1rem;
-  margin: 10px;
-`;
+export {LoginWrapper};
