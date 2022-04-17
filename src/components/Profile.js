@@ -102,9 +102,13 @@ function Profile() {
     signOut(auth)
       .then(() => {
         props.setLogin(false);
+        localStorage.clear();
       })
       .catch((error) => {});
   }
+
+  // need to be fix: confirm access to userInfo after rendering Profile
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   const renderUserSection = () => {
     if (showSection === MY_PIN) {

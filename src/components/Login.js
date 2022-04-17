@@ -70,8 +70,9 @@ function Login(props) {
     createUserWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log("hi", "user", user);
+        // console.log("hi", "user", user);
         writeUserData(user.uid);
+        getUserData(user.uid);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -140,20 +141,18 @@ function Login(props) {
   const getUserData = (userId) => {
     const unsub = onSnapshot(doc(db, "user/" + userId), (doc) => {
       console.log("Current data: ", doc.data());
+      localStorage.setItem(
+        "userInfo",
+        JSON.stringify({
+          name: doc.data().name,
+          email: doc.data().email,
+          role: doc.data().role,
+          following: doc.data().following,
+          follower: doc.data().follower,
+          pic: doc.data().pic,
+        })
+      );
     });
-
-    // const dbRef = ref(getDatabase());
-    // get(child(dbRef, `users/${userId}`))
-    //   .then((snapshot) => {
-    //     if (snapshot.exists()) {
-    //       console.log(snapshot.val());
-    //     } else {
-    //       console.log("No data available");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
   };
 
   return (
