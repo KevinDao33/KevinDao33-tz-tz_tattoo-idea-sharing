@@ -26,6 +26,7 @@ const firebaseConfig = {
 
 function App() {
   const [login, setLogin] = useState(false);
+  const [uid, setUid] = useState();
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore();
@@ -59,6 +60,7 @@ function App() {
         const uid = user.uid;
         console.log(user);
         console.log("uid", uid);
+        setUid(uid);
         setLogin(true);
       } else {
         console.log("not login");

@@ -142,6 +142,10 @@ function Profile() {
     }
   };
 
+  useEffect(() => {
+    getUserData(props.uid);
+  });
+
   return (
     <PorfileWrapper>
       <UserImage></UserImage>
