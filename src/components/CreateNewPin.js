@@ -50,6 +50,7 @@ function CreateNewPin() {
     // show image preview
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
+      
       return;
     }
     setSelectedFile(imageFile);
@@ -100,20 +101,21 @@ function CreateNewPin() {
   };
 
   const submitPinData = (dataURLtoBlob) => {
-    if (pinName && pinDescription && pinLink && pinImage) {
-      dataURLtoBlob(localStorage.getItem("uploadedImage"));
+    if (!pinName || !pinDescription || !pinLink) {
+      alert("please check if all fields are filled");
 
-      console.log("pinName", pinName);
-      console.log("pinDescription", pinDescription);
-      console.log("pinLink", pinLink);
-      console.log("pinImage", pinImage);
-
-      alert("pin successfully created!");
+      return;
     } else if (pinName && pinDescription && pinLink && !pinImage) {
       alert("please upload and check the image for your pin");
-    } else {
-      alert("please check if all fields are filled");
+
+      return;
     }
+    dataURLtoBlob(localStorage.getItem("uploadedImage"));
+    console.log("pinName", pinName);
+    console.log("pinDescription", pinDescription);
+    console.log("pinLink", pinLink);
+    console.log("pinImage", pinImage);
+    alert("pin successfully created!");
   };
 
   const writeUserData = () => {

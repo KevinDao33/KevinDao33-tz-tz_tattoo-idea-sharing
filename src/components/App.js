@@ -16,15 +16,15 @@ function App() {
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const uid = user.uid;
-        console.log("uid", uid);
-        setUid(uid);
-        setLogin(true);
-      } else {
+      if (!user) {
         console.log("not login");
-        setLogin(false);
+
+        return;
       }
+      const uid = user.uid;
+      console.log("uid", uid);
+      setUid(uid);
+      setLogin(true);
     });
   }, []);
 

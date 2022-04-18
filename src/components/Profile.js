@@ -3,10 +3,7 @@ import React, {useState, useEffect} from "react";
 import Login from "./Login";
 import {NavLink} from "react-router-dom";
 import {initializeApp} from "firebase/app";
-import {
-  getAuth,
-  signOut,
-} from "firebase/auth";
+import {getAuth, signOut} from "firebase/auth";
 import {
   getFirestore,
   collection,
@@ -43,11 +40,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth();
 const db = getFirestore(app);
 
-const allCollectionList = [
+const mockAllCollections = [
   {
     arm: [
       {pinId: "idididid", pinName: "Chicken", pinImageLink: "imageLink"},
@@ -69,20 +65,29 @@ const allCollectionList = [
 ];
 
 function Profile(props) {
-  // 0=> my pin/ 1=> my collection/ 2=> my schedual(artist only)
-  const [showSection, setShowSection] = useState(1);
+  // myPin/ myCollection/ mySchedule(artist only)
+  const MY_PIN = "myPin";
+  const MY_COLLECTION = "myCollection";
+  const MY_SCHEDULE = "mySchedule";
+
+  const [showSection, setShowSection] = useState();
   const [pins, setPins] = useState();
   const [userData, setUserData] = useState();
-  const [collectionList, setCollectionList] = useState(allCollectionList);
+  const [collections, setCollections] = useState();
+
+  useEffect(() => {
+    setShowSection(MY_COLLECTION);
+    setCollections(mockAllCollections);
+  }, []);
 
   const showMyPin = () => {
-    setShowSection(0);
+    setShowSection(MY_PIN);
   };
   const showMyCollection = () => {
-    setShowSection(1);
+    setShowSection(MY_COLLECTION);
   };
   const showMySchedule = () => {
-    setShowSection(2);
+    setShowSection(MY_SCHEDULE);
   };
 
   function logOut() {
@@ -95,7 +100,7 @@ function Profile(props) {
   }
 
   const renderUserSection = () => {
-    if (showSection === 0) {
+    if (showSection === MY_PIN) {
       return (
         <AllPinsWrapper>
           {pins &&
@@ -109,11 +114,11 @@ function Profile(props) {
           </NavLink>
         </AllPinsWrapper>
       );
-    } else if (showSection === 1) {
+    } else if (showSection === MY_COLLECTION) {
       return (
         <AllCollectionsWrapper>
-          {collectionList &&
-            collectionList.map((collection, index) => (
+          {collections &&
+            collections.map((collection, index) => (
               <CollectionWarpper key={index}>
                 <CollectionImage></CollectionImage>
                 <CollectionName>{Object.keys(collection)}</CollectionName>
@@ -121,8 +126,8 @@ function Profile(props) {
             ))}
         </AllCollectionsWrapper>
       );
-    } else if (showSection === 2) {
-      return <div>welcom to my scheduel</div>;
+    } else if (showSection === MY_SCHEDULE) {
+      return <div>welcom to my schedule</div>;
     }
   };
 
