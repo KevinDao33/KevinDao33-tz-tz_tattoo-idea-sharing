@@ -14,7 +14,7 @@ import {
   NameNewCollection,
 } from "../styles/AddPin.module";
 
-const Allcollections = [
+const mockAllCollections = [
   "arm ideas",
   "back ideas",
   "black & white",
@@ -24,9 +24,14 @@ const Allcollections = [
 ];
 
 function AddPin(props) {
-  const [collections, setCollections] = useState(Allcollections);
+  const [collections, setCollections] = useState();
+
+  useState(()=>{
+    setCollections(mockAllCollections)
+  },[])
 
   const closeAddPin = () => {
+    // eslint-disable-next-line react/prop-types
     props.setIsShowAddPin(false);
   };
 

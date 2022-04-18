@@ -6,18 +6,12 @@ import CreateNewPin from "./CreateNewPin";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 
 import {initializeApp} from "firebase/app";
-import {getStorage} from "firebase/storage";
 import {
   getFirestore,
   collection,
-  onSnapshot,
-  setDoc,
   doc,
-  Timestamp,
   getDocs,
   getDoc,
-  addDoc,
-  deleteDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {

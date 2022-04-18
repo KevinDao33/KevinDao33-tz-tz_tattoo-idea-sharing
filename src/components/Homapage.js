@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { collection, doc, setDoc, getDocs } from "firebase/firestore";
+import React, {useState, useEffect} from "react";
+import {collection, doc, setDoc, getDocs} from "firebase/firestore";
 import AddPin from "./AddPin";
 import {
   MainWrapper,
@@ -25,27 +25,31 @@ import uglyflower from "../test-images/ugly-flower.jpg";
 import skateboard from "../test-images/skateboard.jpg";
 import duck from "../test-images/duck.jpg";
 
-const allPins = [
-  { pinImage: chicken },
-  { pinImage: kitty },
-  { pinImage: wolf },
-  { pinImage: flower },
-  { pinImage: bear },
-  { pinImage: cherry },
-  { pinImage: death },
-  { pinImage: frog },
-  { pinImage: guitarfrog },
-  { pinImage: hands },
-  { pinImage: raccoon },
-  { pinImage: trex },
-  { pinImage: uglyflower },
-  { pinImage: skateboard },
-  { pinImage: duck },
+const mockAllPins = [
+  {pinImage: chicken},
+  {pinImage: kitty},
+  {pinImage: wolf},
+  {pinImage: flower},
+  {pinImage: bear},
+  {pinImage: cherry},
+  {pinImage: death},
+  {pinImage: frog},
+  {pinImage: guitarfrog},
+  {pinImage: hands},
+  {pinImage: raccoon},
+  {pinImage: trex},
+  {pinImage: uglyflower},
+  {pinImage: skateboard},
+  {pinImage: duck},
 ];
 
 function Homapage() {
   const [isShowAddPin, setIsShowAddPin] = useState(false);
-  const [pins, setPins] = useState(allPins);
+  const [pins, setPins] = useState();
+
+  useEffect(() => {
+    setPins(mockAllPins);
+  });
 
   const showAddPin = () => {
     setIsShowAddPin(true);

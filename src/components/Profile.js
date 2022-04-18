@@ -31,7 +31,7 @@ import uglyflower from "../test-images/ugly-flower.jpg";
 import skateboard from "../test-images/skateboard.jpg";
 import duck from "../test-images/duck.jpg";
 
-const allPins = [
+const mockAllPins = [
   {pinImage: chicken},
   {pinImage: kitty},
   {pinImage: wolf},
@@ -49,7 +49,7 @@ const allPins = [
   {pinImage: duck},
 ];
 
-const allCollectionsList = [
+const mockAllCollections = [
   {
     arm: [
       {pinId: "idididid", pinName: "Chicken", pinImageLink: "imageLink"},
@@ -78,12 +78,12 @@ function Profile() {
 
   const [showSection, setShowSection] = useState();
   const [pins, setPins] = useState();
-  const [allCollections, setAllCollections] = useState();
+  const [collections, setCollections] = useState();
 
   useEffect(() => {
     setShowSection(MY_COLLECTION);
-    setPins(allPins);
-    setAllCollections(allCollectionsList);
+    setPins(mockAllPins);
+    setCollections(mockAllCollections);
   }, []);
 
   const showMyPin = () => {
@@ -111,8 +111,8 @@ function Profile() {
     } else if (showSection === MY_COLLECTION) {
       return (
         <AllCollectionsWrapper>
-          {allCollections &&
-            allCollections.map((collection, index) => (
+          {collections &&
+            collections.map((collection, index) => (
               <CollectionWarpper key={index}>
                 <CollectionImage></CollectionImage>
                 <CollectionName>{Object.keys(collection)}</CollectionName>

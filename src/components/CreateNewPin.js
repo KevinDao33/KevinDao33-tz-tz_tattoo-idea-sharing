@@ -4,7 +4,6 @@ import {
   PinDataUploadWrapper,
   NewPinDataWrapper,
   PinImageUploadWrapper,
-  NewPinDataTitle,
   NewPinDataInput,
   CreatePinButton,
   UploadNewPinImageLabel,
