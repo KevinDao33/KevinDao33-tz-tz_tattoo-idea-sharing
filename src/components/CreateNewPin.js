@@ -1,4 +1,9 @@
+/* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
+import {initializeApp} from "firebase/app";
+import {getFirestore, collection, addDoc} from "firebase/firestore";
 import {
   CreateNewPinWrapper,
   PinDataUploadWrapper,
@@ -11,12 +16,9 @@ import {
   PreviewImage,
 } from "../styles/CreateNewPin.module";
 import imageCompression from "browser-image-compression";
-import MultiDownshift from "./MultiTagSelection";
-import {matchSorter} from "match-sorter";
-import glamorous, {Div} from "glamorous";
-import {onChildAdded} from "firebase/database";
 
 const firebaseConfig = {
+  // eslint-disable-next-line no-undef
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
   authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
   projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
@@ -78,16 +80,40 @@ function CreateNewPin() {
     }
   }
 
-  const submitPinData = () => {
-    if (!pinName || !pinDescription || !pinLink) {
-      alert("please check if all fields are filled~");
-      
-      return;
+  const dataURLtoBlob = (dataURL) => {
+    // convert base64 to raw binary data held in a string
+    const byteString = atob(dataURL.split(",")[1]);
+    // separate out the mime component
+    let mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
+    // write the bytes of the string to an ArrayBuffer
+    let arrayBuffer = new ArrayBuffer(byteString.length);
+    let _ia = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      _ia[i] = byteString.charCodeAt(i);
     }
-    // here's the pin-data that will be upload to firebase
-    console.log("pinName", pinName);
-    console.log("pinDescription", pinDescription);
-    console.log("pinLink", pinLink);
+
+    var dataView = new DataView(arrayBuffer);
+    var blob = new Blob([dataView], {type: mimeString});
+    console.log(`uploading size ${blob.size / 1024 / 1024} MB`);
+
+    return blob;
+  };
+
+  const submitPinData = (dataURLtoBlob) => {
+    if (pinName && pinDescription && pinLink && pinImage) {
+      dataURLtoBlob(localStorage.getItem("uploadedImage"));
+
+      console.log("pinName", pinName);
+      console.log("pinDescription", pinDescription);
+      console.log("pinLink", pinLink);
+      console.log("pinImage", pinImage);
+
+      alert("pin successfully created!");
+    } else if (pinName && pinDescription && pinLink && !pinImage) {
+      alert("please upload and check the image for your pin");
+    } else {
+      alert("please check if all fields are filled");
+    }
   };
 
   const writeUserData = () => {
@@ -133,6 +159,7 @@ function CreateNewPin() {
   useEffect(() => {
     if (!selectedFile) {
       setPreview(undefined);
+
       return;
     }
 
@@ -143,23 +170,12 @@ function CreateNewPin() {
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
-  async function testUpload() {
-    console.log("hieeeee");
-
+  async function uploadPinImage() {
     const uploadedImage = localStorage.getItem("uploadedImage");
-    console.log("uploadedImage", uploadedImage);
-
     const uploadedImageName = localStorage.getItem("uploadedImageName");
-    console.log("uploadedImageName", uploadedImageName);
-
     const result = dataURLtoBlob(uploadedImage);
-    console.log("result", result);
-
     const storage = getStorage(app);
-    console.log("storage", storage);
-
     const storageRef = ref(storage, `pinImages/${uploadedImageName}`);
-    console.log("storageRef", storageRef);
 
     try {
       uploadBytes(storageRef, result).then((snapshot) => {
@@ -186,7 +202,7 @@ function CreateNewPin() {
         </UploadNewPinImageLabel>
         <CreatePinButton
           onClick={() => {
-            testUpload();
+            uploadPinImage();
           }}>
           Check Image
         </CreatePinButton>

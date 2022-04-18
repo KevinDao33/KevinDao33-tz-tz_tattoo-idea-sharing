@@ -1,4 +1,19 @@
+/* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
+import Login from "./Login";
+import {NavLink} from "react-router-dom";
+import {initializeApp} from "firebase/app";
+import {
+  getAuth,
+  signOut,
+} from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  onSnapshot,
+  doc,
+} from "firebase/firestore";
 import {
   PorfileWrapper,
   UserImage,
@@ -16,41 +31,23 @@ import {
 } from "../styles/Profile.module";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
 
-import chicken from "../test-images/chicken.jpg";
-import kitty from "../test-images/kitty.jpg";
-import wolf from "../test-images/wolf.jpg";
-import flower from "../test-images/flower.jpg";
-import bear from "../test-images/bear.jpg";
-import cherry from "../test-images/cherry.jpg";
-import death from "../test-images/death.jpg";
-import frog from "../test-images/frog.jpg";
-import guitarfrog from "../test-images/guitar-frog.jpg";
-import hands from "../test-images/hands.jpg";
-import raccoon from "../test-images/raccoon.jpg";
-import trex from "../test-images/t-rex.jpg";
-import uglyflower from "../test-images/ugly-flower.jpg";
-import skateboard from "../test-images/skateboard.jpg";
-import duck from "../test-images/duck.jpg";
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
+  appId: process.env.REACT_APP_FIREBASE_APPID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
+};
 
-const mockAllPins = [
-  {pinImage: chicken},
-  {pinImage: kitty},
-  {pinImage: wolf},
-  {pinImage: flower},
-  {pinImage: bear},
-  {pinImage: cherry},
-  {pinImage: death},
-  {pinImage: frog},
-  {pinImage: guitarfrog},
-  {pinImage: hands},
-  {pinImage: raccoon},
-  {pinImage: trex},
-  {pinImage: uglyflower},
-  {pinImage: skateboard},
-  {pinImage: duck},
-];
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-const mockAllCollections = [
+const auth = getAuth();
+const db = getFirestore(app);
+
+const allCollectionList = [
   {
     arm: [
       {pinId: "idididid", pinName: "Chicken", pinImageLink: "imageLink"},
@@ -71,31 +68,21 @@ const mockAllCollections = [
   },
 ];
 
-
-function Profile() {
-  // myPin/ myCollection/ mySchedule(artist only)
-  const MY_PIN = "myPin";
-  const MY_COLLECTION = "myCollection";
-  const MY_SCHEDULE = "mySchedule";
-
-  const [showSection, setShowSection] = useState();
+function Profile(props) {
+  // 0=> my pin/ 1=> my collection/ 2=> my schedual(artist only)
+  const [showSection, setShowSection] = useState(1);
   const [pins, setPins] = useState();
-  const [collections, setCollections] = useState();
-
-  useEffect(() => {
-    setShowSection(MY_COLLECTION);
-    setPins(mockAllPins);
-    setCollections(mockAllCollections);
-  }, []);
+  const [userData, setUserData] = useState();
+  const [collectionList, setCollectionList] = useState(allCollectionList);
 
   const showMyPin = () => {
-    setShowSection(MY_PIN);
+    setShowSection(0);
   };
   const showMyCollection = () => {
-    setShowSection(MY_COLLECTION);
+    setShowSection(1);
   };
   const showMySchedule = () => {
-    setShowSection(MY_SCHEDULE);
+    setShowSection(2);
   };
 
   function logOut() {
@@ -107,11 +94,8 @@ function Profile() {
       .catch((error) => {});
   }
 
-  // need to be fix: confirm access to userInfo after rendering Profile
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
   const renderUserSection = () => {
-    if (showSection === MY_PIN) {
+    if (showSection === 0) {
       return (
         <AllPinsWrapper>
           {pins &&
@@ -125,11 +109,11 @@ function Profile() {
           </NavLink>
         </AllPinsWrapper>
       );
-    } else if (showSection === MY_COLLECTION) {
+    } else if (showSection === 1) {
       return (
         <AllCollectionsWrapper>
-          {collections &&
-            collections.map((collection, index) => (
+          {collectionList &&
+            collectionList.map((collection, index) => (
               <CollectionWarpper key={index}>
                 <CollectionImage></CollectionImage>
                 <CollectionName>{Object.keys(collection)}</CollectionName>
@@ -137,9 +121,41 @@ function Profile() {
             ))}
         </AllCollectionsWrapper>
       );
-    } else if (showSection === MY_SCHEDULE) {
-      return <div>welcome to my schedule</div>;
+    } else if (showSection === 2) {
+      return <div>welcom to my scheduel</div>;
     }
+  };
+
+  const getPins = async (id) => {
+    const querySnapshot = await getDocs(collection(db, "user", id, "pin"));
+    let myPins = [];
+    querySnapshot.forEach((doc) => {
+      myPins.push({...doc.data()});
+    });
+    setPins(myPins);
+  };
+
+  useEffect(() => {
+    userData && getPins(userData.id);
+  });
+
+  const getUserData = (userId) => {
+    const unsub = onSnapshot(doc(db, "user/" + userId), (doc) => {
+      if (!props.uid) {
+        return;
+      } else if (props.uid) {
+        setUserData({
+          name: doc.data().name,
+          email: doc.data().email,
+          role: doc.data().role,
+          following: doc.data().following,
+          follower: doc.data().follower,
+          pic: doc.data().pic,
+          id: doc.data().uid,
+          link: doc.data().link,
+        });
+      }
+    });
   };
 
   useEffect(() => {
@@ -147,25 +163,34 @@ function Profile() {
   });
 
   return (
-    <PorfileWrapper>
-      <UserImage></UserImage>
-      <UserName>Kevin Dao</UserName>
-      <ShowFollow>{2} following</ShowFollow>
-      <ShowFollow>{5} follower</ShowFollow>
-      <ButtonWrapper>
-        <Button>share</Button>
-        <Button>edit</Button>
-      </ButtonWrapper>
-      <UserStuffWrapper>
-        <ButtonWrapper>
-          <SelectSection onClick={showMyPin}>my pin</SelectSection>
-          <SelectSection onClick={showMyCollection}>
-            my collection
-          </SelectSection>
-        </ButtonWrapper>
-        {renderUserSection()}
-      </UserStuffWrapper>
-    </PorfileWrapper>
+    <>
+      {props.login ? (
+        userData && (
+          <PorfileWrapper>
+            <UserImage></UserImage>
+            <UserName>{userData.name}</UserName>
+            <ShowFollow>{userData.follower.length} following</ShowFollow>
+            <ShowFollow>{userData.following.length} follower</ShowFollow>
+            <ButtonWrapper>
+              <Button>share</Button>
+              <Button>edit</Button>
+              <Button onClick={logOut}>logOut</Button>
+            </ButtonWrapper>
+            <UserStuffWrapper>
+              <ButtonWrapper>
+                <SelectSection onClick={showMyPin}>my pin</SelectSection>
+                <SelectSection onClick={showMyCollection}>
+                  my collection
+                </SelectSection>
+              </ButtonWrapper>
+              {renderUserSection()}
+            </UserStuffWrapper>
+          </PorfileWrapper>
+        )
+      ) : (
+        <Login userData={userData} setUserData={setUserData}></Login>
+      )}
+    </>
   );
 }
 

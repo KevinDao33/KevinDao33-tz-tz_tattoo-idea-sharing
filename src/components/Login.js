@@ -1,23 +1,14 @@
-import styled from "styled-components";
+/* eslint-disable no-undef */
 import {initializeApp} from "firebase/app";
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
 } from "firebase/auth";
 import {Button} from "../styles/Profile.module";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  addDoc,
-  collection,
-  getDoc,
-  onSnapshot,
-} from "firebase/firestore";
+import {getFirestore, doc, setDoc, onSnapshot} from "firebase/firestore";
 import {LoginWrapper} from "../styles/Login.module";
 
 const firebaseConfig = {
