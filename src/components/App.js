@@ -52,24 +52,17 @@ function App() {
   // getPins();
 
   useEffect(() => {
-    // const analytics = getAnalytics(app);
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
         const uid = user.uid;
         console.log(user);
         console.log("uid", uid);
         setLogin(true);
-        // ...
       } else {
         console.log("not login");
         setLogin(false);
-
-        // User is signed out
-        // ...
       }
     });
   }, []);

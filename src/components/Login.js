@@ -18,7 +18,7 @@ import {
   getDoc,
   onSnapshot,
 } from "firebase/firestore";
-import LoginWrapper from "../styles/Login.module";
+import {LoginWrapper} from "../styles/Login.module";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -141,6 +141,16 @@ function Login(props) {
           link: doc.data().link,
         })
       );
+      props.setUserData({
+        name: doc.data().name,
+        email: doc.data().email,
+        role: doc.data().role,
+        following: doc.data().following,
+        follower: doc.data().follower,
+        pic: doc.data().pic,
+        id: doc.data().uid,
+        link: doc.data().link,
+      });
     });
   };
 
@@ -148,6 +158,7 @@ function Login(props) {
     <LoginWrapper>
       <Button onClick={showSingIn}>Sign In</Button>
       <Button onClick={showSingUp}>Sign Up</Button>
+      {/* elements below will be written in styled components */}
       {isShowSignWhat === SIGN_IN && (
         <>
           <label>email</label>
@@ -186,12 +197,13 @@ function Login(props) {
             value={userPassword}
             onChange={(e) => setUserPassword(e.target.value)}></input>
 
-          <label>photo</label>
+          {/* decide to give a picture as user's profile photo, users will be able to change it at edit-page */}
+          {/* <label>photo</label>
           <input
             type='file'
             accept='image/gif, image/jpeg, image/png, image/webp'
             value={userPhoto}
-            onChange={(e) => setUserPhoto(e.target.value)}></input>
+            onChange={(e) => setUserPhoto(e.target.value)}></input> */}
 
           <label>role</label>
           <input

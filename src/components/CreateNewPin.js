@@ -31,13 +31,16 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 function CreateNewPin() {
-  const [pinName, setPinName] = useState();
-  const [pinDescription, setPinDescription] = useState();
-  const [pinLink, setPinLink] = useState();
+  const [pinName, setPinName] = useState("");
+  const [pinDescription, setPinDescription] = useState("");
+  const [pinLink, setPinLink] = useState("");
   const [pinImage, setPinImage] = useState();
   const [isGetPinImage, setIsGetPinImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
+  const [isPinCreated, setIsPinCreated] = useState(false);
+
+  const redirect = useNavigate();
 
   async function handleImageUpload(e) {
     const imageFile = e.target.files[0];
@@ -116,6 +119,7 @@ function CreateNewPin() {
       pinLink: pinLink,
       pinTags: ["vintage", "arm ideas", "black & white", "dot-work", "animal"],
     });
+    setIsPinCreated(true);
   };
 
   const getPinImageUrl = (name) => {
@@ -140,11 +144,22 @@ function CreateNewPin() {
   }, [selectedFile]);
 
   async function testUpload() {
+    console.log("hieeeee");
+
     const uploadedImage = localStorage.getItem("uploadedImage");
+    console.log("uploadedImage", uploadedImage);
+
     const uploadedImageName = localStorage.getItem("uploadedImageName");
+    console.log("uploadedImageName", uploadedImageName);
+
     const result = dataURLtoBlob(uploadedImage);
-    const storage = getStorage();
+    console.log("result", result);
+
+    const storage = getStorage(app);
+    console.log("storage", storage);
+
     const storageRef = ref(storage, `pinImages/${uploadedImageName}`);
+    console.log("storageRef", storageRef);
 
     try {
       uploadBytes(storageRef, result).then((snapshot) => {
@@ -201,9 +216,10 @@ function CreateNewPin() {
         </NewPinDataWrapper>
 
         <CreatePinButton
-          onClick={() => {
+          onClick={async () => {
             submitPinData(dataURLtoBlob);
             writeUserData();
+            isPinCreated && redirect("/profile");
           }}>
           Create
         </CreatePinButton>

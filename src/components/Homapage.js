@@ -8,6 +8,8 @@ import {
   PinImage,
   SaveButton,
 } from "../styles/Homepage.module";
+import {initializeApp} from "firebase/app";
+import {getFirestore, collection, getDocs} from "firebase/firestore";
 
 import chicken from "../test-images/chicken.jpg";
 import kitty from "../test-images/kitty.jpg";
@@ -54,6 +56,22 @@ function Homapage() {
   const showAddPin = () => {
     setIsShowAddPin(true);
   };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const getPins = async () => {
+    const notesSnapshot = await getDocs(collection(db, "pin"));
+    const pins = notesSnapshot.docs.map((doc) => doc.data());
+    console.log("pins", pins);
+    setPins(pins);
+
+    return pins;
+  };
+
+  useEffect(() => {
+    getPins();
+  }, []);
 
   return (
     <MainWrapper>
