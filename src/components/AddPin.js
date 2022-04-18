@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import chicken from "../test-images/chicken.jpg";
 import {
   Overlay,
@@ -14,13 +14,24 @@ import {
   NameNewCollection,
 } from "../styles/AddPin.module";
 
-const Allcollections = ["arm ideas", "back ideas", "black & white", "vintage", "dootwork", "others"]
-
+const mockAllCollections = [
+  "arm ideas",
+  "back ideas",
+  "black & white",
+  "vintage",
+  "dootwork",
+  "others",
+];
 
 function AddPin(props) {
-  const [collections, setCollections] = useState(Allcollections);
+  const [collections, setCollections] = useState();
+
+  useState(()=>{
+    setCollections(mockAllCollections)
+  },[])
 
   const closeAddPin = () => {
+    // eslint-disable-next-line react/prop-types
     props.setIsShowAddPin(false);
   };
 
@@ -38,7 +49,6 @@ function AddPin(props) {
               <SaveButton>save</SaveButton>
             </AddToCollection>
           ))}
-
       </AddPinOptions>
 
       <CreateCollectionWrapper>
