@@ -6,9 +6,10 @@ const Overlay = styled.div`
   background-color: #ccc;
   position: fixed;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   top: 0px;
   left: 0px;
+  z-index: 2;
 `;
 
 const AddPinOptions = styled.div`
@@ -24,6 +25,7 @@ const AddPinOptions = styled.div`
   opacity: 1;
   overflow: auto;
   justify-content: center;
+  z-index: 3;
 `;
 
 const LeaveButton = styled.button`
@@ -96,7 +98,7 @@ const CreateCollectionWrapper = styled.div`
   position: fixed;
   background-color: #f2f1eb;
   border-radius: 20px;
-  z-index: 2;
+  z-index: 3;
 `;
 
 const NameNewCollectionTitle = styled.label`

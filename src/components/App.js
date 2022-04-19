@@ -33,7 +33,10 @@ function App() {
       <GlobalStyle />
       <Navbar />
       <Routes>
-        <Route path='/' element={<Homapage />} />
+        <Route
+          path='/'
+          element={<Homapage uid={uid} login={login} />}
+        />
         <Route
           path='/profile'
           element={

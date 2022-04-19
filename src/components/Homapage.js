@@ -21,12 +21,14 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
 };
 
-function Homapage() {
+function Homapage(props) {
   const [isShowAddPin, setIsShowAddPin] = useState(false);
   const [pins, setPins] = useState();
 
-  const showAddPin = () => {
-    setIsShowAddPin(true);
+  const showAddPin = (pin, index) => {
+    // setIsShowAddPin(true);
+    pin.isShow = true;
+    //use pin[index].isShow to show or not show AddPin
   };
 
   const app = initializeApp(firebaseConfig);
@@ -34,9 +36,10 @@ function Homapage() {
 
   const getPins = async () => {
     const notesSnapshot = await getDocs(collection(db, "pin"));
-    const pins = notesSnapshot.docs.map((doc) => doc.data());
-    setPins(pins);
-
+    const mockPins = notesSnapshot.docs.map((doc) => doc.data());
+    const addIsShowPins = mockPins.map((pin) => ({...pin, isShow: false}));
+    setPins(addIsShowPins);
+    s;
     return pins;
   };
 
@@ -44,22 +47,56 @@ function Homapage() {
     getPins();
   }, []);
 
+  const handleAddPinShow = (index) => {
+    let mockPin = [...pins];
+    mockPin[index].isShow = true;
+    setPins(mockPin);
+  };
+
+  const handleClosePinShow = (index) => {
+    let mockPin = [...pins];
+    mockPin[index].isShow = false;
+    setPins(mockPin);
+  };
+
   return (
     <MainWrapper>
       <AllPinsWrapper>
+        {console.log("pins", pins)}
         {pins &&
           pins.map((pin, index) => (
-            <PinWrapper key={index}>
-              <PinImage src={pin.pinImage} />
-              <SaveButton onClick={showAddPin}>save</SaveButton>
-            </PinWrapper>
+            <>
+              <PinWrapper key={pin.pinName}>
+                <PinImage src={pin.pinImage} />
+                <SaveButton
+                  onClick={() => {
+                    handleAddPinShow(index);
+                  }}>
+                  save
+                </SaveButton>
+              </PinWrapper>
+
+              {pin.isShow && (
+                <AddPin
+                  handleClosePinShow={handleClosePinShow}
+                  indexxx={index}
+                  key={pin.pinName}
+                  isShowAddPin={isShowAddPin}
+                  setIsShowAddPin={setIsShowAddPin}
+                  uid={props.uid}
+                  pin={pin}
+                  pins={pins}
+                />
+              )}
+            </>
           ))}
-        {isShowAddPin && (
+        {/* {isShowAddPin && (
           <AddPin
             isShowAddPin={isShowAddPin}
             setIsShowAddPin={setIsShowAddPin}
+            uid={props.uid}
           />
-        )}
+        )} */}
       </AllPinsWrapper>
     </MainWrapper>
   );
