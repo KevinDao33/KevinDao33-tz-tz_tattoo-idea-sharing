@@ -59,7 +59,7 @@ function Homapage(props) {
         {pins.length > 0 &&
           pins.map((pin, index) => (
             <>
-              <PinWrapper key={pin.pinName}>
+              <PinWrapper key={pin.id}>
                 <PinImage src={pin.pinImage} />
                 <SaveButton
                   onClick={() => {

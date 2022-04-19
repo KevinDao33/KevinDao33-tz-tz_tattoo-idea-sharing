@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {initializeApp} from "firebase/app";
 import imageCompression from "browser-image-compression";
-import {getFirestore, collection, addDoc} from "firebase/firestore";
+import {getFirestore, collection, doc, setDoc, addDoc} from "firebase/firestore";
 
 import {
   CreateNewPinWrapper,
@@ -111,54 +111,41 @@ function CreateNewPin(props) {
       : alert("something went wrong, please try again :(");
   };
 
-  const writeUserData = async () => {
-    const userInfo = await JSON.parse(localStorage.getItem("userInfo"));
-    const collectionRefPin = await collection(db, "pin");
-    const collectionRefUser = await collection(db, "user", userInfo.id, "pin");
+  const writeUserData = () => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const collectionRefPin = collection(db, "pin");
+    const docRefCollectionRefPin = doc(collectionRefPin);
 
-    try {
-      userInfo &&
-        (await addDoc(collectionRefUser, {
-          pinAutor: {
-            email: userInfo.email,
-            name: userInfo.name,
-            uid: userInfo.id,
-          },
-          pinDesc: pinDescription,
-          pinName: pinName,
-          pinImage: pinImage,
-          pinLink: pinLink,
-          pinTags: [
-            "vintage",
-            "arm ideas",
-            "black & white",
-            "dot-work",
-            "animal",
-          ],
-        }));
-      userInfo &&
-        (await addDoc(collectionRefPin, {
-          pinAutor: {
-            email: userInfo.email,
-            name: userInfo.name,
-            uid: userInfo.id,
-          },
-          pinDesc: pinDescription,
-          pinName: pinName,
-          pinImage: pinImage,
-          pinLink: pinLink,
-          pinTags: [
-            "vintage",
-            "arm ideas",
-            "black & white",
-            "dot-work",
-            "animal",
-          ],
-        }));
-      setIsPinCreated(true);
-    } catch (error) {
-      console.error(error);
-    }
+    const collectionRefUser = doc(db, "user", userInfo.id, "pin", docRefCollectionRefPin.id);
+
+
+    setDoc(collectionRefUser, {
+      pinAutor: {
+        email: userInfo.email,
+        name: userInfo.name,
+        uid: userInfo.id,
+      },
+      pinId: docRefCollectionRefPin.id,
+      pinDesc: pinDescription,
+      pinName: pinName,
+      pinImage: pinImage,
+      pinLink: pinLink,
+      pinTags: ["vintage", "arm ideas", "black & white", "dot-work", "animal"],
+    });
+    setDoc(docRefCollectionRefPin, {
+      pinAutor: {
+        email: userInfo.email,
+        name: userInfo.name,
+        uid: userInfo.id,
+      },
+      pinId: docRefCollectionRefPin.id,
+      pinDesc: pinDescription,
+      pinName: pinName,
+      pinImage: pinImage,
+      pinLink: pinLink,
+      pinTags: ["vintage", "arm ideas", "black & white", "dot-work", "animal"],
+    });
+    setIsPinCreated(true);
   };
 
   const getPinImageUrl = (name) => {
