@@ -58,6 +58,7 @@ const SelectSection = styled.p`
   font-size: 1rem;
   margin: 10px 30px;
   border-bottom: 1px solid gray;
+  cursor: pointer;
 `;
 
 const AllCollectionsWrapper = styled.div`
@@ -76,8 +77,8 @@ const CollectionWarpper = styled.div`
   margin: 10px;
   display: flex;
   flex-direction: column;
-  /* justify-content:center; */
   align-items: center;
+  cursor: pointer;
 `;
 
 const CollectionImage = styled.div`
@@ -95,7 +96,7 @@ const CollectionName = styled.h3`
   margin: 5px auto;
 `;
 
-const CreatePinButton = styled.button`
+const CreateButton = styled.button`
   width: 60px;
   height: 60px;
   color: white;
@@ -105,7 +106,7 @@ const CreatePinButton = styled.button`
   font: inherit;
   cursor: pointer;
   outline: inherit;
-  font-size: 2rem;
+  font-size: 0.5rem;
   margin: 10px;
   position: fixed;
   bottom: 0;
@@ -125,5 +126,5 @@ export {
   CollectionWarpper,
   CollectionImage,
   CollectionName,
-  CreatePinButton,
+  CreateButton,
 };

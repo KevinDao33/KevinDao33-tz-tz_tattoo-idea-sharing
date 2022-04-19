@@ -23,32 +23,32 @@ import {
   CollectionWarpper,
   CollectionImage,
   CollectionName,
-  CreatePinButton,
+  CreateButton,
 } from "../styles/Profile.module";
 
 import Login from "./Login";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
 
-const mockAllCollections = [
-  {
-    arm: [
-      {pinId: "idididid", pinName: "Chicken", pinImageLink: "imageLink"},
-      {pinId: "ididi222", pinName: "Bear", pinImageLink: "imageLink222"},
-    ],
-  },
-  {
-    back: [
-      {pinId: "ididi333", pinName: "Wolf", pinImageLink: "imageLink333"},
-      {pinId: "ididi444", pinName: "Frog", pinImageLink: "imageLink444"},
-    ],
-  },
-  {
-    vintage: [
-      {pinId: "ididi555", pinName: "Tree", pinImageLink: "imageLink555"},
-      {pinId: "ididi666", pinName: "Flower", pinImageLink: "imageLink666"},
-    ],
-  },
-];
+// const mockAllCollections = [
+//   {
+//     arm: [
+//       {pinId: "idididid", pinName: "Chicken", pinImageLink: "imageLink"},
+//       {pinId: "ididi222", pinName: "Bear", pinImageLink: "imageLink222"},
+//     ],
+//   },
+//   {
+//     back: [
+//       {pinId: "ididi333", pinName: "Wolf", pinImageLink: "imageLink333"},
+//       {pinId: "ididi444", pinName: "Frog", pinImageLink: "imageLink444"},
+//     ],
+//   },
+//   {
+//     vintage: [
+//       {pinId: "ididi555", pinName: "Tree", pinImageLink: "imageLink555"},
+//       {pinId: "ididi666", pinName: "Flower", pinImageLink: "imageLink666"},
+//     ],
+//   },
+// ];
 
 function Profile(props) {
   // myPin/ myCollection/ mySchedule(artist only)
@@ -68,7 +68,7 @@ function Profile(props) {
 
   useEffect(() => {
     setShowSection(MY_COLLECTION);
-    setCollections(mockAllCollections);
+    // setCollections(mockAllCollections);
   }, []);
 
   const showMyPin = () => {
@@ -105,7 +105,7 @@ function Profile(props) {
               </PinWrapper>
             ))}
           <NavLink to='/create-pin'>
-            <CreatePinButton>+</CreatePinButton>
+            <CreateButton>+<br></br>pin</CreateButton>
           </NavLink>
         </AllPinsWrapper>
       );
@@ -119,6 +119,7 @@ function Profile(props) {
                 <CollectionName>{Object.keys(collection)}</CollectionName>
               </CollectionWarpper>
             ))}
+             <CreateButton>create<br></br>collec</CreateButton>
         </AllCollectionsWrapper>
       );
     } else if (showSection === MY_SCHEDULE) {
@@ -134,6 +135,25 @@ function Profile(props) {
     });
     setPins(myPins);
   };
+
+  const getCollections = async (id) => {
+    const querySnapshot = await getDocs(
+      collection(db, "user", id, "collection")
+    );
+    let myCollections = [];
+    querySnapshot.forEach((doc) => {
+      myCollections.push({...doc.data()});
+    });
+    console.log("myCollections", myCollections);
+    setCollections(myCollections);
+
+    return;
+  };
+
+  useEffect(() => {
+    userData && getPins(userData.id);
+    userData && getCollections(userData.id);
+  }, [userData]);
 
   const getUserData = (userId) => {
     const unsub = onSnapshot(doc(db, "user/" + userId), (doc) => {

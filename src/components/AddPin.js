@@ -1,5 +1,8 @@
-import React, {useState} from "react";
-import chicken from "../test-images/chicken.jpg";
+/* eslint-disable no-undef */
+import React, {useState, useEffect} from "react";
+// import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
+import {initializeApp} from "firebase/app";
+import {getFirestore, collection, getDocs} from "firebase/firestore";
 import {
   Overlay,
   AddPinOptions,
@@ -14,38 +17,68 @@ import {
   NameNewCollection,
 } from "../styles/AddPin.module";
 
-const mockAllCollections = [
-  "arm ideas",
-  "back ideas",
-  "black & white",
-  "vintage",
-  "dootwork",
-  "others",
-];
+// remove later
+import chicken from "../test-images/chicken.jpg";
+import {prodErrorMap} from "firebase/auth";
+
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
+  appId: process.env.REACT_APP_FIREBASE_APPID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 function AddPin(props) {
   const [collections, setCollections] = useState([]);
 
-  useState(()=>{
-    setCollections(mockAllCollections)
-  },[])
+  // useState(() => {
+  //   setCollections(mockAllCollections);
+  // }, []);
 
   const closeAddPin = () => {
     // eslint-disable-next-line react/prop-types
     props.setIsShowAddPin(false);
   };
 
+  const getCollections = async (id) => {
+    const querySnapshot = await getDocs(
+      collection(db, "user", id, "collection")
+    );
+    let myCollections = [];
+    querySnapshot.forEach((doc) => {
+      myCollections.push({...doc.data()});
+    });
+    console.log("myCollections", myCollections);
+    setCollections(myCollections);
+  };
+
+  useEffect(() => {
+    props.uid && getCollections(props.uid);
+  }, []);
+
   return (
     <>
       <AddPinOptions>
-        <LeaveButton onClick={closeAddPin}>x</LeaveButton>
-        <PinName>Skateboard Chicken</PinName>
-        <PinImage src={chicken} />
+        <LeaveButton
+          onClick={() => {
+            props.handleClosePinShow(props.indexxx);
+          }}>
+          x
+        </LeaveButton>
+        <PinName>{props.pin.pinName}</PinName>
+        <PinImage src={props.pin.pinImage} />
 
         {collections.length>0 &&
           collections.map((collectionName, index) => (
             <AddToCollection key={index}>
-              <CollectionName>{collectionName}</CollectionName>
+              <CollectionName>{Object.keys(collection)}</CollectionName>
               <SaveButton>save</SaveButton>
             </AddToCollection>
           ))}

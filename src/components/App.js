@@ -49,7 +49,7 @@ function App() {
       <Routes>
         <Route
           path='/'
-          element={<Homapage firebaseConfig={firebaseConfig} />}
+          element={<Homapage uid={uid} login={login} />}
         />
         <Route
           path='/profile'
