@@ -25,12 +25,6 @@ function Homapage(props) {
   const [isShowAddPin, setIsShowAddPin] = useState(false);
   const [pins, setPins] = useState();
 
-  const showAddPin = (pin, index) => {
-    // setIsShowAddPin(true);
-    pin.isShow = true;
-    //use pin[index].isShow to show or not show AddPin
-  };
-
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
@@ -39,7 +33,6 @@ function Homapage(props) {
     const mockPins = notesSnapshot.docs.map((doc) => doc.data());
     const addIsShowPins = mockPins.map((pin) => ({...pin, isShow: false}));
     setPins(addIsShowPins);
-    s;
     return pins;
   };
 
@@ -62,11 +55,10 @@ function Homapage(props) {
   return (
     <MainWrapper>
       <AllPinsWrapper>
-        {console.log("pins", pins)}
         {pins &&
           pins.map((pin, index) => (
             <>
-              <PinWrapper key={pin.pinName}>
+              <PinWrapper key={pin.id}>
                 <PinImage src={pin.pinImage} />
                 <SaveButton
                   onClick={() => {

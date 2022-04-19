@@ -3,7 +3,7 @@ import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {initializeApp} from "firebase/app";
-import {getFirestore, collection, addDoc} from "firebase/firestore";
+import {getFirestore, collection, addDoc, doc, setDoc} from "firebase/firestore";
 import {
   CreateNewPinWrapper,
   PinDataUploadWrapper,
@@ -117,26 +117,31 @@ function CreateNewPin() {
   const writeUserData = () => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const collectionRefPin = collection(db, "pin");
-    const collectionRefUser = collection(db, "user", userInfo.id, "pin");
+    const docRefCollectionRefPin = doc(collectionRefPin);
 
-    addDoc(collectionRefUser, {
+    const collectionRefUser = doc(db, "user", userInfo.id, "pin", docRefCollectionRefPin.id);
+
+
+    setDoc(collectionRefUser, {
       pinAutor: {
         email: userInfo.email,
         name: userInfo.name,
         uid: userInfo.id,
       },
+      pinId: docRefCollectionRefPin.id,
       pinDesc: pinDescription,
       pinName: pinName,
       pinImage: pinImage,
       pinLink: pinLink,
       pinTags: ["vintage", "arm ideas", "black & white", "dot-work", "animal"],
     });
-    addDoc(collectionRefPin, {
+    setDoc(docRefCollectionRefPin, {
       pinAutor: {
         email: userInfo.email,
         name: userInfo.name,
         uid: userInfo.id,
       },
+      pinId: docRefCollectionRefPin.id,
       pinDesc: pinDescription,
       pinName: pinName,
       pinImage: pinImage,

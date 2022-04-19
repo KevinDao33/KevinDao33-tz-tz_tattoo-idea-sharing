@@ -1,8 +1,18 @@
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
-// import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
+import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {initializeApp} from "firebase/app";
-import {getFirestore, collection, getDocs} from "firebase/firestore";
+import {
+  getFirestore,
+  collection as co,
+  getDocs,
+  addDoc,
+  doc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
 import {
   Overlay,
   AddPinOptions,
@@ -16,10 +26,6 @@ import {
   NameNewCollectionTitle,
   NameNewCollection,
 } from "../styles/AddPin.module";
-
-// remove later
-import chicken from "../test-images/chicken.jpg";
-import {prodErrorMap} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -38,22 +44,12 @@ const db = getFirestore(app);
 function AddPin(props) {
   const [collections, setCollections] = useState([]);
 
-  // useState(() => {
-  //   setCollections(mockAllCollections);
-  // }, []);
-
-  const closeAddPin = () => {
-    // eslint-disable-next-line react/prop-types
-    props.setIsShowAddPin(false);
-  };
-
   const getCollections = async (id) => {
-    const querySnapshot = await getDocs(
-      collection(db, "user", id, "collection")
-    );
+    const querySnapshot = await getDocs(co(db, "user", id, "collection"));
     let myCollections = [];
     querySnapshot.forEach((doc) => {
       myCollections.push({...doc.data()});
+      // myCollections.collectionName = doc.id;
     });
     console.log("myCollections", myCollections);
     setCollections(myCollections);
@@ -62,6 +58,34 @@ function AddPin(props) {
   useEffect(() => {
     props.uid && getCollections(props.uid);
   }, []);
+
+  const addPinToCollection = (collection, pin) => {
+    const collectionRef = doc(
+      db,
+      "user",
+      props.uid,
+      "collection",
+
+      // the param below needs to be replace by doc name
+      collection.collectionName
+    );
+    updateDoc(
+      collectionRef,
+      {
+        pins: arrayUnion({
+          pinName: pin.pinName,
+
+          // the id below needs to be replace by pin.pinId
+          pinId: pin.pinId,
+          pinImage: pin.pinImage,
+        }),
+      }
+      
+      ,
+      {merge: true}
+    );
+    console.log("all good");
+  };
 
   return (
     <>
@@ -78,8 +102,14 @@ function AddPin(props) {
         {collections &&
           collections.map((collection, index) => (
             <AddToCollection key={index}>
-              <CollectionName>{Object.keys(collection)}</CollectionName>
-              <SaveButton>save</SaveButton>
+              {/* <CollectionName>{Object.keys(collection)}</CollectionName> */}
+              <CollectionName>{collection.collectionName}</CollectionName>
+              <SaveButton
+                onClick={() => {
+                  addPinToCollection(collection, props.pin);
+                }}>
+                save
+              </SaveButton>
             </AddToCollection>
           ))}
       </AddPinOptions>
