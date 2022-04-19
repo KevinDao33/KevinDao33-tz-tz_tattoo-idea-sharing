@@ -35,7 +35,6 @@ function Homapage() {
   const getPins = async () => {
     const notesSnapshot = await getDocs(collection(db, "pin"));
     const pins = notesSnapshot.docs.map((doc) => doc.data());
-    console.log("pins", pins);
     setPins(pins);
 
     return pins;

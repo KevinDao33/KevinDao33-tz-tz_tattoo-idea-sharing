@@ -50,7 +50,7 @@ function CreateNewPin() {
     // show image preview
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
-      
+
       return;
     }
     setSelectedFile(imageFile);
@@ -111,10 +111,6 @@ function CreateNewPin() {
       return;
     }
     dataURLtoBlob(localStorage.getItem("uploadedImage"));
-    console.log("pinName", pinName);
-    console.log("pinDescription", pinDescription);
-    console.log("pinLink", pinLink);
-    console.log("pinImage", pinImage);
     alert("pin successfully created!");
   };
 

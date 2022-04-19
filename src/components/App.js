@@ -22,45 +22,43 @@ function App() {
         return;
       }
       const uid = user.uid;
-      console.log("uid", uid);
+      console.log("login", uid);
       setUid(uid);
       setLogin(true);
     });
   }, []);
 
   return (
-    <>
-      <BrowserRouter>
-        <GlobalStyle />
-        <Navbar />
-        <Routes>
-          <Route path='/' element={<Homapage />} />
-          <Route
-            path='/profile'
-            element={
-              <Profile
-                uid={uid}
-                setUid={setUid}
-                login={login}
-                setLogin={setLogin}
-              />
-            }
-          />
-          <Route path='/create-pin' element={<CreateNewPin />} />
-          <Route
-            path='/login'
-            element={
-              <Login
-                uid={uid}
-                setUid={setUid}
-                login={login}
-                setLogin={setLogin}
-              />
-            }
-          />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <GlobalStyle />
+      <Navbar />
+      <Routes>
+        <Route path='/' element={<Homapage />} />
+        <Route
+          path='/profile'
+          element={
+            <Profile
+              uid={uid}
+              setUid={setUid}
+              login={login}
+              setLogin={setLogin}
+            />
+          }
+        />
+        <Route path='/create-pin' element={<CreateNewPin />} />
+        <Route
+          path='/login'
+          element={
+            <Login
+              uid={uid}
+              setUid={setUid}
+              login={login}
+              setLogin={setLogin}
+            />
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
