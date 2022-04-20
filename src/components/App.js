@@ -48,7 +48,7 @@ function App() {
             }
           />
           <Route path='/create-pin' element={<CreateNewPin />} />
-          <Route path={`collection/:collectionName`} element={<Collection />} />
+          <Route path={`collection/:collectionName`} element={<Collection uid={uid} />} />
           <Route
             path='/login'
             element={

@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
 import Login from "./Login";
 import {NavLink} from "react-router-dom";
 import {initializeApp} from "firebase/app";
 import {getAuth, signOut} from "firebase/auth";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {
   getFirestore,
   collection,
@@ -45,9 +46,6 @@ const auth = getAuth();
 const db = getFirestore(app);
 
 function Profile(props) {
-
-  console.log('123');
-  
   // myPin/ myCollection/ mySchedule(artist only)
   const MY_PIN = "myPin";
   const MY_COLLECTION = "myCollection";
@@ -69,6 +67,7 @@ function Profile(props) {
   const showMyCollection = () => {
     setShowSection(MY_COLLECTION);
   };
+  // eslint-disable-next-line no-unused-vars
   const showMySchedule = () => {
     setShowSection(MY_SCHEDULE);
   };
@@ -79,7 +78,9 @@ function Profile(props) {
         props.setLogin(false);
         localStorage.clear();
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   const redirect = useNavigate();
@@ -106,14 +107,12 @@ function Profile(props) {
       return (
         <AllCollectionsWrapper>
           {collections &&
-            collections.map((collection, index) => (
+            collections.map((collection) => (
               <CollectionWarpper
                 key={collection.collectionName}
-                onClick={async () => {
-                  // const setCollectionParams = await props.setShowCollection(collection.collectionName);
-                  const direct2Collection = await redirect(
-                    `/collection/${collection.collectionName}`
-                  );
+                onClick={() => {
+                  // eslint-disable-next-line no-unused-vars
+                  redirect(`/collection/${collection.collectionName}`);
                 }}>
                 <CollectionImage></CollectionImage>
                 <CollectionName>{collection.collectionName}</CollectionName>
@@ -159,6 +158,7 @@ function Profile(props) {
   }, [userData]);
 
   const getUserData = (userId) => {
+    // eslint-disable-next-line no-unused-vars
     const unsub = onSnapshot(doc(db, "user/" + userId), (doc) => {
       if (!props.uid) {
         return;
