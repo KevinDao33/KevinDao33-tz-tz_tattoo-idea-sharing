@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
-import Login from "./Login";
 import {NavLink} from "react-router-dom";
 import {initializeApp} from "firebase/app";
 import {getAuth, signOut} from "firebase/auth";
@@ -26,22 +25,9 @@ import {
   CollectionName,
   CreatePinButton,
 } from "../styles/Profile.module";
+
+import Login from "./Login";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
-
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
-  appId: process.env.REACT_APP_FIREBASE_APPID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const db = getFirestore(app);
 
 const mockAllCollections = [
   {
@@ -70,10 +56,15 @@ function Profile(props) {
   const MY_COLLECTION = "myCollection";
   const MY_SCHEDULE = "mySchedule";
 
-  const [showSection, setShowSection] = useState();
-  const [pins, setPins] = useState();
-  const [userData, setUserData] = useState();
+  const [showSection, setShowSection] = useState("");
+  const [pins, setPins] = useState([]);
+  const [userData, setUserData] = useState(null);
   const [collections, setCollections] = useState();
+
+  // Initialize Firebase
+  const app = initializeApp(props.firebaseConfig);
+  const auth = getAuth();
+  const db = getFirestore(app);
 
   useEffect(() => {
     setShowSection(MY_COLLECTION);
@@ -93,17 +84,21 @@ function Profile(props) {
   function logOut() {
     signOut(auth)
       .then(() => {
-        props.setLogin(false);
+        props.setIsLogin(false);
+
+        // for the planned functions now, the localStorage would be better be clear out when user logout (including user data and pin image url), so that the next user wouldn't be affect at all.
         localStorage.clear();
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.erroe(error);
+      });
   }
 
   const renderUserSection = () => {
     if (showSection === MY_PIN) {
       return (
         <AllPinsWrapper>
-          {pins &&
+          {pins.length > 0 &&
             pins.map((pin, index) => (
               <PinWrapper key={index}>
                 <PinImage src={pin.pinImage} />
@@ -127,7 +122,7 @@ function Profile(props) {
         </AllCollectionsWrapper>
       );
     } else if (showSection === MY_SCHEDULE) {
-      return <div>welcom to my schedule</div>;
+      return <div>welcome to my schedule</div>;
     }
   };
 
@@ -140,36 +135,36 @@ function Profile(props) {
     setPins(myPins);
   };
 
-  useEffect(() => {
-    userData && getPins(userData.id);
-  });
-
   const getUserData = (userId) => {
     const unsub = onSnapshot(doc(db, "user/" + userId), (doc) => {
       if (!props.uid) {
         return;
-      } else if (props.uid) {
-        setUserData({
-          name: doc.data().name,
-          email: doc.data().email,
-          role: doc.data().role,
-          following: doc.data().following,
-          follower: doc.data().follower,
-          pic: doc.data().pic,
-          id: doc.data().uid,
-          link: doc.data().link,
-        });
       }
+      setUserData({
+        name: doc.data().name,
+        email: doc.data().email,
+        role: doc.data().role,
+        following: doc.data().following,
+        follower: doc.data().follower,
+        pic: doc.data().pic,
+        id: doc.data().uid,
+        link: doc.data().link,
+      });
     });
   };
 
+  async function getUserInfoAndPins() {
+    await getUserData(props.uid);
+    (await userData) && getPins(userData.id);
+  }
+
   useEffect(() => {
-    getUserData(props.uid);
-  });
+    getUserInfoAndPins();
+  }, [userData]);
 
   return (
     <>
-      {props.login ? (
+      {props.isLogin ? (
         userData && (
           <PorfileWrapper>
             <UserImage></UserImage>
@@ -193,7 +188,10 @@ function Profile(props) {
           </PorfileWrapper>
         )
       ) : (
-        <Login userData={userData} setUserData={setUserData}></Login>
+        <Login
+          userData={userData}
+          setUserData={setUserData}
+          firebaseConfig={props.firebaseConfig}></Login>
       )}
     </>
   );

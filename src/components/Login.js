@@ -9,28 +9,15 @@ import {
 } from "firebase/auth";
 import {Button} from "../styles/Profile.module";
 import {getFirestore, doc, setDoc, onSnapshot} from "firebase/firestore";
+
 import {LoginWrapper} from "../styles/Login.module";
-
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
-  appId: process.env.REACT_APP_FIREBASE_APPID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const db = getFirestore(app);
+import * as myConstClass from "../const";
 
 function Login(props) {
-  const SIGN_IN = "sign_in";
-  const SIGN_UP = "sign_up";
+  // const SIGN_IN = "signIn";
+  // const SIGN_UP = "signUp";
 
-  const [isShowSignWhat, setIsShowSignWhat] = useState();
+  const [showSignWhat, setshowSignWhat] = useState();
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userName, setUserName] = useState("");
@@ -40,12 +27,16 @@ function Login(props) {
 
   const redirect = useNavigate();
 
-  const showSingIn = () => {
-    setIsShowSignWhat(SIGN_IN);
+  const app = initializeApp(props.firebaseConfig);
+  const auth = getAuth();
+  const db = getFirestore(app);
+
+  const showSignIn = () => {
+    setshowSignWhat(myConstClass.SIGN_IN);
   };
 
-  const showSingUp = () => {
-    setIsShowSignWhat(SIGN_UP);
+  const showSignUp = () => {
+    setshowSignWhat(myConstClass.SIGN_UP);
   };
 
   const signUp = () => {
@@ -58,21 +49,21 @@ function Login(props) {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log("errorCode", errorCode);
-        console.log("errorMessage", errorMessage);
+        console.error("errorCode", errorCode);
+        console.error("errorMessage", errorMessage);
 
         switch (errorCode) {
           case "auth/wrong-password":
-            alert("密碼錯誤喔");
+            alert(myConstClass.AUTH_WRONG_PASSWORD);
             break;
           case "auth/user-not-found":
-            alert("帳號不存在喔");
+            alert(myConstClass.AUTH_USER_NOT_FOUND);
             break;
           case "auth/weak-password":
-            alert("密碼需至少六碼喔");
+            alert(myConstClass.AUTH_WEAK_PASSWORD);
             break;
           default:
-            alert("登入失敗QQ");
+            alert(myConstClass.AUTH_LOGIN_FAIL);
         }
       });
   };
@@ -103,7 +94,7 @@ function Login(props) {
   };
 
   const writeUserData = (userId) => {
-    setDoc(doc(db, "user/" + userId), {
+    setDoc(doc(db, `user/${userId}`), {
       email: userEmail,
       password: userPassword,
       name: userName,
@@ -118,7 +109,7 @@ function Login(props) {
   };
 
   const getUserData = (userId) => {
-    const unsub = onSnapshot(doc(db, "user/" + userId), (doc) => {
+    const handleUserData = onSnapshot(doc(db, `user/${userId}`), (doc) => {
       localStorage.setItem(
         "userInfo",
         JSON.stringify({
@@ -145,12 +136,21 @@ function Login(props) {
     });
   };
 
+  async function handleSignIn() {
+    signIn();
+    props.isLogin && redirect("/profile");
+  }
+  async function handleSignUp() {
+    signUp();
+    props.isLogin && redirect("/profile");
+  }
+
   return (
     <LoginWrapper>
-      <Button onClick={showSingIn}>Sign In</Button>
-      <Button onClick={showSingUp}>Sign Up</Button>
+      <Button onClick={showSignIn}>Sign In</Button>
+      <Button onClick={showSignUp}>Sign Up</Button>
       {/* elements below will be written in styled components */}
-      {isShowSignWhat === SIGN_IN && (
+      {showSignWhat === myConstClass.SIGN_IN && (
         <>
           <label>email</label>
           <input
@@ -162,16 +162,10 @@ function Login(props) {
             value={userPassword}
             onChange={(e) => setUserPassword(e.target.value)}></input>
 
-          <button
-            onClick={async () => {
-              signIn();
-              props.login && redirect("/profile");
-            }}>
-            Sign In
-          </button>
+          <button onClick={handleSignIn}>Sign In</button>
         </>
       )}
-      {isShowSignWhat === SIGN_UP && (
+      {showSignWhat === myConstClass.SIGN_UP && (
         <>
           <label>name</label>
           <input
@@ -206,13 +200,7 @@ function Login(props) {
             value={userLink}
             onChange={(e) => setUserLink(e.target.value)}></input>
 
-          <button
-            onClick={async () => {
-              signUp();
-              props.login && redirect("/profile");
-            }}>
-            Sign Up
-          </button>
+          <button onClick={handleSignUp}>Sign Up</button>
         </>
       )}
     </LoginWrapper>

@@ -3,7 +3,9 @@ import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {initializeApp} from "firebase/app";
+import imageCompression from "browser-image-compression";
 import {getFirestore, collection, addDoc} from "firebase/firestore";
+
 import {
   CreateNewPinWrapper,
   PinDataUploadWrapper,
@@ -15,24 +17,8 @@ import {
   UploadNewPinImageInput,
   PreviewImage,
 } from "../styles/CreateNewPin.module";
-import imageCompression from "browser-image-compression";
 
-const firebaseConfig = {
-  // eslint-disable-next-line no-undef
-  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
-  appId: process.env.REACT_APP_FIREBASE_APPID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-function CreateNewPin() {
+function CreateNewPin(props) {
   const [pinName, setPinName] = useState("");
   const [pinDescription, setPinDescription] = useState("");
   const [pinLink, setPinLink] = useState("");
@@ -43,6 +29,10 @@ function CreateNewPin() {
   const [isPinCreated, setIsPinCreated] = useState(false);
 
   const redirect = useNavigate();
+
+  // Initialize Firebase
+  const app = initializeApp(props.firebaseConfig);
+  const db = getFirestore(app);
 
   async function handleImageUpload(e) {
     const imageFile = e.target.files[0];
@@ -81,11 +71,11 @@ function CreateNewPin() {
     }
   }
 
-  const dataURLtoBlob = (dataURL) => {
+  const dataUrl2Blob = (dataUrl) => {
     // convert base64 to raw binary data held in a string
-    const byteString = atob(dataURL.split(",")[1]);
+    const byteString = atob(dataUrl.split(",")[1]);
     // separate out the mime component
-    let mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
+    let mimeString = dataUrl.split(",")[0].split(":")[1].split(";")[0];
     // write the bytes of the string to an ArrayBuffer
     let arrayBuffer = new ArrayBuffer(byteString.length);
     let _ia = new Uint8Array(arrayBuffer);
@@ -93,57 +83,83 @@ function CreateNewPin() {
       _ia[i] = byteString.charCodeAt(i);
     }
 
-    var dataView = new DataView(arrayBuffer);
-    var blob = new Blob([dataView], {type: mimeString});
+    let dataView = new DataView(arrayBuffer);
+    let blob = new Blob([dataView], {type: mimeString});
     console.log(`uploading size ${blob.size / 1024 / 1024} MB`);
 
     return blob;
   };
 
-  const submitPinData = (dataURLtoBlob) => {
+  const successfullyCreatePin = (pinImageInLocal) => {
+    dataUrl2Blob(pinImageInLocal);
+    alert("pin successfully created!");
+  };
+
+  const submitPinData = (dataUrl2Blob) => {
     if (!pinName || !pinDescription || !pinLink) {
       alert("please check if all fields are filled");
 
       return;
-    } else if (pinName && pinDescription && pinLink && !pinImage) {
+    } else if (!pinImage) {
       alert("please upload and check the image for your pin");
 
       return;
     }
-    dataURLtoBlob(localStorage.getItem("uploadedImage"));
-    alert("pin successfully created!");
+    const pinImageInLocal = localStorage.getItem("uploadedImage");
+    pinImageInLocal
+      ? successfullyCreatePin(pinImageInLocal)
+      : alert("something went wrong, please try again :(");
+    // alert("pin successfully created!");
   };
 
-  const writeUserData = () => {
+  const writeUserData = async () => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const collectionRefPin = collection(db, "pin");
     const collectionRefUser = collection(db, "user", userInfo.id, "pin");
 
-    addDoc(collectionRefUser, {
-      pinAutor: {
-        email: userInfo.email,
-        name: userInfo.name,
-        uid: userInfo.id,
-      },
-      pinDesc: pinDescription,
-      pinName: pinName,
-      pinImage: pinImage,
-      pinLink: pinLink,
-      pinTags: ["vintage", "arm ideas", "black & white", "dot-work", "animal"],
-    });
-    addDoc(collectionRefPin, {
-      pinAutor: {
-        email: userInfo.email,
-        name: userInfo.name,
-        uid: userInfo.id,
-      },
-      pinDesc: pinDescription,
-      pinName: pinName,
-      pinImage: pinImage,
-      pinLink: pinLink,
-      pinTags: ["vintage", "arm ideas", "black & white", "dot-work", "animal"],
-    });
-    setIsPinCreated(true);
+    try {
+      userInfo &&
+        (await addDoc(collectionRefUser, {
+          pinAutor: {
+            email: userInfo.email,
+            name: userInfo.name,
+            uid: userInfo.id,
+          },
+          pinDesc: pinDescription,
+          pinName: pinName,
+          pinImage: pinImage,
+          pinLink: pinLink,
+          pinTags: [
+            "vintage",
+            "arm ideas",
+            "black & white",
+            "dot-work",
+            "animal",
+          ],
+        }));
+      userInfo &&
+        (await addDoc(collectionRefPin, {
+          pinAutor: {
+            email: userInfo.email,
+            name: userInfo.name,
+            uid: userInfo.id,
+          },
+          pinDesc: pinDescription,
+          pinName: pinName,
+          pinImage: pinImage,
+          pinLink: pinLink,
+          pinTags: [
+            "vintage",
+            "arm ideas",
+            "black & white",
+            "dot-work",
+            "animal",
+          ],
+        }));
+      setIsPinCreated(true);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const getPinImageUrl = (name) => {
@@ -171,7 +187,7 @@ function CreateNewPin() {
   async function uploadPinImage() {
     const uploadedImage = localStorage.getItem("uploadedImage");
     const uploadedImageName = localStorage.getItem("uploadedImageName");
-    const result = dataURLtoBlob(uploadedImage);
+    const result = dataUrl2Blob(uploadedImage);
     const storage = getStorage(app);
     const storageRef = ref(storage, `pinImages/${uploadedImageName}`);
 
@@ -181,7 +197,17 @@ function CreateNewPin() {
         getPinImageUrl(uploadedImageName);
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
+    }
+  }
+
+  async function handleCeatePin() {
+    try {
+      submitPinData(dataUrl2Blob);
+      writeUserData();
+      isPinCreated && redirect("/profile");
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -198,12 +224,7 @@ function CreateNewPin() {
             onChange={handleImageUpload}></UploadNewPinImageInput>
           {selectedFile && <PreviewImage src={preview} />}
         </UploadNewPinImageLabel>
-        <CreatePinButton
-          onClick={() => {
-            uploadPinImage();
-          }}>
-          Check Image
-        </CreatePinButton>
+        <CreatePinButton onClick={uploadPinImage}>Check Image</CreatePinButton>
       </PinImageUploadWrapper>
 
       {/* Pin Info */}
@@ -228,15 +249,7 @@ function CreateNewPin() {
             value={pinLink}
             onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
         </NewPinDataWrapper>
-
-        <CreatePinButton
-          onClick={async () => {
-            submitPinData(dataURLtoBlob);
-            writeUserData();
-            isPinCreated && redirect("/profile");
-          }}>
-          Create
-        </CreatePinButton>
+        <CreatePinButton onClick={handleCeatePin}>Create</CreatePinButton>
       </PinDataUploadWrapper>
     </CreateNewPinWrapper>
   );
