@@ -4,6 +4,7 @@ import Login from "./Login";
 import {NavLink} from "react-router-dom";
 import {initializeApp} from "firebase/app";
 import {getAuth, signOut} from "firebase/auth";
+import {useNavigate, useParams} from "react-router-dom";
 import {
   getFirestore,
   collection,
@@ -43,28 +44,10 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore(app);
 
-// const mockAllCollections = [
-//   {
-//     arm: [
-//       {pinId: "idididid", pinName: "Chicken", pinImageLink: "imageLink"},
-//       {pinId: "ididi222", pinName: "Bear", pinImageLink: "imageLink222"},
-//     ],
-//   },
-//   {
-//     back: [
-//       {pinId: "ididi333", pinName: "Wolf", pinImageLink: "imageLink333"},
-//       {pinId: "ididi444", pinName: "Frog", pinImageLink: "imageLink444"},
-//     ],
-//   },
-//   {
-//     vintage: [
-//       {pinId: "ididi555", pinName: "Tree", pinImageLink: "imageLink555"},
-//       {pinId: "ididi666", pinName: "Flower", pinImageLink: "imageLink666"},
-//     ],
-//   },
-// ];
-
 function Profile(props) {
+
+  console.log('123');
+  
   // myPin/ myCollection/ mySchedule(artist only)
   const MY_PIN = "myPin";
   const MY_COLLECTION = "myCollection";
@@ -99,7 +82,10 @@ function Profile(props) {
       .catch((error) => {});
   }
 
+  const redirect = useNavigate();
+
   const renderUserSection = () => {
+    // let params = useParams();
     if (showSection === MY_PIN) {
       return (
         <AllPinsWrapper>
@@ -110,7 +96,9 @@ function Profile(props) {
               </PinWrapper>
             ))}
           <NavLink to='/create-pin'>
-            <CreateButton>+<br></br>pin</CreateButton>
+            <CreateButton>
+              +<br></br>pin
+            </CreateButton>
           </NavLink>
         </AllPinsWrapper>
       );
@@ -119,12 +107,22 @@ function Profile(props) {
         <AllCollectionsWrapper>
           {collections &&
             collections.map((collection, index) => (
-              <CollectionWarpper key={index}>
+              <CollectionWarpper
+                key={collection.collectionName}
+                onClick={async () => {
+                  // const setCollectionParams = await props.setShowCollection(collection.collectionName);
+                  const direct2Collection = await redirect(
+                    `/collection/${collection.collectionName}`
+                  );
+                }}>
                 <CollectionImage></CollectionImage>
-                <CollectionName>{Object.keys(collection)}</CollectionName>
+                <CollectionName>{collection.collectionName}</CollectionName>
               </CollectionWarpper>
             ))}
-             <CreateButton>create<br></br>collec</CreateButton>
+
+          <CreateButton>
+            create<br></br>collec
+          </CreateButton>
         </AllCollectionsWrapper>
       );
     } else if (showSection === MY_SCHEDULE) {

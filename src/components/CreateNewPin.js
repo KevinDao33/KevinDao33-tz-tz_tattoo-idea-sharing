@@ -3,7 +3,13 @@ import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {initializeApp} from "firebase/app";
-import {getFirestore, collection, addDoc, doc, setDoc} from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 import {
   CreateNewPinWrapper,
   PinDataUploadWrapper,
@@ -119,8 +125,13 @@ function CreateNewPin() {
     const collectionRefPin = collection(db, "pin");
     const docRefCollectionRefPin = doc(collectionRefPin);
 
-    const collectionRefUser = doc(db, "user", userInfo.id, "pin", docRefCollectionRefPin.id);
-
+    const collectionRefUser = doc(
+      db,
+      "user",
+      userInfo.id,
+      "pin",
+      docRefCollectionRefPin.id
+    );
 
     setDoc(collectionRefUser, {
       pinAutor: {
@@ -238,7 +249,7 @@ function CreateNewPin() {
           onClick={async () => {
             submitPinData(dataURLtoBlob);
             writeUserData();
-            isPinCreated && redirect("/profile");
+            const redirect2Profile = await redirect("/profile");
           }}>
           Create
         </CreatePinButton>
