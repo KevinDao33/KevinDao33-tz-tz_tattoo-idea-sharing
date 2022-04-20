@@ -192,7 +192,7 @@ function CreateNewPin(props) {
     }
   }
 
-  async function handleCeatePin() {
+  async function handleCreatePin() {
     try {
       submitPinData(dataUrl2Blob);
       writeUserData();
@@ -241,19 +241,7 @@ function CreateNewPin(props) {
             value={pinLink}
             onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
         </NewPinDataWrapper>
-<<<<<<< HEAD
-        <CreatePinButton onClick={handleCeatePin}>Create</CreatePinButton>
-=======
-
-        <CreatePinButton
-          onClick={async () => {
-            submitPinData(dataURLtoBlob);
-            writeUserData();
-            const redirect2Profile = await redirect("/profile");
-          }}>
-          Create
-        </CreatePinButton>
->>>>>>> 6bad61a (set up routers for collection-page adding each colection's name in the url)
+        <CreatePinButton onClick={handleCreatePin}>Create</CreatePinButton>
       </PinDataUploadWrapper>
     </CreateNewPinWrapper>
   );

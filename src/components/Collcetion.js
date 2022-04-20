@@ -1,42 +1,63 @@
-import React, {useEffect} from "react";
+/* eslint-disable no-undef */
+import React, {useState, useEffect} from "react";
+import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
+import {initializeApp} from "firebase/app";
+import {
+  // collection,
+  getFirestore,
+  doc,
+  // getDocs,
+  getDoc,
+} from "firebase/firestore";
 
-function Collection() {
-  console.log(window.location.href);
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
+  appId: process.env.REACT_APP_FIREBASE_APPID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function Collection(props) {
+  const [pinsInCollection, setPinsInCollection] = useState([]);
+  const [collectionName, setCollectionName] = useState();
 
   const getCollectionName = () => {
     const url = window.location.href;
     const decodeUrl = decodeURI(url);
     const lastSegment = decodeUrl.split("/").pop();
-    console.log(lastSegment);
+    setCollectionName(lastSegment);
   };
-  useEffect(() => {
-    getCollectionName();
-  }, []);
+
+  const getPinsInCollection = async (id) => {
+    const querySnapshot = await getDoc(
+      doc(db, "user", id, "collection", collectionName)
+    );
+    // const pinsInCollec = querySnapshot.data();
+    console.log(querySnapshot.data());
+    setPinsInCollection(querySnapshot.data());
+  };
+
+  useEffect(async () => {
+    const aaa = await getCollectionName();
+    props.uid && getPinsInCollection(props.uid);
+  }, [collectionName, props.uid]);
 
   return (
-    <>
-    {
-        console.log('123')
-        
-    }
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>hihihihhihihi</div>
-      <div>bye</div>
-    </>
+    <AllPinsWrapper>
+      {pinsInCollection.collectionName &&
+        pinsInCollection.pins.map((pin, index) => (
+          <PinWrapper key={index}>
+            <PinImage src={pin.pinImage} />
+          </PinWrapper>
+        ))}
+    </AllPinsWrapper>
   );
 }
 

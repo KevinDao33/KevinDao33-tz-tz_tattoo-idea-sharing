@@ -47,37 +47,33 @@ function App() {
       <GlobalStyle />
       <Navbar />
       <Routes>
-        <Route
-          path='/'
-          element={<Homapage uid={uid} login={login} />}
-        />
-        <Route
-          path='/profile'
-          element={
-            <Profile
-              uid={uid}
-              setUid={setUid}
-              isLogin={isLogin}
-              setIsLogin={setIsLogin}
-              firebaseConfig={firebaseConfig}
-            />
-          }
-        />
-        <Route
-          path='/create-pin'
-          element={<CreateNewPin firebaseConfig={firebaseConfig} />}
-        />
-        <Route
-          path='/login'
-          element={
-            <Login
-              uid={uid}
-              setUid={setUid}
-              isLogin={isLogin}
-              setIsLogin={setIsLogin}
-            />
-          }
-        />
+
+          <Route path='/' element={<Homapage uid={uid} login={login} />} />
+          <Route
+            path='/profile'
+            element={
+              <Profile
+                uid={uid}
+                setUid={setUid}
+                login={login}
+                setLogin={setLogin}
+              />
+            }
+          />
+          <Route path='/create-pin' element={<CreateNewPin />} />
+          <Route path={`collection/:collectionName`} element={<Collection uid={uid} />} />
+          <Route
+            path='/login'
+            element={
+              <Login
+                uid={uid}
+                setUid={setUid}
+                login={login}
+                setLogin={setLogin}
+              />
+            }
+          />
+        
       </Routes>
     </BrowserRouter>
   );
