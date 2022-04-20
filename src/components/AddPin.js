@@ -79,12 +79,10 @@ function AddPin(props) {
           pinId: pin.pinId,
           pinImage: pin.pinImage,
         }),
-      }
-      
-      ,
+      },
       {merge: true}
     );
-    console.log("all good");
+    alert(`pin added to ${collection.collectionName}`);
   };
 
   return (

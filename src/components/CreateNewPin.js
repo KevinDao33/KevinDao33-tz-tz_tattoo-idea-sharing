@@ -116,8 +116,13 @@ function CreateNewPin(props) {
     const collectionRefPin = collection(db, "pin");
     const docRefCollectionRefPin = doc(collectionRefPin);
 
-    const collectionRefUser = doc(db, "user", userInfo.id, "pin", docRefCollectionRefPin.id);
-
+    const collectionRefUser = doc(
+      db,
+      "user",
+      userInfo.id,
+      "pin",
+      docRefCollectionRefPin.id
+    );
 
     setDoc(collectionRefUser, {
       pinAutor: {
@@ -236,7 +241,19 @@ function CreateNewPin(props) {
             value={pinLink}
             onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
         </NewPinDataWrapper>
+<<<<<<< HEAD
         <CreatePinButton onClick={handleCeatePin}>Create</CreatePinButton>
+=======
+
+        <CreatePinButton
+          onClick={async () => {
+            submitPinData(dataURLtoBlob);
+            writeUserData();
+            const redirect2Profile = await redirect("/profile");
+          }}>
+          Create
+        </CreatePinButton>
+>>>>>>> 6bad61a (set up routers for collection-page adding each colection's name in the url)
       </PinDataUploadWrapper>
     </CreateNewPinWrapper>
   );
