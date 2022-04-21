@@ -43,6 +43,7 @@ const db = getFirestore(app);
 
 function AddPin(props) {
   const [collections, setCollections] = useState([]);
+  const [newCollectionName, setNewCollectionName] = useState("");
 
   const getCollections = async (id) => {
     const querySnapshot = await getDocs(co(db, "user", id, "collection"));
@@ -85,6 +86,38 @@ function AddPin(props) {
     alert(`pin added to ${collection.collectionName}`);
   };
 
+  const setCollection2Firestore = (uid) => {
+    const newCollectionRef = doc(
+      db,
+      "user",
+      uid,
+      "collection",
+      newCollectionName
+    );
+    setDoc(
+      newCollectionRef,
+      {
+        collectionName: newCollectionName,
+        pins: [
+          {
+            pinId: props.pin.pinId,
+            pinImage: props.pin.pinImage,
+            pinName: props.pin.pinName,
+          },
+        ],
+      },
+      {merge: true}
+    );
+    alert(`pin added to new collection ${newCollectionName}!`);
+  };
+
+  const createNewCollection = () => {
+    console.log("do u want to create a new collection?");
+    newCollectionName.length > 0
+      ? setCollection2Firestore(props.uid)
+      : alert("please enter a name for the new collection");
+  };
+
   return (
     <>
       <AddPinOptions>
@@ -114,8 +147,12 @@ function AddPin(props) {
 
       <CreateCollectionWrapper>
         <NameNewCollectionTitle>new collection</NameNewCollectionTitle>
-        <NameNewCollection></NameNewCollection>
-        <SaveButton>create</SaveButton>
+        <NameNewCollection
+          value={newCollectionName}
+          onChange={(e) =>
+            setNewCollectionName(e.target.value)
+          }></NameNewCollection>
+        <SaveButton onClick={createNewCollection}>create</SaveButton>
       </CreateCollectionWrapper>
 
       <Overlay />

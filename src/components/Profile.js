@@ -12,6 +12,7 @@ import {
   getDocs,
   onSnapshot,
   doc,
+  setDoc,
 } from "firebase/firestore";
 import {
   PorfileWrapper,
@@ -27,6 +28,12 @@ import {
   CollectionImage,
   CollectionName,
   CreateButton,
+  Overlay,
+  SaveButton,
+  CreateCollectionWrapper,
+  NameNewCollectionTitle,
+  NameNewCollection,
+  LeaveButton,
 } from "../styles/Profile.module";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
 
@@ -55,6 +62,8 @@ function Profile(props) {
   const [pins, setPins] = useState();
   const [userData, setUserData] = useState();
   const [collections, setCollections] = useState();
+  const [showCreateCollection, setShowCreateCollection] = useState(false);
+  const [newCollectionName, setNewCollectionName] = useState();
 
   useEffect(() => {
     setShowSection(MY_COLLECTION);
@@ -119,7 +128,11 @@ function Profile(props) {
               </CollectionWarpper>
             ))}
 
-          <CreateButton>
+          <CreateButton
+            // onClick={setShowCreateCollection(true)}>
+            onClick={() => {
+              setShowCreateCollection(true);
+            }}>
             create<br></br>collec
           </CreateButton>
         </AllCollectionsWrapper>
@@ -146,7 +159,6 @@ function Profile(props) {
     querySnapshot.forEach((doc) => {
       myCollections.push({...doc.data()});
     });
-    console.log("myCollections", myCollections);
     setCollections(myCollections);
 
     return;
@@ -183,6 +195,56 @@ function Profile(props) {
     !userData && getUserData(props.uid);
   });
 
+  const setCollection2Firestore = (uid) => {
+    const newCollectionRef = doc(
+      db,
+      "user",
+      uid,
+      "collection",
+      newCollectionName
+    );
+    setDoc(
+      newCollectionRef,
+      {
+        collectionName: newCollectionName,
+        pins: [],
+      },
+      {merge: true}
+    );
+    alert(`pin added to new collection ${newCollectionName}!`);
+  };
+
+  const createNewCollection = () => {
+    console.log("do u want to create a new collection?");
+    newCollectionName.length > 0
+      ? setCollection2Firestore(props.uid)
+      : alert("please enter a name for the new collection");
+  };
+
+  const showCreateCollectionSection = () => {
+    return (
+      <>
+        {showCreateCollection && (
+          <>
+            <Overlay></Overlay>
+            <CreateCollectionWrapper>
+              <LeaveButton onClick={() => setShowCreateCollection(false)}>
+                x
+              </LeaveButton>
+              <NameNewCollectionTitle>new collection</NameNewCollectionTitle>
+              <NameNewCollection
+                value={newCollectionName}
+                onChange={(e) =>
+                  setNewCollectionName(e.target.value)
+                }></NameNewCollection>
+              <SaveButton onClick={createNewCollection}>create</SaveButton>
+            </CreateCollectionWrapper>
+          </>
+        )}
+      </>
+    );
+  };
+
   return (
     <>
       {props.login ? (
@@ -205,6 +267,7 @@ function Profile(props) {
                 </SelectSection>
               </ButtonWrapper>
               {renderUserSection()}
+              {showCreateCollectionSection()}
             </UserStuffWrapper>
           </PorfileWrapper>
         )

@@ -113,6 +113,88 @@ const CreateButton = styled.button`
   right: 30px;
 `;
 
+// =======================================================================
+const Overlay = styled.div`
+  position: relative;
+  opacity: 0.8;
+  background-color: #ccc;
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  top: 0px;
+  left: 0px;
+  z-index: 2;
+`;
+
+const CreateCollectionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 50vw;
+  max-width: 650px;
+  height: 30vh;
+  right: 25%;
+  top: 25%;
+  align-items: center;
+  justify-content: center;
+  bottom: 45px;
+  position: fixed;
+  background-color: #f2f1eb;
+  border-radius: 20px;
+  z-index: 3;
+`;
+
+const NameNewCollectionTitle = styled.label`
+  font-size: 2rem;
+  color: gray;
+  line-height: normal;
+  text-align: center;
+  z-index: 3;
+  margin: 30px auto 10px auto;
+`;
+
+const NameNewCollection = styled.input`
+  width: 50%;
+  height: 35px;
+  font-size: 1.5rem;
+  border-radius: 30px;
+  border: 1.5px solid #e3e0e0;
+  background-color: white;
+  margin: 10px auto;
+  padding-left: 10px;
+  cursor: text;
+  z-index: 3;
+`;
+
+const SaveButton = styled.button`
+  width: 35%;
+  color: white;
+  background-color: coral;
+  border: none;
+  border-radius: 30px;
+  padding: 10px;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  font-size: 1.5rem;
+  margin: 20px;
+  z-index: 5;
+`;
+
+const LeaveButton = styled.button`
+  color: gray;
+  border: none;
+  border-radius: 30px;
+  padding: 10px;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 1.5rem;
+`;
+
+// =======================================================================
 export {
   PorfileWrapper,
   UserImage,
@@ -127,4 +209,10 @@ export {
   CollectionImage,
   CollectionName,
   CreateButton,
+  Overlay,
+  SaveButton,
+  CreateCollectionWrapper,
+  NameNewCollectionTitle,
+  NameNewCollection,
+  LeaveButton,
 };
