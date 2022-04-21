@@ -2,13 +2,7 @@
 import React, {useState, useEffect} from "react";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
 import {initializeApp} from "firebase/app";
-import {
-  // collection,
-  getFirestore,
-  doc,
-  // getDocs,
-  getDoc,
-} from "firebase/firestore";
+import {getFirestore, doc, getDoc} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -51,12 +45,15 @@ function Collection(props) {
 
   return (
     <AllPinsWrapper>
-      {pinsInCollection.collectionName &&
+      {pinsInCollection.collectionName && pinsInCollection.pins.length > 0 ? (
         pinsInCollection.pins.map((pin, index) => (
           <PinWrapper key={index}>
             <PinImage src={pin.pinImage} />
           </PinWrapper>
-        ))}
+        ))
+      ) : (
+        <h2>There is no pin in this collection</h2>
+      )}
     </AllPinsWrapper>
   );
 }
