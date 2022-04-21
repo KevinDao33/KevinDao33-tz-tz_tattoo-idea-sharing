@@ -25,9 +25,9 @@ function Login(props) {
 
   const redirect = useNavigate();
 
-  const app = initializeApp(props.firebaseConfig);
+  // const app = initializeApp(props.firebaseConfig);
+  // const db = getFirestore(app);
   const auth = getAuth();
-  const db = getFirestore(app);
 
   const showSignIn = () => {
     setshowSignWhat(myConstClass.SIGN_IN);
@@ -92,7 +92,7 @@ function Login(props) {
   };
 
   const writeUserData = (userId) => {
-    setDoc(doc(db, `user/${userId}`), {
+    setDoc(doc(props.db, `user/${userId}`), {
       email: userEmail,
       password: userPassword,
       name: userName,
@@ -107,7 +107,7 @@ function Login(props) {
   };
 
   const getUserData = (userId) => {
-    const handleUserData = onSnapshot(doc(db, `user/${userId}`), (doc) => {
+    const handleUserData = onSnapshot(doc(props.db, `user/${userId}`), (doc) => {
       localStorage.setItem(
         "userInfo",
         JSON.stringify({

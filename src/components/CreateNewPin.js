@@ -30,9 +30,9 @@ function CreateNewPin(props) {
 
   const redirect = useNavigate();
 
-  // Initialize Firebase
-  const app = initializeApp(props.firebaseConfig);
-  const db = getFirestore(app);
+  // // Initialize Firebase
+  // const app = initializeApp(props.firebaseConfig);
+  // const db = getFirestore(app);
 
   async function handleImageUpload(e) {
     // show image preview
@@ -117,7 +117,7 @@ function CreateNewPin(props) {
     const docRefCollectionRefPin = doc(collectionRefPin);
 
     const collectionRefUser = doc(
-      db,
+      props.db,
       "user",
       userInfo.id,
       "pin",

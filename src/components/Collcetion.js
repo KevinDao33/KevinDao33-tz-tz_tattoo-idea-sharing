@@ -1,22 +1,34 @@
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
-import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
 import {initializeApp} from "firebase/app";
-import {getFirestore, doc, getDoc} from "firebase/firestore";
+import {
+  getFirestore,
+  updateDoc,
+  doc,
+  getDoc,
+  arrayRemove,
+} from "firebase/firestore";
 
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
-  appId: process.env.REACT_APP_FIREBASE_APPID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
-};
+import {
+  AllPinsWrapper,
+  PinWrapper,
+  PinImage,
+  SaveButton as RemoveButton,
+} from "../styles/Homepage.module";
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// const firebaseConfig = {
+//   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+//   authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
+//   projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
+//   storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
+//   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
+//   appId: process.env.REACT_APP_FIREBASE_APPID,
+//   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
+// };
+
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
 
 function Collection(props) {
   const [pinsInCollection, setPinsInCollection] = useState([]);
@@ -31,17 +43,29 @@ function Collection(props) {
 
   const getPinsInCollection = async (id) => {
     const querySnapshot = await getDoc(
-      doc(db, "user", id, "collection", collectionName)
+      doc(props.db, "user", id, "collection", collectionName)
     );
-    // const pinsInCollec = querySnapshot.data();
-    console.log(querySnapshot.data());
-    setPinsInCollection(querySnapshot.data());
+    const pinsInCollec = querySnapshot.data();
+    setPinsInCollection(pinsInCollec);
   };
 
   useEffect(async () => {
-    const aaa = await getCollectionName();
+    getCollectionName();
     props.uid && getPinsInCollection(props.uid);
-  }, [collectionName, props.uid]);
+  }, [collectionName, props.uid, pinsInCollection]);
+
+  const removePinFromCollection = (collecName, pin, index) => {
+    const collectionRef = doc(props.db, "user", props.uid, "collection", collecName);
+    updateDoc(collectionRef, {
+      pins: arrayRemove({
+        pinName: pin.pinName,
+        pinId: pin.pinId,
+        pinImage: pin.pinImage,
+      }),
+    });
+    setPinsInCollection((prev) => prev.pins.splice(index, 1));
+    alert(`pin removed from ${collectionName}`);
+  };
 
   return (
     <AllPinsWrapper>
@@ -49,10 +73,16 @@ function Collection(props) {
         pinsInCollection.pins.map((pin, index) => (
           <PinWrapper key={index}>
             <PinImage src={pin.pinImage} />
+            <RemoveButton
+              onClick={() => {
+                removePinFromCollection(collectionName, pin, index);
+              }}>
+              remove
+            </RemoveButton>
           </PinWrapper>
         ))
       ) : (
-        <h2>There is no pin in this collection</h2>
+        <h2>Collection empty :(</h2>
       )}
     </AllPinsWrapper>
   );

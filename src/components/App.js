@@ -5,6 +5,7 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 import Navbar from "./Navbar";
+import Collection from "./Collcetion";
 import Homapage from "./Homapage";
 import Profile from "./Profile";
 import CreateNewPin from "./CreateNewPin";
@@ -41,39 +42,47 @@ function App() {
     appId: process.env.REACT_APP_FIREBASE_APPID,
     measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
   };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
   return (
     <BrowserRouter>
       <GlobalStyle />
       <Navbar />
       <Routes>
-
-          <Route path='/' element={<Homapage uid={uid} login={login} />} />
-          <Route
-            path='/profile'
-            element={
-              <Profile
-                uid={uid}
-                setUid={setUid}
-                login={login}
-                setLogin={setLogin}
-              />
-            }
-          />
-          <Route path='/create-pin' element={<CreateNewPin />} />
-          <Route path={`collection/:collectionName`} element={<Collection uid={uid} />} />
-          <Route
-            path='/login'
-            element={
-              <Login
-                uid={uid}
-                setUid={setUid}
-                login={login}
-                setLogin={setLogin}
-              />
-            }
-          />
-        
+        <Route
+          path='/'
+          element={<Homapage uid={uid} login={login} db={db} />}
+        />
+        <Route
+          path='/profile'
+          element={
+            <Profile
+              uid={uid}
+              db={db}
+              setUid={setUid}
+              login={login}
+              setLogin={setLogin}
+            />
+          }
+        />
+        <Route path='/create-pin' element={<CreateNewPin db={db} />} />
+        <Route
+          path={`collection/:collectionName`}
+          element={<Collection uid={uid} db={db} />}
+        />
+        <Route
+          path='/login'
+          element={
+            <Login
+              uid={uid}
+              db={db}
+              setUid={setUid}
+              login={login}
+              setLogin={setLogin}
+            />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

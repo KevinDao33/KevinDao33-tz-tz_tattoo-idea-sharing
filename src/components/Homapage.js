@@ -1,5 +1,8 @@
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
+import {initializeApp} from "firebase/app";
+import {getFirestore, collection, getDocs} from "firebase/firestore";
+
 import AddPin from "./AddPin";
 import {initializeApp} from "firebase/app";
 import {getFirestore, collection, getDocs} from "firebase/firestore";
@@ -16,9 +19,6 @@ function Homapage(props) {
   const [isShowAddPin, setIsShowAddPin] = useState(false);
   const [pins, setPins] = useState([]);
 
-  const app = initializeApp(props.firebaseConfig);
-  const db = getFirestore(app);
-
   const showAddPin = (pin, index) => {
     // setIsShowAddPin(true);
     pin.isShow = true;
@@ -27,7 +27,7 @@ function Homapage(props) {
 
   const getPins = async () => {
     try {
-      const notesSnapshot = await getDocs(collection(db, "pin"));
+      const notesSnapshot = await getDocs(collection(props.db, "pin"));
       const pins = notesSnapshot.docs.map((doc) => doc.data());
       setPins(pins);
 
@@ -77,6 +77,7 @@ function Homapage(props) {
                   isShowAddPin={isShowAddPin}
                   setIsShowAddPin={setIsShowAddPin}
                   uid={props.uid}
+                  db={props.db}
                   pin={pin}
                   pins={pins}
                 />

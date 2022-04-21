@@ -52,9 +52,9 @@ function Profile(props) {
   const [newCollectionName, setNewCollectionName] = useState();
 
   // Initialize Firebase  
-  const app = initializeApp(props.firebaseConfig);  
+  // const app = initializeApp(props.firebaseConfig);  
+  // const db = getFirestore(app);
   const auth = getAuth();
-  const db = getFirestore(app);
 
   useEffect(() => {
     setShowSection(MY_COLLECTION);
@@ -136,7 +136,7 @@ function Profile(props) {
   };
 
   const getPins = async (id) => {
-    const querySnapshot = await getDocs(collection(db, "user", id, "pin"));
+    const querySnapshot = await getDocs(collection(props.db, "user", id, "pin"));
     let myPins = [];
     querySnapshot.forEach((doc) => {
       myPins.push({...doc.data()});
@@ -146,7 +146,7 @@ function Profile(props) {
 
   const getCollections = async (id) => {
     const querySnapshot = await getDocs(
-      collection(db, "user", id, "collection")
+      collection(props.db, "user", id, "collection")
     );
     let myCollections = [];
     querySnapshot.forEach((doc) => {
@@ -164,7 +164,7 @@ function Profile(props) {
 
   const getUserData = (userId) => {
     // eslint-disable-next-line no-unused-vars
-    const unsub = onSnapshot(doc(db, "user/" + userId), (doc) => {
+    const unsub = onSnapshot(doc(props.db, "user/" + userId), (doc) => {
       if (!props.uid) {
         return;
       }
@@ -192,7 +192,7 @@ function Profile(props) {
 
   const setCollection2Firestore = (uid) => {
     const newCollectionRef = doc(
-      db,
+      props.db,
       "user",
       uid,
       "collection",
