@@ -61,8 +61,8 @@ function Profile(props) {
   const [userData, setUserData] = useState(null);
   const [collections, setCollections] = useState();
 
-  // Initialize Firebase
-  const app = initializeApp(props.firebaseConfig);
+  // Initialize Firebase  
+  const app = initializeApp(props.firebaseConfig);  
   const auth = getAuth();
   const db = getFirestore(app);
 
@@ -154,7 +154,7 @@ function Profile(props) {
   };
 
   async function getUserInfoAndPins() {
-    await getUserData(props.uid);
+    getUserData(props.uid);
     (await userData) && getPins(userData.id);
   }
 

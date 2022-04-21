@@ -19,13 +19,13 @@ function App() {
 
     onAuthStateChanged(auth, (user) => {
       if (!user) {
-        // keep this console for realizing login status; will remove it before release
+        // keep this console for knowing login status; will remove it before release
         console.log("status : not login");
 
         return;
       }
       const uid = user.uid;
-      // keep this console for realizing login status; will remove it before release
+      // keep this console for knowing login status; will remove it before release
       console.log("status : login", uid);
       setUid(uid);
       setIsLogin(true);

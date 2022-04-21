@@ -109,13 +109,12 @@ function CreateNewPin(props) {
     pinImageInLocal
       ? successfullyCreatePin(pinImageInLocal)
       : alert("something went wrong, please try again :(");
-    // alert("pin successfully created!");
   };
 
   const writeUserData = async () => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    const collectionRefPin = collection(db, "pin");
-    const collectionRefUser = collection(db, "user", userInfo.id, "pin");
+    const userInfo = await JSON.parse(localStorage.getItem("userInfo"));
+    const collectionRefPin = await collection(db, "pin");
+    const collectionRefUser = await collection(db, "user", userInfo.id, "pin");
 
     try {
       userInfo &&
@@ -163,7 +162,7 @@ function CreateNewPin(props) {
   };
 
   const getPinImageUrl = (name) => {
-    const app = initializeApp(firebaseConfig);
+    const app = initializeApp(props.firebaseConfig);
     const storage = getStorage(app);
     getDownloadURL(ref(storage, `pinImages/${name}`)).then((url) => {
       setPinImage(url);

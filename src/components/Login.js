@@ -14,8 +14,6 @@ import {LoginWrapper} from "../styles/Login.module";
 import * as myConstClass from "../const";
 
 function Login(props) {
-  // const SIGN_IN = "signIn";
-  // const SIGN_UP = "signUp";
 
   const [showSignWhat, setshowSignWhat] = useState();
   const [userEmail, setUserEmail] = useState("");
