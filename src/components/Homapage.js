@@ -1,5 +1,8 @@
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
+import {initializeApp} from "firebase/app";
+import {getFirestore, collection, getDocs} from "firebase/firestore";
+
 import AddPin from "./AddPin";
 import {
   MainWrapper,
@@ -8,8 +11,6 @@ import {
   PinImage,
   SaveButton,
 } from "../styles/Homepage.module";
-import {initializeApp} from "firebase/app";
-import {getFirestore, collection, getDocs} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,

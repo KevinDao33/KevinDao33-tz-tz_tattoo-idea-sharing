@@ -1,17 +1,14 @@
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
-import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {initializeApp} from "firebase/app";
 import {
   getFirestore,
   collection as co,
   getDocs,
-  addDoc,
   doc,
   setDoc,
   updateDoc,
   arrayUnion,
-  arrayRemove,
 } from "firebase/firestore";
 import {
   Overlay,
@@ -66,8 +63,6 @@ function AddPin(props) {
       "user",
       props.uid,
       "collection",
-
-      // the param below needs to be replace by doc name
       collection.collectionName
     );
     updateDoc(
@@ -75,8 +70,6 @@ function AddPin(props) {
       {
         pins: arrayUnion({
           pinName: pin.pinName,
-
-          // the id below needs to be replace by pin.pinId
           pinId: pin.pinId,
           pinImage: pin.pinImage,
         }),
