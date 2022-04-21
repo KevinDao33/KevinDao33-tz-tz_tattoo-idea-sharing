@@ -211,11 +211,10 @@ function Profile(props) {
       },
       {merge: true}
     );
-    alert(`pin added to new collection ${newCollectionName}!`);
+    alert(`collection ${newCollectionName} created!`);
   };
 
   const createNewCollection = () => {
-    console.log("do u want to create a new collection?");
     newCollectionName.length > 0
       ? setCollection2Firestore(props.uid)
       : alert("please enter a name for the new collection");
