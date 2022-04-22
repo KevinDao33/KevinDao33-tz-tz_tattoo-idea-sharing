@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 const CreateNewPinWrapper = styled.div`
   background-color: lightgray;
-  width: 80vw;
-  height: 75vh;
+  width: 900px;
+  min-height: 75vh;
   display: flex;
   border-radius: 20px;
   margin: 35px auto;
@@ -25,7 +25,7 @@ const PinDataUploadWrapper = styled.div`
 
 const PinImageUploadWrapper = styled.div`
   width: 50%;
-  height: 100%;
+  /* height: 100%; */
   border: 1px solid red;
   border-radius: 20px;
   display: flex;

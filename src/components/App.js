@@ -1,15 +1,16 @@
 /* eslint-disable no-undef */
 import GlobalStyle from "../styles/globalStyles";
 import React, {useState, useEffect} from "react";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Routes, Route, useParams} from "react-router-dom";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 
-import Navbar from "./Navbar";
 import Collection from "./Collcetion";
+import Navbar from "./Navbar";
 import Homapage from "./Homapage";
 import Profile from "./Profile";
 import CreateNewPin from "./CreateNewPin";
 import Login from "./Login";
+import PinDetail from "./PinDetail";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -52,7 +53,7 @@ function App() {
       <Routes>
         <Route
           path='/'
-          element={<Homapage uid={uid} login={login} db={db} />}
+          element={<Homapage uid={uid} isLogin={isLogin} db={db} />}
         />
         <Route
           path='/profile'
@@ -61,8 +62,8 @@ function App() {
               uid={uid}
               db={db}
               setUid={setUid}
-              login={login}
-              setLogin={setLogin}
+              isLogin={isLogin}
+              setIsLogin={setIsLogin}
             />
           }
         />
@@ -78,11 +79,12 @@ function App() {
               uid={uid}
               db={db}
               setUid={setUid}
-              login={login}
-              setLogin={setLogin}
+              isLogin={isLogin}
+              setIsLogin={setIsLogin}
             />
           }
         />
+        <Route path='pin-detail' element={<PinDetail />} />
       </Routes>
     </BrowserRouter>
   );

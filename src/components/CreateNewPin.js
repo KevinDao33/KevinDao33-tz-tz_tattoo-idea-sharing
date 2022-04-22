@@ -3,8 +3,14 @@ import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {initializeApp} from "firebase/app";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 import imageCompression from "browser-image-compression";
-import {getFirestore, collection, doc, setDoc, addDoc} from "firebase/firestore";
 
 import {
   CreateNewPinWrapper,
@@ -17,12 +23,29 @@ import {
   UploadNewPinImageInput,
   PreviewImage,
 } from "../styles/CreateNewPin.module";
+import MultipleCombobox from "./MultipleCombobox";
+
+const firebaseConfig = {
+  // eslint-disable-next-line no-undef
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
+  appId: process.env.REACT_APP_FIREBASE_APPID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 function CreateNewPin(props) {
   const [pinName, setPinName] = useState("");
   const [pinDescription, setPinDescription] = useState("");
   const [pinLink, setPinLink] = useState("");
-  const [pinImage, setPinImage] = useState("");
+  const [pinTags, setPinTags] = useState([]);
+  const [pinImage, setPinImage] = useState();
   const [isGetPinImage, setIsGetPinImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState("");
   const [preview, setPreview] = useState("");
@@ -90,13 +113,8 @@ function CreateNewPin(props) {
     return blob;
   };
 
-  const successfullyCreatePin = (pinImageInLocal) => {
-    dataUrl2Blob(pinImageInLocal);
-    alert("pin successfully created!");
-  };
-
-  const submitPinData = (dataUrl2Blob) => {
-    if (!pinName || !pinDescription || !pinLink) {
+  const submitPinData = (dataURLtoBlob) => {
+    if (!pinName || !pinDescription || !pinLink || !pinTags) {
       alert("please check if all fields are filled");
 
       return;
@@ -135,7 +153,7 @@ function CreateNewPin(props) {
       pinName: pinName,
       pinImage: pinImage,
       pinLink: pinLink,
-      pinTags: ["vintage", "arm ideas", "black & white", "dot-work", "animal"],
+      pinTags: pinTags,
     });
     setDoc(docRefCollectionRefPin, {
       pinAutor: {
@@ -148,7 +166,7 @@ function CreateNewPin(props) {
       pinName: pinName,
       pinImage: pinImage,
       pinLink: pinLink,
-      pinTags: ["vintage", "arm ideas", "black & white", "dot-work", "animal"],
+      pinTags: pinTags,
     });
     setIsPinCreated(true);
   };
@@ -241,7 +259,20 @@ function CreateNewPin(props) {
             value={pinLink}
             onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
         </NewPinDataWrapper>
-        <CreatePinButton onClick={handleCreatePin}>Create</CreatePinButton>
+        <NewPinDataWrapper>
+          <MultipleCombobox
+            pinTags={pinTags}
+            setPinTags={setPinTags}></MultipleCombobox>
+        </NewPinDataWrapper>
+
+        <CreatePinButton
+          onClick={async () => {
+            submitPinData(dataURLtoBlob);
+            writeUserData();
+            const redirect2Profile = await redirect("/profile");
+          }}>
+          Create
+        </CreatePinButton>
       </PinDataUploadWrapper>
     </CreateNewPinWrapper>
   );
