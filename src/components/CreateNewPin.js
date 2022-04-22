@@ -10,6 +10,8 @@ import {
   doc,
   setDoc,
 } from "firebase/firestore";
+import imageCompression from "browser-image-compression";
+
 import {
   CreateNewPinWrapper,
   PinDataUploadWrapper,
@@ -21,7 +23,7 @@ import {
   UploadNewPinImageInput,
   PreviewImage,
 } from "../styles/CreateNewPin.module";
-import imageCompression from "browser-image-compression";
+import MultipleCombobox from "./MultipleCombobox";
 
 const firebaseConfig = {
   // eslint-disable-next-line no-undef
@@ -42,6 +44,7 @@ function CreateNewPin() {
   const [pinName, setPinName] = useState("");
   const [pinDescription, setPinDescription] = useState("");
   const [pinLink, setPinLink] = useState("");
+  const [pinTags, setPinTags] = useState([]);
   const [pinImage, setPinImage] = useState();
   const [isGetPinImage, setIsGetPinImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
@@ -107,11 +110,11 @@ function CreateNewPin() {
   };
 
   const submitPinData = (dataURLtoBlob) => {
-    if (!pinName || !pinDescription || !pinLink) {
+    if (!pinName || !pinDescription || !pinLink || !pinTags) {
       alert("please check if all fields are filled");
 
       return;
-    } else if (pinName && pinDescription && pinLink && !pinImage) {
+    } else if (!pinImage) {
       alert("please upload and check the image for your pin");
 
       return;
@@ -144,7 +147,7 @@ function CreateNewPin() {
       pinName: pinName,
       pinImage: pinImage,
       pinLink: pinLink,
-      pinTags: ["vintage", "arm ideas", "black & white", "dot-work", "animal"],
+      pinTags: pinTags,
     });
     setDoc(docRefCollectionRefPin, {
       pinAutor: {
@@ -157,7 +160,7 @@ function CreateNewPin() {
       pinName: pinName,
       pinImage: pinImage,
       pinLink: pinLink,
-      pinTags: ["vintage", "arm ideas", "black & white", "dot-work", "animal"],
+      pinTags: pinTags,
     });
     setIsPinCreated(true);
   };
@@ -243,6 +246,11 @@ function CreateNewPin() {
             placeholder='Enter Pin Link'
             value={pinLink}
             onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
+        </NewPinDataWrapper>
+        <NewPinDataWrapper>
+          <MultipleCombobox
+            pinTags={pinTags}
+            setPinTags={setPinTags}></MultipleCombobox>
         </NewPinDataWrapper>
 
         <CreatePinButton

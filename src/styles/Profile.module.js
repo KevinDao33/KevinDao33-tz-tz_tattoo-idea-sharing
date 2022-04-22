@@ -113,7 +113,6 @@ const CreateButton = styled.button`
   right: 30px;
 `;
 
-// =======================================================================
 const Overlay = styled.div`
   position: relative;
   opacity: 0.8;
@@ -194,7 +193,6 @@ const LeaveButton = styled.button`
   font-size: 1.5rem;
 `;
 
-// =======================================================================
 export {
   PorfileWrapper,
   UserImage,

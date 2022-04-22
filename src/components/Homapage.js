@@ -68,7 +68,6 @@ function Homapage(props) {
                   save
                 </SaveButton>
               </PinWrapper>
-
               {pin.isShow && (
                 <AddPin
                   handleClosePinShow={handleClosePinShow}
@@ -83,13 +82,6 @@ function Homapage(props) {
               )}
             </>
           ))}
-        {/* {isShowAddPin && (
-          <AddPin
-            isShowAddPin={isShowAddPin}
-            setIsShowAddPin={setIsShowAddPin}
-            uid={props.uid}
-          />
-        )} */}
       </AllPinsWrapper>
     </MainWrapper>
   );

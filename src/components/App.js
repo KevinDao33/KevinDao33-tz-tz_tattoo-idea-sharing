@@ -1,13 +1,15 @@
 import GlobalStyle from "../styles/globalStyles";
+import React, {useState, useEffect} from "react";
+import {BrowserRouter, Routes, Route, useParams} from "react-router-dom";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+
+import Collection from "./Collcetion";
 import Navbar from "./Navbar";
 import Homapage from "./Homapage";
 import Profile from "./Profile";
 import CreateNewPin from "./CreateNewPin";
 import Login from "./Login";
-import React, {useState, useEffect} from "react";
-import {BrowserRouter, Routes, Route, useParams} from "react-router-dom";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
-import Collection from "./Collcetion";
+import PinDetail from "./PinDetail";
 
 function App() {
   const [login, setLogin] = useState(false);
@@ -34,33 +36,35 @@ function App() {
       <GlobalStyle />
       <Navbar />
       <Routes>
-
-          <Route path='/' element={<Homapage uid={uid} login={login} />} />
-          <Route
-            path='/profile'
-            element={
-              <Profile
-                uid={uid}
-                setUid={setUid}
-                login={login}
-                setLogin={setLogin}
-              />
-            }
-          />
-          <Route path='/create-pin' element={<CreateNewPin />} />
-          <Route path={`collection/:collectionName`} element={<Collection uid={uid} />} />
-          <Route
-            path='/login'
-            element={
-              <Login
-                uid={uid}
-                setUid={setUid}
-                login={login}
-                setLogin={setLogin}
-              />
-            }
-          />
-        
+        <Route path='/' element={<Homapage uid={uid} login={login} />} />
+        <Route
+          path='/profile'
+          element={
+            <Profile
+              uid={uid}
+              setUid={setUid}
+              login={login}
+              setLogin={setLogin}
+            />
+          }
+        />
+        <Route path='/create-pin' element={<CreateNewPin />} />
+        <Route
+          path={`collection/:collectionName`}
+          element={<Collection uid={uid} />}
+        />
+        <Route
+          path='/login'
+          element={
+            <Login
+              uid={uid}
+              setUid={setUid}
+              login={login}
+              setLogin={setLogin}
+            />
+          }
+        />
+        <Route path='pin-detail' element={<PinDetail />} />
       </Routes>
     </BrowserRouter>
   );
