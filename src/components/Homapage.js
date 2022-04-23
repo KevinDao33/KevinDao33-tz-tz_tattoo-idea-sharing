@@ -2,9 +2,9 @@
 import React, {useState, useEffect} from "react";
 import {initializeApp} from "firebase/app";
 import {getFirestore, collection, getDocs} from "firebase/firestore";
+import {useNavigate} from "react-router-dom";
 
 import AddPin from "./AddPin";
-import {initializeApp} from "firebase/app";
 import {getFirestore, collection, getDocs} from "firebase/firestore";
 
 import {
@@ -19,11 +19,7 @@ function Homapage(props) {
   const [isShowAddPin, setIsShowAddPin] = useState(false);
   const [pins, setPins] = useState([]);
 
-  const showAddPin = (pin, index) => {
-    // setIsShowAddPin(true);
-    pin.isShow = true;
-    //use pin[index].isShow to show or not show AddPin
-  };
+  const redirect = useNavigate();
 
   const getPins = async () => {
     try {
@@ -60,7 +56,12 @@ function Homapage(props) {
           pins.map((pin, index) => (
             <>
               <PinWrapper key={pin.id}>
-                <PinImage src={pin.pinImage} />
+                <PinImage
+                  src={pin.pinImage}
+                  onClick={() => {
+                    redirect(`/pin-detail/${pin.pinId}`);
+                  }}
+                />
                 <SaveButton
                   onClick={() => {
                     handleAddPinShow(index);
@@ -75,6 +76,7 @@ function Homapage(props) {
                   key={pin.pinName}
                   isShowAddPin={isShowAddPin}
                   setIsShowAddPin={setIsShowAddPin}
+                  // eslint-disable-next-line react/prop-types
                   uid={props.uid}
                   db={props.db}
                   pin={pin}

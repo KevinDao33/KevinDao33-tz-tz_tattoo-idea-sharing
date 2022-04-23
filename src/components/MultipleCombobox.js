@@ -17,6 +17,7 @@ function MultipleCombobox(props) {
   const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
+    // set limits for selectedItems
     console.log(selectedItems);
 
     props.setPinTags(selectedItems);

@@ -1,8 +1,9 @@
 /* eslint-disable no-undef */
 import GlobalStyle from "../styles/globalStyles";
 import React, {useState, useEffect} from "react";
-import {BrowserRouter, Routes, Route, useParams} from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {initializeApp} from "firebase/app";
 
 import Collection from "./Collcetion";
 import Navbar from "./Navbar";
@@ -15,6 +16,16 @@ import PinDetail from "./PinDetail";
 function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [uid, setUid] = useState("");
+
+  const firebaseConfig = {
+    apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+    authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
+    appId: process.env.REACT_APP_FIREBASE_APPID,
+    measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
+  };
 
   useEffect(() => {
     const auth = getAuth();
@@ -68,6 +79,10 @@ function App() {
           }
         />
         <Route path='/create-pin' element={<CreateNewPin db={db} />} />
+        <Route
+          path={`pin-detail/:pinId`}
+          element={<PinDetail uid={uid} firebaseConfig={firebaseConfig} />}
+        />
         <Route
           path={`collection/:collectionName`}
           element={<Collection uid={uid} db={db} />}
