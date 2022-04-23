@@ -20,12 +20,11 @@ const AddPinOptions = styled.div`
   border-radius: 20px;
   width: 50vw;
   height: 530px;
-  z-index: 1;
+  z-index: 3;
   background-color: #f2f1eb;
   opacity: 1;
   overflow: auto;
   justify-content: center;
-  z-index: 3;
 `;
 
 const LeaveButton = styled.button`
@@ -85,6 +84,7 @@ const SaveButton = styled.button`
   outline: inherit;
   font-size: 1.5rem;
   margin: 20px;
+  z-index: 5;
 `;
 
 const CreateCollectionWrapper = styled.div`

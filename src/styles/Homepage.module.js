@@ -18,6 +18,7 @@ const AllPinsWrapper = styled.div`
 
 const PinWrapper = styled.div`
   width: 325px;
+  height: auto;
   border: 1px solid red;
   border-radius: 20px;
   margin: 10px;
@@ -45,10 +46,4 @@ const SaveButton = styled.button`
   font-size: 1.5rem;
 `;
 
-export { 
-  MainWrapper, 
-  AllPinsWrapper, 
-  PinWrapper, 
-  PinImage, 
-  SaveButton 
-};
+export {MainWrapper, AllPinsWrapper, PinWrapper, PinImage, SaveButton};

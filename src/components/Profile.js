@@ -2,10 +2,9 @@
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
 import Login from "./Login";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {initializeApp} from "firebase/app";
 import {getAuth, signOut} from "firebase/auth";
-import {useNavigate} from "react-router-dom";
 import {
   getFirestore,
   collection,

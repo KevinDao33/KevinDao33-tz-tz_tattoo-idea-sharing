@@ -2,6 +2,7 @@
 import React, {useState, useEffect} from "react";
 import {initializeApp} from "firebase/app";
 import {getFirestore, collection, getDocs} from "firebase/firestore";
+import {useNavigate} from "react-router-dom";
 
 import AddPin from "./AddPin";
 import {
@@ -28,6 +29,7 @@ function Homapage(props) {
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const redirect = useNavigate();
 
   const getPins = async () => {
     const notesSnapshot = await getDocs(collection(db, "pin"));
@@ -60,7 +62,12 @@ function Homapage(props) {
           pins.map((pin, index) => (
             <>
               <PinWrapper key={pin.id}>
-                <PinImage src={pin.pinImage} />
+                <PinImage
+                  src={pin.pinImage}
+                  onClick={() => {
+                    redirect(`/pin-detail/${pin.pinId}`);
+                  }}
+                />
                 <SaveButton
                   onClick={() => {
                     handleAddPinShow(index);
@@ -75,6 +82,7 @@ function Homapage(props) {
                   key={pin.pinName}
                   isShowAddPin={isShowAddPin}
                   setIsShowAddPin={setIsShowAddPin}
+                  // eslint-disable-next-line react/prop-types
                   uid={props.uid}
                   pin={pin}
                   pins={pins}
