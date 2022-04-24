@@ -15,7 +15,7 @@ import * as myConstClass from "../const";
 
 function Login(props) {
 
-  const [showSignWhat, setshowSignWhat] = useState();
+  const [showSignWhat, setshowSignWhat] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userName, setUserName] = useState("");

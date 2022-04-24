@@ -24,7 +24,7 @@ const mockAllCollections = [
 ];
 
 function AddPin(props) {
-  const [collections, setCollections] = useState();
+  const [collections, setCollections] = useState([]);
 
   useState(()=>{
     setCollections(mockAllCollections)
@@ -42,7 +42,7 @@ function AddPin(props) {
         <PinName>Skateboard Chicken</PinName>
         <PinImage src={chicken} />
 
-        {collections &&
+        {collections.length>0 &&
           collections.map((collectionName, index) => (
             <AddToCollection key={index}>
               <CollectionName>{collectionName}</CollectionName>

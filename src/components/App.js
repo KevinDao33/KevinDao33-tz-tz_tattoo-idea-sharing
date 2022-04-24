@@ -12,7 +12,7 @@ import Login from "./Login";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
-  const [uid, setUid] = useState();
+  const [uid, setUid] = useState("");
 
   useEffect(() => {
     const auth = getAuth();

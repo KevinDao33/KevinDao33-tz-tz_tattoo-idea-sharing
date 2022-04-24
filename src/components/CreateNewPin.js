@@ -22,10 +22,10 @@ function CreateNewPin(props) {
   const [pinName, setPinName] = useState("");
   const [pinDescription, setPinDescription] = useState("");
   const [pinLink, setPinLink] = useState("");
-  const [pinImage, setPinImage] = useState();
+  const [pinImage, setPinImage] = useState("");
   const [isGetPinImage, setIsGetPinImage] = useState(false);
-  const [selectedFile, setSelectedFile] = useState();
-  const [preview, setPreview] = useState();
+  const [selectedFile, setSelectedFile] = useState("");
+  const [preview, setPreview] = useState("");
   const [isPinCreated, setIsPinCreated] = useState(false);
 
   const redirect = useNavigate();
@@ -35,14 +35,14 @@ function CreateNewPin(props) {
   const db = getFirestore(app);
 
   async function handleImageUpload(e) {
-    const imageFile = e.target.files[0];
-
     // show image preview
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
 
       return;
     }
+
+    const imageFile = e.target.files[0];
     setSelectedFile(imageFile);
 
     // compress image
@@ -220,6 +220,7 @@ function CreateNewPin(props) {
             placeholder='Upload your Pin Image'
             type='file'
             accept='image/gif, image/jpeg, image/png, image/webp'
+            multiple={false}
             onChange={handleImageUpload}></UploadNewPinImageInput>
           {selectedFile && <PreviewImage src={preview} />}
         </UploadNewPinImageLabel>
