@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const PinDetailWrapper = styled.div`
-  width: 1000px;
+  width: 1300px;
   height: auto;
   border-radius: 20px;
   margin: 100px auto 50px auto;
@@ -84,7 +84,7 @@ const PinDescription = styled.p`
 const PinAuthorWrapper = styled.div`
   width: 100%;
   display: flex;
-  align-items:center;
+  align-items: center;
   cursor: pointer;
   border: 1px solid orange;
 `;
@@ -209,6 +209,24 @@ const SubmitButton = styled.button`
   line-height: 30px;
 `;
 
+const SimiliarPinsWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 80vw;
+  min-height: 150px;
+  border: 1px solid gray;
+  border-radius: 20px;
+  margin: 30px auto;
+`;
+
+const SimiliarPin = styled.img`
+  width: 300px;
+  height: auto;
+  margin: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+`;
+
 export {
   PinDetailWrapper,
   PinImageWrapper,
@@ -223,7 +241,6 @@ export {
   PinAuthorWrapper,
   PinAuthorPhoto,
   PinAuthorName,
-
   PinCommentTitle,
   AllPinCommentWrapper,
   OtherPinCommentWrapper,
@@ -236,4 +253,6 @@ export {
   PinComment,
   RelatedPinsTitle,
   SubmitButton,
+  SimiliarPinsWrapper,
+  SimiliarPin,
 };

@@ -11,6 +11,7 @@ import Profile from "./Profile";
 import CreateNewPin from "./CreateNewPin";
 import Login from "./Login";
 import PinDetail from "./PinDetail";
+import EditProfile from "./EditProfile";
 
 function App() {
   const [login, setLogin] = useState(false);
@@ -59,6 +60,7 @@ function App() {
             />
           }
         />
+        <Route path="edit-profile"element={<EditProfile />} />
         <Route path='/create-pin' element={<CreateNewPin />} />
         <Route
           path={`pin-detail/:pinId`}

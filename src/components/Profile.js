@@ -254,7 +254,12 @@ function Profile(props) {
             <ShowFollow>{userData.following.length} follower</ShowFollow>
             <ButtonWrapper>
               <Button>share</Button>
-              <Button>edit</Button>
+              <Button
+                onClick={() => {
+                  redirect("/edit-profile");
+                }}>
+                edit
+              </Button>
               <Button onClick={logOut}>logOut</Button>
             </ButtonWrapper>
             <UserStuffWrapper>
