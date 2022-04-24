@@ -45,17 +45,13 @@ function CreateNewPin(props) {
   const [pinDescription, setPinDescription] = useState("");
   const [pinLink, setPinLink] = useState("");
   const [pinTags, setPinTags] = useState([]);
-  const [pinImage, setPinImage] = useState();
+  const [pinImage, setPinImage] = useState("");
   const [isGetPinImage, setIsGetPinImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState("");
   const [preview, setPreview] = useState("");
   const [isPinCreated, setIsPinCreated] = useState(false);
 
   const redirect = useNavigate();
-
-  // // Initialize Firebase
-  // const app = initializeApp(props.firebaseConfig);
-  // const db = getFirestore(app);
 
   async function handleImageUpload(e) {
     // show image preview
@@ -266,11 +262,7 @@ function CreateNewPin(props) {
         </NewPinDataWrapper>
 
         <CreatePinButton
-          onClick={async () => {
-            submitPinData(dataURLtoBlob);
-            writeUserData();
-            const redirect2Profile = await redirect("/profile");
-          }}>
+          onClick={handleCreatePin}>
           Create
         </CreatePinButton>
       </PinDataUploadWrapper>
