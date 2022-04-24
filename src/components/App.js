@@ -12,6 +12,7 @@ import Profile from "./Profile";
 import CreateNewPin from "./CreateNewPin";
 import Login from "./Login";
 import PinDetail from "./PinDetail";
+import EditProfile from "./EditProfile";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -78,7 +79,8 @@ function App() {
             />
           }
         />
-        <Route path='/create-pin' element={<CreateNewPin db={db} />} />
+        <Route path="edit-profile"element={<EditProfile />} />
+        <Route path='/create-pin' element={<CreateNewPin />} />
         <Route
           path={`pin-detail/:pinId`}
           element={<PinDetail uid={uid} firebaseConfig={firebaseConfig} />}

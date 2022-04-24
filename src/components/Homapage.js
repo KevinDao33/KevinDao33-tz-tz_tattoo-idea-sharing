@@ -3,7 +3,9 @@ import React, {useState, useEffect} from "react";
 import {initializeApp} from "firebase/app";
 import {getFirestore, collection, getDocs} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
+import Masonry from "react-masonry-css";
 
+import "../styles/style.css";
 import AddPin from "./AddPin";
 import {getFirestore, collection, getDocs} from "firebase/firestore";
 
@@ -37,6 +39,13 @@ function Homapage(props) {
     getPins();
   }, []);
 
+  const breakpointColumnsObj = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
+  };
+
   const handleAddPinShow = (index) => {
     let mockPin = [...pins];
     mockPin[index].isShow = true;
@@ -52,10 +61,14 @@ function Homapage(props) {
   return (
     <MainWrapper>
       <AllPinsWrapper>
-        {pins.length > 0 &&
-          pins.map((pin, index) => (
-            <>
-              <PinWrapper key={pin.id}>
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          className='my-masonry-grid'
+          columnClassName='my-masonry-grid_column'>
+          {pins &&
+            pins.map((pin, index) => (
+              <PinWrapper key={pin.pinId}>
+                {/* <PinWrapper key={pin.pinId}> */}
                 <PinImage
                   src={pin.pinImage}
                   onClick={() => {
@@ -68,23 +81,23 @@ function Homapage(props) {
                   }}>
                   save
                 </SaveButton>
+                {/* </PinWrapper> */}
+                {pin.isShow && (
+                  <AddPin
+                    handleClosePinShow={handleClosePinShow}
+                    indexxx={index}
+                    key={pin.pinName}
+                    isShowAddPin={isShowAddPin}
+                    setIsShowAddPin={setIsShowAddPin}
+                    // eslint-disable-next-line react/prop-types
+                    uid={props.uid}
+                    pin={pin}
+                    pins={pins}
+                  />
+                )}
               </PinWrapper>
-              {pin.isShow && (
-                <AddPin
-                  handleClosePinShow={handleClosePinShow}
-                  indexxx={index}
-                  key={pin.pinName}
-                  isShowAddPin={isShowAddPin}
-                  setIsShowAddPin={setIsShowAddPin}
-                  // eslint-disable-next-line react/prop-types
-                  uid={props.uid}
-                  db={props.db}
-                  pin={pin}
-                  pins={pins}
-                />
-              )}
-            </>
-          ))}
+            ))}
+        </Masonry>
       </AllPinsWrapper>
     </MainWrapper>
   );

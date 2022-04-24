@@ -12,6 +12,7 @@ import {
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
+import {useNavigate} from "react-router-dom";
 
 import {
   PinDetailWrapper,
@@ -39,6 +40,8 @@ import {
   PinComment,
   RelatedPinsTitle,
   SubmitButton,
+  SimiliarPinsWrapper,
+  SimiliarPin,
 } from "../styles/PinDetail.module";
 
 function PinDetail(props) {
@@ -47,9 +50,11 @@ function PinDetail(props) {
   const [authorData, setAuthorData] = useState("");
   const [userCollection, setUserCollection] = useState("");
   const [selectedCollection, setSelectedCollection] = useState("");
+  const [similiarPins, setSimiliarPins] = useState([]);
 
   const app = initializeApp(props.firebaseConfig);
   const db = getFirestore(app);
+  const redirect = useNavigate();
 
   const getPinId = () => {
     const url = window.location.href;
@@ -142,22 +147,29 @@ function PinDetail(props) {
     alert(`pin added to ${selectedCollection}`);
   };
 
-  const getRelatedPins = async() => {
-    const pinsRef = collection(db, "pin");
+  const getRelatedPins = async () => {
+    if (!pinData) {
+      return;
+    }
 
-    // Create a query against the collection.
-    const q = query(pinsRef, where("pinTags", "array-contains-any", ["Vintage", "Dotwork"]));
-    
+    const pinsRef = collection(db, "pin");
+    const q = query(
+      pinsRef,
+      where("pinTags", "array-contains-any", pinData.pinTags)
+    );
+
     const querySnapshot = await getDocs(q);
-    // console.log(querySnapshot);
+    let localSimiliarPins = [];
     querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
+      localSimiliarPins.push(doc.data());
     });
+    console.log(localSimiliarPins);
+    setSimiliarPins(localSimiliarPins);
   };
 
   useEffect(() => {
     getRelatedPins();
-  }, []);
+  }, [pinData]);
 
   return (
     <>
@@ -205,7 +217,7 @@ function PinDetail(props) {
                   <PinCommentWrapper>
                     <UserPhoto
                       src={
-                        "https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/pinImages%2Fraccoon?alt=media&token=bb29b6c0-83ad-40ea-85b8-f7330c5ea153"
+                        "https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/profileImages%2F%E7%9C%9F%E5%A3%9E%E4%BB%BD%E5%AD%90%E9%98%BF%E7%86%8A.jpg?alt=media&token=d8c84a59-8fcc-429d-8bdc-4707685fd2ec"
                       }></UserPhoto>
                     <UserName>chieh</UserName>
                     <PinComment>Good Work!</PinComment>
@@ -215,7 +227,7 @@ function PinDetail(props) {
               <MyPinCommentWrapper>
                 <MyPhoto
                   src={
-                    "https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/pinImages%2Ftztz?alt=media&token=5dbd2f43-2ef4-4699-832b-ec976f9d1e13"
+                    "https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/profileImages%2F%E9%98%BF%E7%86%8A%E7%B2%89.jpg?alt=media&token=522d68aa-ed41-4917-a840-c68861fe8199"
                   }></MyPhoto>
                 <PinCommentInput></PinCommentInput>
                 <SubmitButton>Send</SubmitButton>
@@ -223,6 +235,18 @@ function PinDetail(props) {
             </PinDetailDataWrapper>
           </PinDetailWrapper>
           <RelatedPinsTitle>Similiar Pins</RelatedPinsTitle>
+          <SimiliarPinsWrapper>
+            {similiarPins &&
+              similiarPins.map((similiarPin) => (
+                <SimiliarPin
+                  key={similiarPin.pinId}
+                  src={similiarPin.pinImage}
+                  onClick={() => {
+                    redirect(`/pin-detail/${similiarPin.pinId}`);
+                    window.location.reload();
+                  }}></SimiliarPin>
+              ))}
+          </SimiliarPinsWrapper>
         </>
       ) : (
         <div>Loading</div>
