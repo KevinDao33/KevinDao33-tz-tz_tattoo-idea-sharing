@@ -1,18 +1,10 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
-import Login from "./Login";
 import {NavLink, useNavigate} from "react-router-dom";
-import {initializeApp} from "firebase/app";
 import {getAuth, signOut} from "firebase/auth";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  onSnapshot,
-  doc,
-  setDoc,
-} from "firebase/firestore";
+import Masonry from "react-masonry-css";
+import {collection, getDocs, getDoc, doc, setDoc} from "firebase/firestore";
 
 import {
   PorfileWrapper,
@@ -35,7 +27,6 @@ import {
   NameNewCollection,
   LeaveButton,
 } from "../styles/Profile.module";
-
 import Login from "./Login";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
 
@@ -48,18 +39,20 @@ function Profile(props) {
   const [showSection, setShowSection] = useState("");
   const [pins, setPins] = useState([]);
   const [userData, setUserData] = useState(null);
-  const [collections, setCollections] = useState();
+  const [collections, setCollections] = useState([]);
   const [showCreateCollection, setShowCreateCollection] = useState(false);
-  const [newCollectionName, setNewCollectionName] = useState();
+  const [newCollectionName, setNewCollectionName] = useState("");
 
-  // Initialize Firebase  
-  // const app = initializeApp(props.firebaseConfig);  
-  // const db = getFirestore(app);
-  const auth = getAuth();
+  const breakpointColumnsObj = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
+  };
+  const auth = getAuth(props.app);
 
   useEffect(() => {
     setShowSection(MY_COLLECTION);
-    // setCollections(mockAllCollections);
   }, []);
 
   const showMyPin = () => {
@@ -93,12 +86,17 @@ function Profile(props) {
     if (showSection === MY_PIN) {
       return (
         <AllPinsWrapper>
-          {pins.length > 0 &&
-            pins.map((pin, index) => (
-              <PinWrapper key={index}>
-                <PinImage src={pin.pinImage} />
-              </PinWrapper>
-            ))}
+          <Masonry
+            breakpointCols={breakpointColumnsObj}
+            className='my-masonry-grid'
+            columnClassName='my-masonry-grid_column'>
+            {pins.length > 0 &&
+              pins.map((pin, index) => (
+                <PinWrapper key={index}>
+                  <PinImage src={pin.pinImage} />
+                </PinWrapper>
+              ))}
+          </Masonry>
           <NavLink to='/create-pin'>
             <CreateButton>
               +<br></br>pin
@@ -109,7 +107,7 @@ function Profile(props) {
     } else if (showSection === MY_COLLECTION) {
       return (
         <AllCollectionsWrapper>
-          {collections &&
+          {collections.length > 0 &&
             collections.map((collection) => (
               <CollectionWarpper
                 key={collection.collectionName}
@@ -137,7 +135,9 @@ function Profile(props) {
   };
 
   const getPins = async (id) => {
-    const querySnapshot = await getDocs(collection(props.db, "user", id, "pin"));
+    const querySnapshot = await getDocs(
+      collection(props.db, `user/${id}`, "pin")
+    );
     let myPins = [];
     querySnapshot.forEach((doc) => {
       myPins.push({...doc.data()});
@@ -147,8 +147,9 @@ function Profile(props) {
 
   const getCollections = async (id) => {
     const querySnapshot = await getDocs(
-      collection(props.db, "user", id, "collection")
+      collection(props.db, `user/${id}`, "collection")
     );
+
     let myCollections = [];
     querySnapshot.forEach((doc) => {
       myCollections.push({...doc.data()});
@@ -158,38 +159,34 @@ function Profile(props) {
     return;
   };
 
-  useEffect(() => {
-    userData && getPins(userData.id);
-    userData && getCollections(userData.id);
-  }, [userData]);
-
-  const getUserData = (userId) => {
-    // eslint-disable-next-line no-unused-vars
-    const unsub = onSnapshot(doc(props.db, "user/" + userId), (doc) => {
-      if (!props.uid) {
-        return;
-      }
-      setUserData({
-        name: doc.data().name,
-        email: doc.data().email,
-        role: doc.data().role,
-        following: doc.data().following,
-        follower: doc.data().follower,
-        pic: doc.data().pic,
-        id: doc.data().uid,
-        link: doc.data().link,
-      });
+  const getUserData = async (userId) => {
+    if (!props.uid) {
+      return;
+    }
+    const docRef = doc(props.db, `user/${userId}`);
+    const docSnap = await getDoc(docRef);
+    setUserData({
+      name: docSnap.data().name,
+      email: docSnap.data().email,
+      role: docSnap.data().role,
+      following: docSnap.data().following,
+      follower: docSnap.data().follower,
+      pic: docSnap.data().pic,
+      id: docSnap.data().uid,
+      link: docSnap.data().link,
+      desc: docSnap.data().desc,
     });
   };
 
-  async function getUserInfoAndPins() {
+  async function getUserInfoAndPinsAndCollection() {
     getUserData(props.uid);
-    (await userData) && getPins(userData.id);
+    await getPins(props.uid);
+    await getCollections(props.uid);
   }
 
   useEffect(() => {
-    getUserInfoAndPins();
-  }, [userData]);
+    getUserInfoAndPinsAndCollection();
+  }, [props.uid]);
 
   const setCollection2Firestore = (uid) => {
     const newCollectionRef = doc(
@@ -211,7 +208,7 @@ function Profile(props) {
   };
 
   const createNewCollection = () => {
-    newCollectionName.length > 0
+    newCollectionName
       ? setCollection2Firestore(props.uid)
       : alert("please enter a name for the new collection");
   };

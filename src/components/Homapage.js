@@ -1,13 +1,11 @@
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
-import {initializeApp} from "firebase/app";
-import {getFirestore, collection, getDocs} from "firebase/firestore";
+import {collection, getDocs} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 
 import "../styles/style.css";
 import AddPin from "./AddPin";
-import {getFirestore, collection, getDocs} from "firebase/firestore";
 
 import {
   MainWrapper,
@@ -90,6 +88,7 @@ function Homapage(props) {
                     isShowAddPin={isShowAddPin}
                     setIsShowAddPin={setIsShowAddPin}
                     // eslint-disable-next-line react/prop-types
+                    db={props.db}
                     uid={props.uid}
                     pin={pin}
                     pins={pins}

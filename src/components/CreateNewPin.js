@@ -26,21 +26,6 @@ import {
 } from "../styles/CreateNewPin.module";
 import MultipleCombobox from "./MultipleCombobox";
 
-const firebaseConfig = {
-  // eslint-disable-next-line no-undef
-  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
-  appId: process.env.REACT_APP_FIREBASE_APPID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
 function CreateNewPin(props) {
   const [pinName, setPinName] = useState("");
   const [pinDescription, setPinDescription] = useState("");
@@ -53,6 +38,8 @@ function CreateNewPin(props) {
   const [isPinCreated, setIsPinCreated] = useState(false);
 
   const redirect = useNavigate();
+  const storage = getStorage(props.app);
+
 
   async function handleImageUpload(e) {
     // show image preview
@@ -110,7 +97,12 @@ function CreateNewPin(props) {
     return blob;
   };
 
-  const submitPinData = (dataURLtoBlob) => {
+  const successfullyCreatePin = (pinImageInLocal) => {
+    dataUrl2Blob(pinImageInLocal);
+    alert("pin successfully created!");
+  };
+
+  const submitPinData = () => {
     if (!pinName || !pinDescription || !pinLink || !pinTags) {
       alert("please check if all fields are filled");
 
@@ -128,13 +120,13 @@ function CreateNewPin(props) {
 
   const writeUserData = () => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    const collectionRefPin = collection(db, "pin");
+    const collectionRefPin = collection(props.db, "pin");
     const docRefCollectionRefPin = doc(collectionRefPin);
 
     const collectionRefUser = doc(
       props.db,
       "user",
-      userInfo.id,
+      props.uid,
       "pin",
       docRefCollectionRefPin.id
     );
@@ -169,8 +161,6 @@ function CreateNewPin(props) {
   };
 
   const getPinImageUrl = (name) => {
-    const app = initializeApp(props.firebaseConfig);
-    const storage = getStorage(app);
     getDownloadURL(ref(storage, `pinImages/${name}`)).then((url) => {
       setPinImage(url);
     });
@@ -194,7 +184,6 @@ function CreateNewPin(props) {
     const uploadedImage = localStorage.getItem("uploadedImage");
     const uploadedImageName = localStorage.getItem("uploadedImageName");
     const result = dataUrl2Blob(uploadedImage);
-    const storage = getStorage(app);
     const storageRef = ref(storage, `pinImages/${uploadedImageName}`);
 
     try {

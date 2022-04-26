@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import {initializeApp} from "firebase/app";
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {
@@ -9,14 +8,13 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import {Button} from "../styles/Profile.module";
-import {getFirestore, doc, setDoc, onSnapshot} from "firebase/firestore";
+import {doc, setDoc, getDoc} from "firebase/firestore";
 
+import {Button} from "../styles/Profile.module";
 import {LoginWrapper} from "../styles/Login.module";
 import * as myConstClass from "../const";
 
 function Login(props) {
-
   const [showSignWhat, setshowSignWhat] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
@@ -25,11 +23,8 @@ function Login(props) {
   const [userRole, setUserRole] = useState("");
   const [userLink, setUserLink] = useState("");
 
+  const auth = getAuth(props.app);
   const redirect = useNavigate();
-
-  // const app = initializeApp(props.firebaseConfig);
-  // const db = getFirestore(app);
-  const auth = getAuth();
 
   const showSignIn = () => {
     setshowSignWhat(myConstClass.SIGN_IN);
@@ -82,13 +77,13 @@ function Login(props) {
 
         switch (errorCode) {
           case "auth/wrong-password":
-            alert("密碼錯誤喔");
+            alert(myConstClass.AUTH_WRONG_PASSWORD);
             break;
           case "auth/user-not-found":
-            alert("帳號不存在喔");
+            alert(myConstClass.AUTH_USER_NOT_FOUND);
             break;
           default:
-            alert("登入失敗QQ");
+            alert(myConstClass.AUTH_LOGIN_FAIL);
         }
       });
   };
@@ -109,7 +104,7 @@ function Login(props) {
   };
 
   const getUserData = (userId) => {
-    const handleUserData = onSnapshot(doc(props.db, `user/${userId}`), (doc) => {
+    const handleUserData = getDoc(doc(props.db, `user/${userId}`), (doc) => {
       localStorage.setItem(
         "userInfo",
         JSON.stringify({
@@ -121,18 +116,9 @@ function Login(props) {
           pic: doc.data().pic,
           id: doc.data().uid,
           link: doc.data().link,
+          desc: doc.data().desc,
         })
       );
-      props.setUserData({
-        name: doc.data().name,
-        email: doc.data().email,
-        role: doc.data().role,
-        following: doc.data().following,
-        follower: doc.data().follower,
-        pic: doc.data().pic,
-        id: doc.data().uid,
-        link: doc.data().link,
-      });
     });
   };
 
@@ -181,14 +167,6 @@ function Login(props) {
           <input
             value={userPassword}
             onChange={(e) => setUserPassword(e.target.value)}></input>
-
-          {/* decide to give a picture as user's profile photo, users will be able to change it at edit-page */}
-          {/* <label>photo</label>
-          <input
-            type='file'
-            accept='image/gif, image/jpeg, image/png, image/webp'
-            value={userPhoto}
-            onChange={(e) => setUserPhoto(e.target.value)}></input> */}
 
           <label>role</label>
           <input

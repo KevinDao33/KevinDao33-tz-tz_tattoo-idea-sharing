@@ -13,43 +13,10 @@ import {
   SearchTagInput,
 } from "../styles/MultipleCombobox.modul";
 import {useEffect} from "react";
+import {items} from "../const";
 
 function MultipleCombobox(props) {
   const [inputValue, setInputValue] = useState("");
-
-  useEffect(() => {
-    // set limits for selectedItems
-    console.log(selectedItems);
-
-    props.setPinTags(selectedItems);
-  });
-
-  const items = [
-    "Animal",
-    "Black & Gray",
-    "Blackwork",
-    "Chicano",
-    "Classic Americana",
-    "Dark Art",
-    "Dotwork",
-    "Fineline",
-    "Funny",
-    "Geometric",
-    "Hand-Poked",
-    "Illustrative",
-    "Japanese",
-    "Lettering",
-    "Nature",
-    "Neo Traditional",
-    "New School Americana",
-    "Portraiture",
-    "Realism",
-    "Pet",
-    "Flora",
-    "Tribal",
-    "Vintage",
-    "Watercolor",
-  ];
 
   const {
     getSelectedItemProps,
@@ -57,8 +24,12 @@ function MultipleCombobox(props) {
     addSelectedItem,
     removeSelectedItem,
     selectedItems,
-    //   } = useMultipleSelection({initialSelectedItems: [items[0], items[1]]});
   } = useMultipleSelection({initialSelectedItems: []});
+
+  useEffect(() => {
+    // set limits for selectedItems
+    props.setPinTags(selectedItems);
+  }, [selectedItems]);
 
   const getFilteredItems = (items) =>
     items.filter(
@@ -93,7 +64,6 @@ function MultipleCombobox(props) {
             addSelectedItem(selectedItem);
             selectItem(null);
           }
-
           break;
         default:
           break;

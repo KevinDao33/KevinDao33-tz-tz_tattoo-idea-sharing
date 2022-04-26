@@ -1,9 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
-import {initializeApp} from "firebase/app";
 import {
-  getFirestore,
   collection as co,
   getDocs,
   doc,
@@ -27,32 +25,17 @@ import {
   NameNewCollection,
 } from "../styles/AddPin.module";
 
-// const firebaseConfig = {
-//   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-//   authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
-//   projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
-//   storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
-//   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
-//   appId: process.env.REACT_APP_FIREBASE_APPID,
-//   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-
 function AddPin(props) {
   const [collections, setCollections] = useState([]);
   const [newCollectionName, setNewCollectionName] = useState("");
 
   const getCollections = async (id) => {
     const querySnapshot = await getDocs(co(props.db, "user", id, "collection"));
+
     let myCollections = [];
     querySnapshot.forEach((doc) => {
       myCollections.push({...doc.data()});
-      // myCollections.collectionName = doc.id;
     });
-    console.log("myCollections", myCollections);
     setCollections(myCollections);
   };
 
@@ -108,7 +91,6 @@ function AddPin(props) {
   };
 
   const createNewCollection = () => {
-    console.log("do u want to create a new collection?");
     newCollectionName.length > 0
       ? setCollection2Firestore(props.uid)
       : alert("please enter a name for the new collection");
@@ -126,8 +108,8 @@ function AddPin(props) {
         <PinName>{props.pin.pinName}</PinName>
         <PinImage src={props.pin.pinImage} />
 
-        {collections.length>0 &&
-          collections.map((collectionName, index) => (
+        {collections.length > 0 &&
+          collections.map((collection, index) => (
             <AddToCollection key={index}>
               {/* <CollectionName>{Object.keys(collection)}</CollectionName> */}
               <CollectionName>{collection.collectionName}</CollectionName>
