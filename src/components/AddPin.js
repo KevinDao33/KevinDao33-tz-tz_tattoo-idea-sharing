@@ -1,9 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
-import {initializeApp} from "firebase/app";
 import {
-  getFirestore,
   collection as co,
   getDocs,
   doc,
@@ -27,26 +25,17 @@ import {
   NameNewCollection,
 } from "../styles/AddPin.module";
 
-// const firebaseConfig = {
-//   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-//   authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
-//   projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
-//   storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
-//   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
-//   appId: process.env.REACT_APP_FIREBASE_APPID,
-//   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-
 function AddPin(props) {
   const [collections, setCollections] = useState([]);
   const [newCollectionName, setNewCollectionName] = useState("");
 
   const getCollections = async (id) => {
+    console.log('this is the start of getCollections');
+    
     const querySnapshot = await getDocs(co(props.db, "user", id, "collection"));
+
+    console.log('this is the end of getCollections');
+    
     let myCollections = [];
     querySnapshot.forEach((doc) => {
       myCollections.push({...doc.data()});
@@ -127,7 +116,7 @@ function AddPin(props) {
         <PinImage src={props.pin.pinImage} />
 
         {collections.length>0 &&
-          collections.map((collectionName, index) => (
+          collections.map((collection, index) => (
             <AddToCollection key={index}>
               {/* <CollectionName>{Object.keys(collection)}</CollectionName> */}
               <CollectionName>{collection.collectionName}</CollectionName>

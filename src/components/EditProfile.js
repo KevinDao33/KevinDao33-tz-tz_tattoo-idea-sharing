@@ -7,12 +7,10 @@ import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {
   getFirestore,
-  // collection,
-  // getDocs,
   onSnapshot,
+  getDoc,
   doc,
   updateDoc,
-  // setDoc,
 } from "firebase/firestore";
 // import {useNavigate} from "react-router-dom";
 
@@ -36,22 +34,7 @@ import {
   InputFile,
   InputDesc,
 } from "../styles/EditProfile.module";
-// import {async} from "@firebase/util";
 
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-  authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
-  appId: process.env.REACT_APP_FIREBASE_APPID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
 
 function EditProfile(props) {
   const [userData, setUserData] = useState("");
@@ -61,26 +44,28 @@ function EditProfile(props) {
   const [newDescription, setNewDescription] = useState("");
   const [newLink, setNewLink] = useState("");
   const [newUserPhotoName, setNewUserPhotoName] = useState("");
-
+  
+  const storage = getStorage(props.app);
   const redirect = useNavigate();
 
   const getUserData = (userId) => {
     // eslint-disable-next-line no-unused-vars
-    const unsub = onSnapshot(doc(db, "user", userId), (doc) => {
+    // change from onSnapShot to getDoc to prevent infinite loop
+    const unsub = getDoc(doc(props.db, "user", userId), (doc) => {
       if (!props.uid) {
         return;
       } else if (props.uid && !userData) {
-        setUserData({
-          name: doc.data().name,
-          email: doc.data().email,
-          role: doc.data().role,
-          following: doc.data().following,
-          follower: doc.data().follower,
-          pic: doc.data().pic,
-          id: doc.data().uid,
-          link: doc.data().link,
-          desc: doc.data().desc,
-        });
+        // setUserData({
+        //   name: doc.data().name,
+        //   email: doc.data().email,
+        //   role: doc.data().role,
+        //   following: doc.data().following,
+        //   follower: doc.data().follower,
+        //   pic: doc.data().pic,
+        //   id: doc.data().uid,
+        //   link: doc.data().link,
+        //   desc: doc.data().desc,
+        // });
         setDisplayPhoto(doc.data().pic);
         setNewDescription(doc.data().desc);
         setNewName(doc.data().name);
@@ -151,7 +136,7 @@ function EditProfile(props) {
   };
   // =======================================
   const updateUserData = async () => {
-    const userRef = doc(db, "user", props.uid);
+    const userRef = doc(props.db, "user", props.uid);
     updateDoc(userRef, {
       name: newName,
       link: newLink,
@@ -162,7 +147,7 @@ function EditProfile(props) {
   const getUserImageUrl = async (name) => {
     getDownloadURL(ref(storage, `profileImages/${name}`))
       .then((url) => {
-        const userRef = doc(db, "user", props.uid);
+        const userRef = doc(props.db, "user", props.uid);
         updateDoc(userRef, {
           pic: url,
         });

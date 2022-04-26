@@ -1,15 +1,13 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
-import Login from "./Login";
 import {NavLink, useNavigate} from "react-router-dom";
-import {initializeApp} from "firebase/app";
 import {getAuth, signOut} from "firebase/auth";
 import {
-  getFirestore,
   collection,
   getDocs,
   onSnapshot,
+  getDoc,
   doc,
   setDoc,
 } from "firebase/firestore";
@@ -35,7 +33,6 @@ import {
   NameNewCollection,
   LeaveButton,
 } from "../styles/Profile.module";
-
 import Login from "./Login";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
 
@@ -52,8 +49,8 @@ function Profile(props) {
   const [showCreateCollection, setShowCreateCollection] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState();
 
-  // Initialize Firebase  
-  // const app = initializeApp(props.firebaseConfig);  
+  // Initialize Firebase
+  // const app = initializeApp(props.firebaseConfig);
   // const db = getFirestore(app);
   const auth = getAuth();
 
@@ -137,7 +134,9 @@ function Profile(props) {
   };
 
   const getPins = async (id) => {
-    const querySnapshot = await getDocs(collection(props.db, "user", id, "pin"));
+    const querySnapshot = await getDocs(
+      collection(props.db, "user", id, "pin")
+    );
     let myPins = [];
     querySnapshot.forEach((doc) => {
       myPins.push({...doc.data()});
@@ -157,15 +156,24 @@ function Profile(props) {
 
     return;
   };
+  
+  // =================================================================
+  // adjusted prevent infinite loop
+  
+  // useEffect(() => {
+    //   userData && getPins(userData);
+    //   userData && getCollections(userData);
+    // }, [userData]);
+    useEffect(() => {
+      props.uid && getPins(props.uid);
+      props.uid && getCollections(props.uid);
+    }, []);
 
-  useEffect(() => {
-    userData && getPins(userData.id);
-    userData && getCollections(userData.id);
-  }, [userData]);
+  // =================================================================
 
   const getUserData = (userId) => {
     // eslint-disable-next-line no-unused-vars
-    const unsub = onSnapshot(doc(props.db, "user/" + userId), (doc) => {
+    const unsub = getDoc(doc(props.db, "user/" + userId), (doc) => {
       if (!props.uid) {
         return;
       }
@@ -187,9 +195,15 @@ function Profile(props) {
     (await userData) && getPins(userData.id);
   }
 
+  // adjusted prevent infinite loop
+  // useEffect(() => {
+  //   getUserInfoAndPins();
+  // }, [userData]);
   useEffect(() => {
     getUserInfoAndPins();
-  }, [userData]);
+  }, []);
+
+  // =================================================================
 
   const setCollection2Firestore = (uid) => {
     const newCollectionRef = doc(

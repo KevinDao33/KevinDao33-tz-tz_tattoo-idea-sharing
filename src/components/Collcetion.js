@@ -1,9 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
-import {initializeApp} from "firebase/app";
 import {
-  getFirestore,
   updateDoc,
   doc,
   getDoc,
@@ -16,20 +14,6 @@ import {
   PinImage,
   SaveButton as RemoveButton,
 } from "../styles/Homepage.module";
-
-// const firebaseConfig = {
-//   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-//   authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
-//   projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
-//   storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
-//   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
-//   appId: process.env.REACT_APP_FIREBASE_APPID,
-//   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
 
 function Collection(props) {
   const [pinsInCollection, setPinsInCollection] = useState([]);
@@ -50,10 +34,20 @@ function Collection(props) {
     setPinsInCollection(pinsInCollec);
   };
 
+  // ===========================================
+
+  // adjusted prevent infinite loop
+
+  // useEffect(async () => {
+  //   getCollectionName();
+  //   props.uid && getPinsInCollection(props.uid);
+  // }, [collectionName, props.uid, pinsInCollection]);
+
   useEffect(async () => {
     getCollectionName();
     props.uid && getPinsInCollection(props.uid);
-  }, [collectionName, props.uid, pinsInCollection]);
+  }, [props.uid]);
+  // ===========================================
 
   const removePinFromCollection = (collecName, pin, index) => {
     const collectionRef = doc(props.db, "user", props.uid, "collection", collecName);

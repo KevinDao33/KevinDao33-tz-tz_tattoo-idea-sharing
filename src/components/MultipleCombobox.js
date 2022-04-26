@@ -13,43 +13,44 @@ import {
   SearchTagInput,
 } from "../styles/MultipleCombobox.modul";
 import {useEffect} from "react";
+import { items } from "../const";
 
 function MultipleCombobox(props) {
   const [inputValue, setInputValue] = useState("");
 
+// ==============================
+// make sure it wont cause infinite loop
   useEffect(() => {
     // set limits for selectedItems
-    console.log(selectedItems);
-
     props.setPinTags(selectedItems);
-  });
+  },[selectedItems]);
 
-  const items = [
-    "Animal",
-    "Black & Gray",
-    "Blackwork",
-    "Chicano",
-    "Classic Americana",
-    "Dark Art",
-    "Dotwork",
-    "Fineline",
-    "Funny",
-    "Geometric",
-    "Hand-Poked",
-    "Illustrative",
-    "Japanese",
-    "Lettering",
-    "Nature",
-    "Neo Traditional",
-    "New School Americana",
-    "Portraiture",
-    "Realism",
-    "Pet",
-    "Flora",
-    "Tribal",
-    "Vintage",
-    "Watercolor",
-  ];
+  // const items = [
+  //   "Animal",
+  //   "Black & Gray",
+  //   "Blackwork",
+  //   "Chicano",
+  //   "Classic Americana",
+  //   "Dark Art",
+  //   "Dotwork",
+  //   "Fineline",
+  //   "Funny",
+  //   "Geometric",
+  //   "Hand-Poked",
+  //   "Illustrative",
+  //   "Japanese",
+  //   "Lettering",
+  //   "Nature",
+  //   "Neo Traditional",
+  //   "New School Americana",
+  //   "Portraiture",
+  //   "Realism",
+  //   "Pet",
+  //   "Flora",
+  //   "Tribal",
+  //   "Vintage",
+  //   "Watercolor",
+  // ];
 
   const {
     getSelectedItemProps,
