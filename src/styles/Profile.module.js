@@ -95,6 +95,23 @@ const CollectionName = styled.h3`
   margin: 5px auto;
 `;
 
+const CreatePinButton = styled.button`
+  width: 60px;
+  height: 60px;
+  color: white;
+  background-color: coral;
+  border: none;
+  border-radius: 30px;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  font-size: 2rem;
+  margin: 10px;
+  position: fixed;
+  bottom: 0;
+  right: 30px;
+`;
+
 export {
   PorfileWrapper,
   UserImage,
@@ -108,4 +125,5 @@ export {
   CollectionWarpper,
   CollectionImage,
   CollectionName,
+  CreatePinButton,
 };

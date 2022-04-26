@@ -9,7 +9,6 @@ const Overlay = styled.div`
   height: 100%;
   top: 0px;
   left: 0px;
-  z-index: 3;
 `;
 
 const AddPinOptions = styled.div`
@@ -20,15 +19,11 @@ const AddPinOptions = styled.div`
   border-radius: 20px;
   width: 50vw;
   height: 530px;
-  z-index: 5;
+  z-index: 1;
   background-color: #f2f1eb;
   opacity: 1;
   overflow: auto;
   justify-content: center;
-  //   overflow-x: hidden;
-  //   overflow-y: auto;
-  //   display: flex;
-  //   flex-wrap: wrap;
 `;
 
 const LeaveButton = styled.button`
@@ -87,7 +82,6 @@ const SaveButton = styled.button`
   cursor: pointer;
   outline: inherit;
   font-size: 1.5rem;
-  z-index: 2;
   margin: 20px;
 `;
 
@@ -98,12 +92,11 @@ const CreateCollectionWrapper = styled.div`
   right: 25%;
   align-items: center;
   justify-content: space-between;
-  position: absolute;
   bottom: 45px;
   position: fixed;
   background-color: #f2f1eb;
   border-radius: 20px;
-  z-index: 5;
+  z-index: 2;
 `;
 
 const NameNewCollectionTitle = styled.label`
