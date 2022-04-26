@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, {useEffect, useState} from "react";
 import {initializeApp} from "firebase/app";
 import {
@@ -6,7 +7,7 @@ import {
   getDoc,
   getDocs,
   doc,
-  setDoc,
+  // setDoc,
   query,
   where,
   updateDoc,

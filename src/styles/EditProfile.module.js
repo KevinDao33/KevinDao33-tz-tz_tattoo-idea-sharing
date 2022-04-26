@@ -4,10 +4,10 @@ const EditWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 1300px;
-  height: 800px;
+  height: 1100px;
   margin: 90px auto 50px auto;
   border-radius: 20px;
-  border: 1px solid coral;
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
 `;
 
 const EditNavAllWrapper = styled.div`
@@ -15,22 +15,19 @@ const EditNavAllWrapper = styled.div`
   height: 100px;
   display: flex;
   justify-content: space-between;
-  /* flex-direction:row; */
-  /* flex-wrap: nowrap; */
   margin: 0 0 70px 0;
-  border: 1px solid red;
 `;
 
 const EditNavLeftWrapper = styled.div`
   display: flex;
   align-items: center;
-  border: 1px solid blue;
+  margin: auto 30px;
 `;
 
 const EditNavRightWrapper = styled.div`
   display: flex;
   align-items: center;
-  border: 1px solid blue;
+  margin: auto 30px;
 `;
 
 const BackButton = styled.div`
@@ -42,16 +39,18 @@ const BackButton = styled.div`
   font-size: 1.5rem;
   border: 1px solid lightgray;
   border-radius: 50px;
-  margin: auto 10px;
+  margin: auto 20px auto 0;
   cursor: pointer;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
   transition: 0.4s;
 
   &:hover {
-    transform: scale(1.1);
+    /* transform: scale(1.1);
     box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
       rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
-      rgba(67, 67, 67, 0.05) 12px 12px;
+      rgba(67, 67, 67, 0.05) 12px 12px; */
+    transform: scale(0.97);
+    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
   }
 `;
 
@@ -68,7 +67,7 @@ const CancelButton = styled.button`
   border: 1px solid lightgray;
   border-radius: 10px;
   padding: 10px;
-  margin: auto 10px;
+  margin: auto 30px auto 0;
   font: inherit;
   cursor: pointer;
   outline: inherit;
@@ -78,10 +77,12 @@ const CancelButton = styled.button`
   transition: 0.4s;
 
   &:hover {
-    transform: scale(1.1);
+    /* transform: scale(1.1);
     box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
       rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
-      rgba(67, 67, 67, 0.05) 12px 12px;
+      rgba(67, 67, 67, 0.05) 12px 12px; */
+    transform: scale(0.97);
+    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
   }
 `;
 
@@ -89,7 +90,7 @@ const SaveButton = styled.button`
   width: 130px;
   height: 50px;
   color: white;
-  background-color: black;
+  background-color: green;
   border: none;
   border-radius: 10px;
   padding: 10px;
@@ -102,18 +103,22 @@ const SaveButton = styled.button`
   transition: 0.4s;
 
   &:hover {
-    transform: scale(1.1);
+    /* transform: scale(1.1);
     box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
       rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
-      rgba(67, 67, 67, 0.05) 12px 12px;
+      rgba(67, 67, 67, 0.05) 12px 12px; */
+    transform: scale(0.97);
+    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
   }
 `;
 
-const InputWrapper = styled.div`
-  width: 50%;
+const InputTextWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 60%;
   height: 60px;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
-  margin: 20px auto 0 auto;
+  margin: 30px auto 0 auto;
   transition: 0.4s;
   border-radius: 20px;
   border: 1px solid green;
@@ -126,11 +131,133 @@ const InputWrapper = styled.div`
   }
 `;
 
-const InputTitle = styled.span`
-  width: 100%;
-  height: 50%;
+const InputDescTextWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 60%;
+  height: 250px;
+  box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
+  margin: 30px auto 0 auto;
+  transition: 0.4s;
+  border-radius: 20px;
   border: 1px solid green;
+
+  &:hover {
+    transform: scale(1);
+    box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
+      rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
+      rgba(67, 67, 67, 0.05) 12px 12px;
+  }
 `;
+
+const InputFileWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 50%;
+  box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
+  margin: 30px auto 0 auto;
+  border-radius: 20px;
+  border: 1px solid green;
+  /* transition: 0.4s;
+
+  &:hover {
+    transform: scale(1);
+    box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
+      rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
+      rgba(67, 67, 67, 0.05) 12px 12px;
+  } */
+`;
+
+const InputFileTitle = styled.span`
+  width: 90px;
+  margin: 10px auto;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid gray;
+`;
+
+const LabelFile = styled.label`
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  margin: 10px auto;
+  border: 1px solid green;
+  transition: 0.4s;
+
+  &:hover {
+    transform: scale(1);
+    box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
+      rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
+      rgba(67, 67, 67, 0.05) 12px 12px;
+  }
+`;
+
+const PhotoDisplay = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+`;
+
+const InputFile = styled.input`
+  display: none;
+`;
+
+const InputTextTitle = styled.span`
+  width: 150px;
+  margin: auto 20px;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid gray;
+`;
+
+const InputText = styled.input`
+  width: 60%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  margin: auto 20px;
+  font-size: 1.5rem;
+  padding-left: 15px;
+  border: 1px solid green;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+const InputDesc = styled.textarea`
+  width: 60%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  margin: auto 20px;
+  font-size: 1.5rem;
+  padding-left: 15px;
+  border: 1px solid green;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+// display: block;
+// width: 100%;
+// overflow: hidden;
+// resize: both;
+// min-height: 40px;
+// line-height: 20px;
 
 export {
   EditWrapper,
@@ -141,6 +268,14 @@ export {
   EditTitle,
   CancelButton,
   SaveButton,
-  InputWrapper,
-  InputTitle
+  InputTextWrapper,
+  InputDescTextWrapper,
+  InputTextTitle,
+  InputText,
+  InputFileWrapper,
+  InputFileTitle,
+  LabelFile,
+  PhotoDisplay,
+  InputFile,
+  InputDesc,
 };

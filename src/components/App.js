@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import GlobalStyle from "../styles/globalStyles";
 import React, {useState, useEffect} from "react";
@@ -13,6 +14,7 @@ import CreateNewPin from "./CreateNewPin";
 import Login from "./Login";
 import PinDetail from "./PinDetail";
 import EditProfile from "./EditProfile";
+import {getFirestore} from "firebase/firestore";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -27,6 +29,11 @@ function App() {
     appId: process.env.REACT_APP_FIREBASE_APPID,
     measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
   };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+  const db = getFirestore(app);
 
   useEffect(() => {
     const auth = getAuth();
@@ -79,7 +86,10 @@ function App() {
             />
           }
         />
-        <Route path="edit-profile"element={<EditProfile />} />
+        <Route
+          path='edit-profile'
+          element={<EditProfile uid={uid} app={app} db={db} />}
+        />
         <Route path='/create-pin' element={<CreateNewPin />} />
         <Route
           path={`pin-detail/:pinId`}

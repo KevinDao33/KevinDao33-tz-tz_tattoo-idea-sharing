@@ -13,6 +13,7 @@ import {
   doc,
   setDoc,
 } from "firebase/firestore";
+
 import {
   PorfileWrapper,
   UserImage,
@@ -244,7 +245,7 @@ function Profile(props) {
       {props.isLogin ? (
         userData && (
           <PorfileWrapper>
-            <UserImage></UserImage>
+            <UserImage src={userData.pic}></UserImage>
             <UserName>{userData.name}</UserName>
             <ShowFollow>{userData.follower.length} following</ShowFollow>
             <ShowFollow>{userData.following.length} follower</ShowFollow>

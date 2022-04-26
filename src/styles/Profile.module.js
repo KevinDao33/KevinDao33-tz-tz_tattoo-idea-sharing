@@ -10,10 +10,10 @@ const PorfileWrapper = styled.div`
   align-items: center;
 `;
 
-const UserImage = styled.div`
-  border-radius: 50px;
-  width: 100px;
-  height: 100px;
+const UserImage = styled.img`
+  border-radius: 100px;
+  width: 150px;
+  height: 150px;
   background-color: gray;
   margin: 20px auto 0px auto;
 `;

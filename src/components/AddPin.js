@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
 import {initializeApp} from "firebase/app";
@@ -13,6 +14,7 @@ import {
 
 import {
   Overlay,
+  AllAddPinWrapper,
   AddPinOptions,
   LeaveButton,
   PinImage,
@@ -113,7 +115,7 @@ function AddPin(props) {
   };
 
   return (
-    <>
+    <AllAddPinWrapper>
       <AddPinOptions>
         <LeaveButton
           onClick={() => {
@@ -150,7 +152,7 @@ function AddPin(props) {
       </CreateCollectionWrapper>
 
       <Overlay />
-    </>
+    </AllAddPinWrapper>
   );
 }
 

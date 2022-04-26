@@ -67,7 +67,7 @@ function Homapage(props) {
           columnClassName='my-masonry-grid_column'>
           {pins &&
             pins.map((pin, index) => (
-              <PinWrapper key={pin.pinId}>
+              <PinWrapper key={index}>
                 {/* <PinWrapper key={pin.pinId}> */}
                 <PinImage
                   src={pin.pinImage}

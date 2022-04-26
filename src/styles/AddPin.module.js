@@ -12,15 +12,28 @@ const Overlay = styled.div`
   z-index: 2;
 `;
 
-const AddPinOptions = styled.div`
-  position: absolute;
+const AllAddPinWrapper = styled.div`
+  width: 30vw;
+  height: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 3;
+  /* position: absolute; */
   position: fixed;
   top: 80px;
-  right: 25%;
+  right: 35%;
+`;
+
+const AddPinOptions = styled.div`
+  /* position: absolute; */
+  /* position: fixed;
+  top: 80px;
+  right: 25%; */
   border-radius: 20px;
-  width: 50vw;
-  height: 530px;
-  z-index: 3;
+  width: 100%;
+  height: 650px;
+  z-index: 4;
   background-color: #f2f1eb;
   opacity: 1;
   overflow: auto;
@@ -59,10 +72,16 @@ const PinName = styled.h2`
 const AddToCollection = styled.div`
   width: 100%;
   height: 70px;
-  border: 1px solid red;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px;
+  transition: 0.4s;
+  
+  &:hover {
+    /* transform: scale(1.1); */
+    box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
+  }
 `;
 
 const CollectionName = styled.h3`
@@ -89,16 +108,16 @@ const SaveButton = styled.button`
 
 const CreateCollectionWrapper = styled.div`
   display: flex;
-  width: 50vw;
+  width: 100%;
   height: 70px;
   right: 25%;
   align-items: center;
   justify-content: space-between;
-  bottom: 45px;
-  position: fixed;
+  /* bottom: 45px;
+  position: fixed; */
   background-color: #f2f1eb;
   border-radius: 20px;
-  z-index: 3;
+  z-index: 4;
 `;
 
 const NameNewCollectionTitle = styled.label`
@@ -123,6 +142,7 @@ const NameNewCollection = styled.input`
 
 export {
   Overlay,
+  AllAddPinWrapper,
   AddPinOptions,
   LeaveButton,
   PinImage,

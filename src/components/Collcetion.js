@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
 import {initializeApp} from "firebase/app";
