@@ -6,7 +6,7 @@ import {getAuth, signOut} from "firebase/auth";
 import {
   collection,
   getDocs,
-  onSnapshot,
+  // onSnapshot,
   getDoc,
   doc,
   setDoc,
@@ -45,14 +45,14 @@ function Profile(props) {
   const [showSection, setShowSection] = useState("");
   const [pins, setPins] = useState([]);
   const [userData, setUserData] = useState(null);
-  const [collections, setCollections] = useState();
+  const [collections, setCollections] = useState([]);
   const [showCreateCollection, setShowCreateCollection] = useState(false);
-  const [newCollectionName, setNewCollectionName] = useState();
+  const [newCollectionName, setNewCollectionName] = useState("");
 
   // Initialize Firebase
   // const app = initializeApp(props.firebaseConfig);
   // const db = getFirestore(app);
-  const auth = getAuth();
+  const auth = getAuth(props.app);
 
   useEffect(() => {
     setShowSection(MY_COLLECTION);
@@ -106,7 +106,7 @@ function Profile(props) {
     } else if (showSection === MY_COLLECTION) {
       return (
         <AllCollectionsWrapper>
-          {collections &&
+          {collections.length > 0 &&
             collections.map((collection) => (
               <CollectionWarpper
                 key={collection.collectionName}
@@ -135,7 +135,7 @@ function Profile(props) {
 
   const getPins = async (id) => {
     const querySnapshot = await getDocs(
-      collection(props.db, "user", id, "pin")
+      collection(props.db, `user/${id}`, "pin")
     );
     let myPins = [];
     querySnapshot.forEach((doc) => {
@@ -146,8 +146,9 @@ function Profile(props) {
 
   const getCollections = async (id) => {
     const querySnapshot = await getDocs(
-      collection(props.db, "user", id, "collection")
+      collection(props.db, `user/${id}`, "collection")
     );
+
     let myCollections = [];
     querySnapshot.forEach((doc) => {
       myCollections.push({...doc.data()});
@@ -156,52 +157,35 @@ function Profile(props) {
 
     return;
   };
-  
-  // =================================================================
-  // adjusted prevent infinite loop
-  
-  // useEffect(() => {
-    //   userData && getPins(userData);
-    //   userData && getCollections(userData);
-    // }, [userData]);
-    useEffect(() => {
-      props.uid && getPins(props.uid);
-      props.uid && getCollections(props.uid);
-    }, []);
 
-  // =================================================================
-
-  const getUserData = (userId) => {
-    // eslint-disable-next-line no-unused-vars
-    const unsub = getDoc(doc(props.db, "user/" + userId), (doc) => {
-      if (!props.uid) {
-        return;
-      }
-      setUserData({
-        name: doc.data().name,
-        email: doc.data().email,
-        role: doc.data().role,
-        following: doc.data().following,
-        follower: doc.data().follower,
-        pic: doc.data().pic,
-        id: doc.data().uid,
-        link: doc.data().link,
-      });
+  const getUserData = async (userId) => {
+    if (!props.uid) {
+      return;
+    }
+    const docRef = doc(props.db, `user/${userId}`);
+    const docSnap = await getDoc(docRef);
+    setUserData({
+      name: docSnap.data().name,
+      email: docSnap.data().email,
+      role: docSnap.data().role,
+      following: docSnap.data().following,
+      follower: docSnap.data().follower,
+      pic: docSnap.data().pic,
+      id: docSnap.data().uid,
+      link: docSnap.data().link,
+      desc: docSnap.data().desc,
     });
   };
 
-  async function getUserInfoAndPins() {
+  async function getUserInfoAndPinsAndCollection() {
     getUserData(props.uid);
-    (await userData) && getPins(userData.id);
+    await getPins(props.uid);
+    await getCollections(props.uid);
   }
 
-  // adjusted prevent infinite loop
-  // useEffect(() => {
-  //   getUserInfoAndPins();
-  // }, [userData]);
   useEffect(() => {
-    getUserInfoAndPins();
-  }, []);
+    getUserInfoAndPinsAndCollection();
+  }, [props.uid]);
 
   // =================================================================
 
@@ -225,7 +209,7 @@ function Profile(props) {
   };
 
   const createNewCollection = () => {
-    newCollectionName.length > 0
+    newCollectionName
       ? setCollection2Firestore(props.uid)
       : alert("please enter a name for the new collection");
   };

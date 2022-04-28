@@ -13,17 +13,18 @@ import {
   SearchTagInput,
 } from "../styles/MultipleCombobox.modul";
 import {useEffect} from "react";
-import { items } from "../const";
+import {items} from "../const";
 
 function MultipleCombobox(props) {
   const [inputValue, setInputValue] = useState("");
+  
 
 // ==============================
 // make sure it wont cause infinite loop
   useEffect(() => {
     // set limits for selectedItems
     props.setPinTags(selectedItems);
-  },[selectedItems]);
+  },[]);
 
   // const items = [
   //   "Animal",

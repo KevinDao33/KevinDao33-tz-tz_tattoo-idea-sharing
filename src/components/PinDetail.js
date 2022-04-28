@@ -1,8 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, {useEffect, useState} from "react";
-import {initializeApp} from "firebase/app";
 import {
-  getFirestore,
   collection,
   getDoc,
   getDocs,
@@ -53,8 +51,6 @@ function PinDetail(props) {
   const [selectedCollection, setSelectedCollection] = useState("");
   const [similiarPins, setSimiliarPins] = useState([]);
 
-  const app = initializeApp(props.firebaseConfig);
-  const db = getFirestore(app);
   const redirect = useNavigate();
 
   const getPinId = () => {
@@ -71,7 +67,7 @@ function PinDetail(props) {
     if (!authorId) {
       return;
     }
-    const authorSnapshot = await getDoc(doc(db, "user", authorId));
+    const authorSnapshot = await getDoc(doc(props.db, "user", authorId));
     setAuthorData(authorSnapshot.data());
 
     return;
@@ -86,7 +82,7 @@ function PinDetail(props) {
       return;
     }
     const collectionSnapshot = await getDocs(
-      collection(db, "user", userId, "collection")
+      collection(props.db, "user", userId, "collection")
     );
 
     let myCollections = [];
@@ -106,7 +102,7 @@ function PinDetail(props) {
     if (!pinId) {
       return;
     }
-    const pinSnapshot = await getDoc(doc(db, "pin", pinId));
+    const pinSnapshot = await getDoc(doc(props.db, "pin", pinId));
     setPinData(pinSnapshot.data());
 
     return;
@@ -128,7 +124,7 @@ function PinDetail(props) {
       return;
     }
     const collectionRef = doc(
-      db,
+      props.db,
       "user",
       props.uid,
       "collection",
@@ -153,7 +149,7 @@ function PinDetail(props) {
       return;
     }
 
-    const pinsRef = collection(db, "pin");
+    const pinsRef = collection(props.db, "pin");
     const q = query(
       pinsRef,
       where("pinTags", "array-contains-any", pinData.pinTags)

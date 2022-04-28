@@ -5,8 +5,9 @@ import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 
 import "../styles/style.css";
-import AddPin from "./AddPin";
 
+import LandingPage from "./LandingPageVideo";
+import AddPin from "./AddPin";
 import {
   MainWrapper,
   AllPinsWrapper,
@@ -16,6 +17,7 @@ import {
 } from "../styles/Homepage.module";
 
 function Homapage(props) {
+  const [isShowVideo, setIsShowVideo] = useState(true);
   const [isShowAddPin, setIsShowAddPin] = useState(false);
   const [pins, setPins] = useState([]);
 
@@ -56,7 +58,11 @@ function Homapage(props) {
     setPins(mockPin);
   };
 
-  return (
+  return isShowVideo ? (
+    <LandingPage setIsShowVideo={setIsShowVideo}></LandingPage>
+  ) : (
+    // <h1>there is nothing here now :(</h1>
+
     <MainWrapper>
       <AllPinsWrapper>
         <Masonry

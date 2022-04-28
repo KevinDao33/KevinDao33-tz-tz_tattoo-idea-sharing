@@ -25,7 +25,7 @@ function Login(props) {
   const [userRole, setUserRole] = useState("");
   const [userLink, setUserLink] = useState("");
   
-  const auth = getAuth(props.app);
+  // const auth = getAuth(props.app);
   const redirect = useNavigate();
 
   // const app = initializeApp(props.firebaseConfig);
@@ -40,7 +40,7 @@ function Login(props) {
   };
 
   const signUp = () => {
-    createUserWithEmailAndPassword(auth, userEmail, userPassword)
+    createUserWithEmailAndPassword(props.auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
         writeUserData(user.uid);
@@ -69,7 +69,7 @@ function Login(props) {
   };
 
   const signIn = () => {
-    signInWithEmailAndPassword(auth, userEmail, userPassword)
+    signInWithEmailAndPassword(props.auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
         getUserData(user.uid);

@@ -14,16 +14,7 @@ const AllPinsWrapper = styled.div`
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
-  /* display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: flow;
-
-  /* display: grid;
-  masonry-auto-flow: next */
-  /* grid-template-columns: repeat(auto-fill, var(250px));
- grid-auto-rows: var(10px); */
   justify-content: center;
-
   border: 1px solid blue;
   height: auto;
 `;

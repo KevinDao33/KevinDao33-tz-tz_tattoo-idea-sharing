@@ -1,12 +1,13 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import chatIcon from "../icon/chat-icon.png";
+import notifyIcon from "../icon/noti.png";
+import photo from "../icon/profile.png";
 import {
   NavbarBlank,
   NavbarWrapper,
   LogoWrapper,
   Searchbar,
-  Chat,
+  Notify,
   MemberPictureWrapper,
 } from "../styles/Navbar.module";
 
@@ -19,9 +20,9 @@ function Navbar() {
           <LogoWrapper />
         </NavLink>
         <Searchbar />
-        <Chat src={chatIcon} />
+        <Notify src={notifyIcon} />
         <NavLink to='/profile'>
-          <MemberPictureWrapper />
+          <MemberPictureWrapper src={photo} />
         </NavLink>
       </NavbarWrapper>
     </>

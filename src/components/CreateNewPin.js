@@ -55,7 +55,6 @@ function CreateNewPin(props) {
   const redirect = useNavigate();
   const storage = getStorage(props.app);
 
-
   async function handleImageUpload(e) {
     // show image preview
     if (!e.target.files || e.target.files.length === 0) {
@@ -115,6 +114,7 @@ function CreateNewPin(props) {
   const successfullyCreatePin = (pinImageInLocal) => {
     dataUrl2Blob(pinImageInLocal);
     alert("pin successfully created!");
+    redirect("/profile");
   };
 
   const submitPinData = () => {
@@ -134,7 +134,7 @@ function CreateNewPin(props) {
   };
 
   const writeUserData = () => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    // const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const collectionRefPin = collection(props.db, "pin");
     const docRefCollectionRefPin = doc(collectionRefPin);
 
@@ -148,9 +148,9 @@ function CreateNewPin(props) {
 
     setDoc(collectionRefUser, {
       pinAutor: {
-        email: userInfo.email,
-        name: userInfo.name,
-        uid: userInfo.id,
+        // email: userInfo.email,
+        // name: userInfo.name,
+        uid: props.uid,
       },
       pinId: docRefCollectionRefPin.id,
       pinDesc: pinDescription,
@@ -161,9 +161,9 @@ function CreateNewPin(props) {
     });
     setDoc(docRefCollectionRefPin, {
       pinAutor: {
-        email: userInfo.email,
-        name: userInfo.name,
-        uid: userInfo.id,
+        // email: userInfo.email,
+        // name: userInfo.name,
+        uid: props.uid,
       },
       pinId: docRefCollectionRefPin.id,
       pinDesc: pinDescription,
@@ -267,10 +267,7 @@ function CreateNewPin(props) {
             setPinTags={setPinTags}></MultipleCombobox>
         </NewPinDataWrapper>
 
-        <CreatePinButton
-          onClick={handleCreatePin}>
-          Create
-        </CreatePinButton>
+        <CreatePinButton onClick={handleCreatePin}>Create</CreatePinButton>
       </PinDataUploadWrapper>
     </CreateNewPinWrapper>
   );

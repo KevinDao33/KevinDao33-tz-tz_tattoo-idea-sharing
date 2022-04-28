@@ -28,11 +28,11 @@ function App() {
     messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
     appId: process.env.REACT_APP_FIREBASE_APPID,
     measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
-  };
+  };  
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth();
+  const auth = getAuth(app);
   const db = getFirestore(app);
 
   useEffect(() => {
@@ -68,6 +68,7 @@ function App() {
             <Profile
               uid={uid}
               db={db}
+              auth={auth}
               setUid={setUid}
               isLogin={isLogin}
               setIsLogin={setIsLogin}
@@ -84,7 +85,7 @@ function App() {
         />
         <Route
           path={`pin-detail/:pinId`}
-          element={<PinDetail uid={uid} firebaseConfig={firebaseConfig} />}
+          element={<PinDetail uid={uid} app={app} db={db} />}
         />
         <Route
           path={`collection/:collectionName`}
@@ -96,6 +97,7 @@ function App() {
             <Login
               uid={uid}
               db={db}
+              auth={auth}
               setUid={setUid}
               isLogin={isLogin}
               setIsLogin={setIsLogin}

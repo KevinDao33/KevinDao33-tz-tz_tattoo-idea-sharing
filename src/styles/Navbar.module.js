@@ -44,17 +44,17 @@ const Searchbar = styled.input`
   font-size: 1.5rem;
 `;
 
-const Chat = styled.img`
+const Notify = styled.img`
   width: 50px;
   height: 50px;
   margin: auto 15px auto 15px;
   cursor: pointer;
 `;
 
-const MemberPictureWrapper = styled.div`
+const MemberPictureWrapper = styled.img`
   width: 50px;
   height: 50px;
-  background-color: #8e8d8a;
+  background-color: lightgray;
   border-radius: 50px;
   margin: auto 15px auto 0;
   cursor: pointer;
@@ -65,6 +65,6 @@ export {
   NavbarWrapper,
   LogoWrapper,
   Searchbar,
-  Chat,
+  Notify,
   MemberPictureWrapper,
 };
