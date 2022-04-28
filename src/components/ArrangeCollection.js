@@ -47,8 +47,7 @@ function ArrangeCollection(props) {
         doc(props.db, "user", id, "collection", lastSegment)
       );
       const pinsInCollec = querySnapshot.data();
-      console.log('pinsInCollec', pinsInCollec);
-      
+
       setPinsInCollection(pinsInCollec.pins);
     };
 
@@ -58,12 +57,6 @@ function ArrangeCollection(props) {
   useEffect(() => {
     props.uid && getCollectionName();
   }, [props.uid]);
-
-  useEffect(()=>{
-    //   console.log('collectionName', collectionName); 
-      console.log('pinsInCollection', pinsInCollection); 
-      
-  })
 
   const itemsFromBackend = [
     {id: uuid(), content: "First task"},
@@ -76,7 +69,7 @@ function ArrangeCollection(props) {
   const columnsFromBackend = {
     [uuid()]: {
       name: "Requested",
-    //   items: itemsFromBackend,
+      //   items: itemsFromBackend,
       items: pinsInCollection,
     },
     [uuid()]: {
@@ -86,7 +79,7 @@ function ArrangeCollection(props) {
     [uuid()]: {
       name: "In Progress",
       items: [],
-    }, 
+    },
     [uuid()]: {
       name: "Done",
       items: [],
@@ -135,7 +128,6 @@ function ArrangeCollection(props) {
   };
 
   return (
-
     <div style={{display: "flex", justifyContent: "center", height: "100%"}}>
       <DragDropContext
         onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
@@ -148,7 +140,7 @@ function ArrangeCollection(props) {
                 alignItems: "center",
               }}
               key={columnId}>
-              <h2>{column.pinName}</h2>
+              <h2>{column.name}</h2>
               <div style={{margin: 8}}>
                 <Droppable droppableId={columnId} key={columnId}>
                   {(provided, snapshot) => {
@@ -167,8 +159,8 @@ function ArrangeCollection(props) {
                         {column.items.map((item, index) => {
                           return (
                             <Draggable
-                              key={item.id}
-                              draggableId={item.id}
+                              key={item.pinId}
+                              draggableId={item.pinId}
                               index={index}>
                               {(provided, snapshot) => {
                                 return (
@@ -187,7 +179,7 @@ function ArrangeCollection(props) {
                                       color: "white",
                                       ...provided.draggableProps.style,
                                     }}>
-                                    {item.content}
+                                    {item.pinName}
                                   </div>
                                 );
                               }}
