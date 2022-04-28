@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import {arrangeIcon} from "../icon/arrange.png"
 
+// ======================header section==================================
 const CollectionHeader = styled.div`
   display: flex;
   flex-direction: column;
-  width: 1300px;
-  height: 300px;
+  width: 1350px;
+  /* height: 300px; */
   margin: 90px auto 10px auto;
   border-radius: 20px;
   box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -19,20 +19,37 @@ const UserPhoto = styled.img`
 `;
 
 const CollectionName = styled.h2`
-  font-size: 1.5rem;
+  font-size: 2rem;
   text-align: center;
-  margin: 10px auto;
+  margin: 30px auto 10px auto;
+  cursor: pointer;
 `;
 
-const ArrangeButton = styled.div`
-  width: 130px;
-  height: 130px;
+const AllButtonWrapper = styled.div`
+  width: 30%;
+  margin: 10px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Button = styled.img`
+  width: 40px;
+  height: 40px;
+  margin: 10px auto;
   background-color: #ecebe4;
   opacity: 0.8;
-  border-radius: 20px;
+  border-radius: 10px;
   cursor: pointer;
   transition: 0.4s;
-  background-image: arrangeIcon;
 
   &:hover {
     transform: scale(1);
@@ -41,6 +58,12 @@ const ArrangeButton = styled.div`
       rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
       rgba(67, 67, 67, 0.05) 12px 12px;
   }
+`;
+
+const ButtonName = styled.h2`
+  font-size: 0.5rem;
+  text-align: center;
+  margin: 0 auto;
 `;
 
 const SaveOrderButton = styled.button`
@@ -66,10 +89,105 @@ const SaveOrderButton = styled.button`
   }
 `;
 
+// ======================Pin section==================================
+const MainWrapper = styled.div`
+  width: 1400px;
+  margin: 15px auto;
+  border: 1px solid red;
+  display: flex;
+  justify-content: center;
+`;
+
+const AllPinsWrapper = styled.div`
+  width: 100%;
+  margin: 20px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  justify-content: center;
+  border-top: 1px solid gray;
+
+  /* border: 1px solid blue; */
+  height: auto;
+`;
+
+const PinWrapper = styled.div`
+  /* width: 325px;
+  height: auto;
+  border: 1px solid red;
+  border-radius: 20px;
+  margin: 10px;
+  background-color: lightblue; */
+  position: relative;
+`;
+
+const PinImage = styled.img`
+  width: 300px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 15px;
+  transition: 0.4s;
+  box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: rgba(67, 67, 67, 0.4) 3px 3px, rgba(67, 67, 67, 0.3) 8px 8px,
+      rgba(67, 67, 67, 0.2) 12px 12px, rgba(67, 67, 67, 0.1) 18px 18px,
+      rgba(67, 67, 67, 0.05) 20px 20px;
+  }
+`;
+
+const RemoveButton = styled.button`
+  width: 40px;
+  height: 40px;
+  color: gray;
+  background-color: lightgray;
+  opacity: 0.9;
+  border: none;
+  border-radius: 30px;
+  /* padding: 10px; */
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  font-size: 1.5rem;
+  transition: 0.4s;
+
+  &:hover {
+    color: white;
+    background-color: coral;
+    opacity: 1;
+  }
+`;
+
+const DragPinWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const ShowEmptyMessage = styled.div`
+  text-align: center;
+  margin: 20px auto;
+`;
+
 export {
   CollectionHeader,
   UserPhoto,
   CollectionName,
-  ArrangeButton,
+  AllButtonWrapper,
+  ButtonWrapper,
+  Button,
+  ButtonName,
   SaveOrderButton,
+  MainWrapper,
+  AllPinsWrapper,
+  PinWrapper,
+  PinImage,
+  RemoveButton,
+  DragPinWrapper,
+  ShowEmptyMessage,
 };
