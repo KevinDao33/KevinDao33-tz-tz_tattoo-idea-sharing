@@ -12,7 +12,9 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
+import Masonry from "react-masonry-css";
 
+import "../styles/style.css";
 import {
   PinDetailWrapper,
   PinImageWrapper,
@@ -52,6 +54,12 @@ function PinDetail(props) {
   const [similiarPins, setSimiliarPins] = useState([]);
 
   const redirect = useNavigate();
+  const breakpointColumnsObj = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
+  };
 
   const getPinId = () => {
     const url = window.location.href;
@@ -233,16 +241,21 @@ function PinDetail(props) {
           </PinDetailWrapper>
           <RelatedPinsTitle>Similiar Pins</RelatedPinsTitle>
           <SimiliarPinsWrapper>
-            {similiarPins &&
-              similiarPins.map((similiarPin) => (
-                <SimiliarPin
-                  key={similiarPin.pinId}
-                  src={similiarPin.pinImage}
-                  onClick={() => {
-                    redirect(`/pin-detail/${similiarPin.pinId}`);
-                    window.location.reload();
-                  }}></SimiliarPin>
-              ))}
+            <Masonry
+              breakpointCols={breakpointColumnsObj}
+              className='my-masonry-grid'
+              columnClassName='my-masonry-grid_column'>
+              {similiarPins &&
+                similiarPins.map((similiarPin) => (
+                  <SimiliarPin
+                    key={similiarPin.pinId}
+                    src={similiarPin.pinImage}
+                    onClick={() => {
+                      redirect(`/pin-detail/${similiarPin.pinId}`);
+                      window.location.reload();
+                    }}></SimiliarPin>
+                ))}
+            </Masonry>
           </SimiliarPinsWrapper>
         </>
       ) : (

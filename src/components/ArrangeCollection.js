@@ -2,37 +2,15 @@
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
-// import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
-import {v4 as uuid} from "uuid";
 import "../styles/style.css";
 import {doc, getDoc, updateDoc} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
-// import Masonry from "react-masonry-css";
-// import arrangeIcon from "../icon/arrange.png";
-// import removeIcon from "../icon/remove.png";
-// import {SHOW_PINS} from "../const";
-// import {ARRANGE_PINS} from "../const";
-// import {DELETE_PINS} from "../const";
 
 import {
-  // CollectionHeader,
-  //   UserPhoto,
-  // CollectionName,
-  //   AllButtonWrapper,
-  //   ButtonWrapper,
-  // Button,
-  //   ButtonName,
-  //   SaveOrderButton,
-  //   AllPinsWrapper,
-  //   PinWrapper,
-  // PinImage,
   PinImageArrange,
   ArrangeNavWrapper,
   BackButton,
   SaveButton,
-  //   RemoveButton,
-  //   ShowEmptyMessage,
-  // DragPinWrapper,
 } from "../styles/Collection.module";
 
 function ArrangeCollection(props) {
@@ -43,8 +21,6 @@ function ArrangeCollection(props) {
   const [columnB, setColumnB] = useState([]);
   const [columnC, setColumnC] = useState([]);
   const [columnD, setColumnD] = useState([]);
-
-  const redirect = useNavigate();
 
   const getCollectionName = () => {
     const url = window.location.href;
@@ -155,7 +131,6 @@ function ArrangeCollection(props) {
   };
 
   const saveNewPinOrder = () => {
-    // console.log(columnA.items.concat(columnB.items).concat(columnC.items).concat(columnD.items));
     Object.values(columns).length > 0
       ? upDateCombinedColumns()
       : console.log("there's nothing");
@@ -250,9 +225,7 @@ function ArrangeCollection(props) {
                           {...provided.droppableProps}
                           ref={provided.innerRef}
                           style={{
-                            background: snapshot.isDraggingOver
-                              ? "white"
-                              : "white",
+                            background: "white",
                             padding: 4,
                             width: "330px",
                             minHeight: "100vh",
@@ -265,50 +238,11 @@ function ArrangeCollection(props) {
                                 index={index}>
                                 {(provided, snapshot) => {
                                   return (
-                                    //   <div
-                                    //     ref={provided.innerRef}
-                                    //     {...provided.draggableProps}
-                                    //     {...provided.dragHandleProps}
-                                    //     style={{
-                                    //       userSelect: "none",
-                                    //       padding: 16,
-                                    //       margin: "0 0 8px 0",
-                                    //       minHeight: "50px",
-                                    //       backgroundColor: snapshot.isDragging
-                                    //         ? "#263B4A"
-                                    //         : "#456C86",
-                                    //       color: "white",
-                                    //       animation: snapshot.isDragging
-                                    //         ? "shake 0.5s"
-                                    //         : "",
-                                    //       animationIterationCount:"infinite",
-
-                                    //       ...provided.draggableProps.style,
-                                    //     }}>
-                                    //     {item.pinName}
-                                    //   </div>
                                     <PinImageArrange
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
-                                      src={item.pinImage}
-                                      // style={{
-                                      //   userSelect: "none",
-                                      //   padding: 16,
-                                      //   margin: "0 0 8px 0",
-                                      //   minHeight: "50px",
-                                      //   backgroundColor: snapshot.isDragging
-                                      //     ? "#263B4A"
-                                      //     : "#456C86",
-                                      //   color: "white",
-                                      //   animation: snapshot.isDragging
-                                      //     ? "shake 0.5s"
-                                      //     : "",
-                                      //   animationIterationCount:"infinite",
-
-                                      //   ...provided.draggableProps.style,
-                                      // }}
-                                    ></PinImageArrange>
+                                      src={item.pinImage}></PinImageArrange>
                                   );
                                 }}
                               </Draggable>
@@ -329,72 +263,4 @@ function ArrangeCollection(props) {
   );
 }
 
-// function ArrangeCollection(props) {
-//   const [pinsInCollection, setPinsInCollection] = useState([]);
-//   const [collectionName, setCollectionName] = useState("");
-//   const [handlePin, setHandlePin] = useState(SHOW_PINS);
-
-//   const getCollectionName = () => {
-//     const url = window.location.href;
-//     const decodeUrl = decodeURI(url);
-//     const lastSegment = decodeUrl.split("/").pop();
-//     setCollectionName(lastSegment);
-
-//     const getPinsInCollection = async (id) => {
-//       const querySnapshot = await getDoc(
-//         doc(props.db, "user", id, "collection", lastSegment)
-//       );
-//       const pinsInCollec = querySnapshot.data();
-//       setPinsInCollection(pinsInCollec);
-//     };
-//     getPinsInCollection(props.uid);
-//   };
-
-//   useEffect(async () => {
-//     getCollectionName();
-//   }, [props.uid]);
-
-//   // const handleOnDragEnd = (result) => {
-//   //   if (!result.destination) return;
-
-//   //   const items = Array.from(pinsInCollection.pins);
-//   //   const [reorderedItem] = items.splice(result.source.index, 1);
-//   //   items.splice(result.destination.index, 0, reorderedItem);
-
-//   //   setPinsInCollection((prev) => ({...prev, pins: items}));
-//   // };
-
-// //   const breakpointColumnsObj = {
-// //     default: 4,
-// //     1100: 3,
-// //     700: 2,
-// //     500: 1,
-// //   };
-
-//   const switch2Show = () => {
-//     setHandlePin(SHOW_PINS);
-//   };
-
-//   const switch2Arrange = () => {
-//     setHandlePin(ARRANGE_PINS);
-//   };
-
-//   const switch2Delete = () => {
-//     setHandlePin(DELETE_PINS);
-//   };
-
-//   return <div>hi arrange</div>;
-// }
-
 export default ArrangeCollection;
-
-{
-  /* <SaveOrderButton
-onClick={() =>
-alert(
-"firebase doesn't support soting array orders, so the change won't be saved; however, feel free to come back an play with the drag and drop function."
-)
-}>
-save
-</SaveOrderButton> */
-}

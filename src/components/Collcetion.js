@@ -14,7 +14,7 @@ import {DELETE_PINS} from "../const";
 
 import {
   CollectionHeader,
-  UserPhoto,
+  // UserPhoto,
   CollectionName,
   AllButtonWrapper,
   ButtonWrapper,
@@ -26,6 +26,7 @@ import {
   PinImage,
   RemoveButton,
   ShowEmptyMessage,
+  PinImageDelete
   // DragPinWrapper,
 } from "../styles/Collection.module";
 import ArrangeCollection from "./ArrangeCollection";
@@ -51,23 +52,6 @@ function Collection(props) {
     getPinsInCollection(props.uid);
   };
 
-  // const getPinsInCollection = async (id) => {
-  //   const querySnapshot = await getDoc(
-  //     doc(props.db, "user", id, "collection", collectionName)
-  //   );
-  //   const pinsInCollec = querySnapshot.data();
-  //   setPinsInCollection(pinsInCollec);
-  // };
-
-  // ===========================================
-
-  // adjusted prevent infinite loop
-
-  // useEffect(async () => {
-  //   getCollectionName();
-  //   props.uid && getPinsInCollection(props.uid);
-  // }, [collectionName, props.uid, pinsInCollection]);
-
   useEffect(() => {
     getCollectionName();
   }, [props.uid]);
@@ -91,16 +75,6 @@ function Collection(props) {
     alert(`pin removed from ${collectionName}`);
   };
 
-  // const handleOnDragEnd = (result) => {
-  //   if (!result.destination) return;
-
-  //   const items = Array.from(pinsInCollection.pins);
-  //   const [reorderedItem] = items.splice(result.source.index, 1);
-  //   items.splice(result.destination.index, 0, reorderedItem);
-
-  //   setPinsInCollection((prev) => ({...prev, pins: items}));
-  // };
-
   const breakpointColumnsObj = {
     default: 4,
     1100: 3,
@@ -117,13 +91,19 @@ function Collection(props) {
   };
 
   const switch2Delete = () => {
-    setHandlePin(DELETE_PINS);
+    handlePin !== DELETE_PINS
+      ? setHandlePin(DELETE_PINS)
+      : setHandlePin(SHOW_PINS);
   };
 
   return (
     <>
       {handlePin === ARRANGE_PINS ? (
-        <ArrangeCollection uid={props.uid} db={props.db} switch2Show={switch2Show}/>
+        <ArrangeCollection
+          uid={props.uid}
+          db={props.db}
+          switch2Show={switch2Show}
+        />
       ) : (
         <CollectionHeader>
           {/* <UserPhoto src={photo}></UserPhoto> */}
@@ -153,25 +133,34 @@ function Collection(props) {
                   breakpointCols={breakpointColumnsObj}
                   className='my-masonry-grid'
                   columnClassName='my-masonry-grid_column'>
+
                   {pinsInCollection.collectionName &&
                     pinsInCollection.pins.length > 0 &&
+                    handlePin === DELETE_PINS ?
                     pinsInCollection.pins.map((pin, index) => (
                       <PinWrapper key={uuid()}>
+                        <PinImageDelete src={pin.pinImage} />
+
+                        <RemoveButton
+                          onClick={() => {
+                            removePinFromCollection(collectionName, pin, index);
+                          }}>
+                          -
+                        </RemoveButton>
+                      </PinWrapper>
+                    )): pinsInCollection.pins.map((pin, index) => (
+                      <PinWrapper key={uuid()}>
                         <PinImage src={pin.pinImage} />
-                        {handlePin === DELETE_PINS && (
-                          <RemoveButton
-                            onClick={() => {
-                              removePinFromCollection(
-                                collectionName,
-                                pin,
-                                index
-                              );
-                            }}>
-                            -
-                          </RemoveButton>
-                        )}
+
+                        {/* <RemoveButton
+                          onClick={() => {
+                            removePinFromCollection(collectionName, pin, index);
+                          }}>
+                          -
+                        </RemoveButton> */}
                       </PinWrapper>
                     ))}
+
                 </Masonry>
               </AllPinsWrapper>
             </>
@@ -185,14 +174,3 @@ function Collection(props) {
 }
 
 export default Collection;
-
-{
-  /* <SaveOrderButton
-onClick={() =>
-alert(
-"firebase doesn't support soting array orders, so the change won't be saved; however, feel free to come back an play with the drag and drop function."
-)
-}>
-save
-</SaveOrderButton> */
-}

@@ -3,6 +3,7 @@
 import React, {useState, useEffect} from "react";
 import {NavLink, useNavigate} from "react-router-dom";
 import {getAuth, signOut} from "firebase/auth";
+import Masonry from "react-masonry-css";
 import {
   collection,
   getDocs,
@@ -49,14 +50,16 @@ function Profile(props) {
   const [showCreateCollection, setShowCreateCollection] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("");
 
-  // Initialize Firebase
-  // const app = initializeApp(props.firebaseConfig);
-  // const db = getFirestore(app);
+  const breakpointColumnsObj = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
+  };
   const auth = getAuth(props.app);
 
   useEffect(() => {
     setShowSection(MY_COLLECTION);
-    // setCollections(mockAllCollections);
   }, []);
 
   const showMyPin = () => {
@@ -90,12 +93,17 @@ function Profile(props) {
     if (showSection === MY_PIN) {
       return (
         <AllPinsWrapper>
-          {pins.length > 0 &&
-            pins.map((pin, index) => (
-              <PinWrapper key={index}>
-                <PinImage src={pin.pinImage} />
-              </PinWrapper>
-            ))}
+          <Masonry
+            breakpointCols={breakpointColumnsObj}
+            className='my-masonry-grid'
+            columnClassName='my-masonry-grid_column'>
+            {pins.length > 0 &&
+              pins.map((pin, index) => (
+                <PinWrapper key={index}>
+                  <PinImage src={pin.pinImage} />
+                </PinWrapper>
+              ))}
+          </Masonry>
           <NavLink to='/create-pin'>
             <CreateButton>
               +<br></br>pin

@@ -135,8 +135,27 @@ const PinImage = styled.img`
     box-shadow: rgba(67, 67, 67, 0.4) 3px 3px, rgba(67, 67, 67, 0.3) 8px 8px,
       rgba(67, 67, 67, 0.2) 12px 12px, rgba(67, 67, 67, 0.1) 18px 18px,
       rgba(67, 67, 67, 0.05) 20px 20px;
-    animation: shake 0.5s;
-    animation-iteration-count: infinite;
+    /* animation: shake 0.5s;
+    animation-iteration-count: infinite; */
+  }
+`;
+
+const PinImageDelete = styled.img`
+  width: 300px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 15px;
+  transition: 0.4s;
+  box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
+  animation: shake 0.5s;
+  animation-iteration-count: infinite;
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: rgba(67, 67, 67, 0.4) 3px 3px, rgba(67, 67, 67, 0.3) 8px 8px,
+      rgba(67, 67, 67, 0.2) 12px 12px, rgba(67, 67, 67, 0.1) 18px 18px,
+      rgba(67, 67, 67, 0.05) 20px 20px;
+      
   }
 `;
 
@@ -271,4 +290,5 @@ export {
   ArrangeNavWrapper,
   BackButton,
   SaveButton,
+  PinImageDelete
 };
