@@ -135,6 +135,9 @@ const PinImage = styled.img`
     box-shadow: rgba(67, 67, 67, 0.4) 3px 3px, rgba(67, 67, 67, 0.3) 8px 8px,
       rgba(67, 67, 67, 0.2) 12px 12px, rgba(67, 67, 67, 0.1) 18px 18px,
       rgba(67, 67, 67, 0.05) 20px 20px;
+    animation: shake 0.5s;
+    animation-iteration-count:infinite;
+
   }
 `;
 

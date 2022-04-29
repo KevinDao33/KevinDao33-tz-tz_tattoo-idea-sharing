@@ -5,7 +5,7 @@ import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 // import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import {v4 as uuid} from "uuid";
 import "../styles/style.css";
-import {doc, getDoc} from "firebase/firestore";
+import {doc, getDoc, onSnapshot} from "firebase/firestore";
 
 // import Masonry from "react-masonry-css";
 // import arrangeIcon from "../icon/arrange.png";
@@ -14,22 +14,22 @@ import {doc, getDoc} from "firebase/firestore";
 // import {ARRANGE_PINS} from "../const";
 // import {DELETE_PINS} from "../const";
 
-// import {
-//   CollectionHeader,
-//   //   UserPhoto,
-//   CollectionName,
-//   AllButtonWrapper,
-//   ButtonWrapper,
-//   Button,
-//   ButtonName,
-//   // SaveOrderButton,
-//   AllPinsWrapper,
-//   PinWrapper,
-//   PinImage,
-//   RemoveButton,
-//   ShowEmptyMessage,
-//   // DragPinWrapper,
-// } from "../styles/Collection.module";
+import {
+  CollectionHeader,
+  //   UserPhoto,
+  CollectionName,
+  //   AllButtonWrapper,
+  //   ButtonWrapper,
+  //   Button,
+  //   ButtonName,
+  //   SaveOrderButton,
+  //   AllPinsWrapper,
+  //   PinWrapper,
+  PinImage,
+  //   RemoveButton,
+  //   ShowEmptyMessage,
+  // DragPinWrapper,
+} from "../styles/Collection.module";
 
 function ArrangeCollection(props) {
   const [columns, setColumns] = useState([]);
@@ -127,76 +127,131 @@ function ArrangeCollection(props) {
     }
   };
 
+  //   <CollectionHeader>
+  //   {/* <UserPhoto src={photo}></UserPhoto> */}
+  //   <CollectionName onClick={switch2Show}>
+  //     {collectionName}
+  //   </CollectionName>
+
   return (
-    <div style={{display: "flex", justifyContent: "center", height: "100%"}}>
-      <DragDropContext
-        onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
-        {Object.entries(columns).map(([columnId, column], index) => {
-          return (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-              key={columnId}>
-              <h2>{column.name}</h2>
-              <div style={{margin: 8}}>
-                <Droppable droppableId={columnId} key={columnId}>
-                  {(provided, snapshot) => {
-                    return (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        style={{
-                          background: snapshot.isDraggingOver
-                            ? "lightblue"
-                            : "lightgrey",
-                          padding: 4,
-                          width: 250,
-                          minHeight: 500,
-                        }}>
-                        {column.items.map((item, index) => {
-                          return (
-                            <Draggable
-                              key={item.pinId}
-                              draggableId={item.pinId}
-                              index={index}>
-                              {(provided, snapshot) => {
-                                return (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      userSelect: "none",
-                                      padding: 16,
-                                      margin: "0 0 8px 0",
-                                      minHeight: "50px",
-                                      backgroundColor: snapshot.isDragging
-                                        ? "#263B4A"
-                                        : "#456C86",
-                                      color: "white",
-                                      ...provided.draggableProps.style,
-                                    }}>
-                                    {item.pinName}
-                                  </div>
-                                );
-                              }}
-                            </Draggable>
-                          );
-                        })}
-                        {provided.placeholder}
-                      </div>
-                    );
-                  }}
-                </Droppable>
+    // <div style={{display: "flex", justifyContent: "center", height: "100%"}}>
+    <>
+      <h2
+        styled={{
+          fontSize: "2rem",
+          textAlign: "center",
+          margin: "30px auto 10px auto",
+          cursor: "pointer",
+        }}>
+        {collectionName}
+      </h2>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
+          width: "1400px",
+          /* height: 300px; */
+          margin: "90px auto 10px auto",
+          borderRadius: "20px",
+          boxShadow: "inset 0 4px 10px rgba(0, 0, 0, 0.3)",
+        }}>
+        <DragDropContext
+          onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
+          {Object.entries(columns).map(([columnId, column], index) => {
+            return (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+                key={columnId}>
+                <div
+                  style={{margin: 8, border: "1px solid red", width: "330px"}}>
+                  <Droppable droppableId={columnId} key={columnId}>
+                    {(provided, snapshot) => {
+                      return (
+                        <div
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                          style={{
+                            background: snapshot.isDraggingOver
+                              ? "lightblue"
+                              : "lightgrey",
+                            padding: 4,
+                            width: "330px",
+                            minHeight: "100vh",
+                          }}>
+                          {column.items.map((item, index) => {
+                            return (
+                              <Draggable
+                                key={item.pinId}
+                                draggableId={item.pinId}
+                                index={index}>
+                                {(provided, snapshot) => {
+                                  return (
+                                    //   <div
+                                    //     ref={provided.innerRef}
+                                    //     {...provided.draggableProps}
+                                    //     {...provided.dragHandleProps}
+                                    //     style={{
+                                    //       userSelect: "none",
+                                    //       padding: 16,
+                                    //       margin: "0 0 8px 0",
+                                    //       minHeight: "50px",
+                                    //       backgroundColor: snapshot.isDragging
+                                    //         ? "#263B4A"
+                                    //         : "#456C86",
+                                    //       color: "white",
+                                    //       animation: snapshot.isDragging
+                                    //         ? "shake 0.5s"
+                                    //         : "",
+                                    //       animationIterationCount:"infinite",
+
+                                    //       ...provided.draggableProps.style,
+                                    //     }}>
+                                    //     {item.pinName}
+                                    //   </div>
+                                    <PinImage
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                      src={item.pinImage}
+                                      // style={{
+                                      //   userSelect: "none",
+                                      //   padding: 16,
+                                      //   margin: "0 0 8px 0",
+                                      //   minHeight: "50px",
+                                      //   backgroundColor: snapshot.isDragging
+                                      //     ? "#263B4A"
+                                      //     : "#456C86",
+                                      //   color: "white",
+                                      //   animation: snapshot.isDragging
+                                      //     ? "shake 0.5s"
+                                      //     : "",
+                                      //   animationIterationCount:"infinite",
+
+                                      //   ...provided.draggableProps.style,
+                                      // }}
+                                    ></PinImage>
+                                  );
+                                }}
+                              </Draggable>
+                            );
+                          })}
+                          {provided.placeholder}
+                        </div>
+                      );
+                    }}
+                  </Droppable>
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </DragDropContext>
-    </div>
+            );
+          })}
+        </DragDropContext>
+      </div>
+    </>
   );
 }
 
