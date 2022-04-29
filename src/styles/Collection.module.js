@@ -136,8 +136,26 @@ const PinImage = styled.img`
       rgba(67, 67, 67, 0.2) 12px 12px, rgba(67, 67, 67, 0.1) 18px 18px,
       rgba(67, 67, 67, 0.05) 20px 20px;
     animation: shake 0.5s;
-    animation-iteration-count:infinite;
+    animation-iteration-count: infinite;
+  }
+`;
 
+const PinImageArrange = styled.img`
+  width: 300px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 15px;
+  transition: 0.2s;
+  box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
+
+  &:hover {
+    /* transform: scale(1.1); */
+    transform: rotate(5deg);
+    box-shadow: rgba(67, 67, 67, 0.4) 3px 3px, rgba(67, 67, 67, 0.3) 8px 8px,
+      rgba(67, 67, 67, 0.2) 12px 12px, rgba(67, 67, 67, 0.1) 18px 18px,
+      rgba(67, 67, 67, 0.05) 20px 20px;
+    /* animation: shake 0.5s; */
+    /* animation-iteration-count:infinite; */
   }
 `;
 
@@ -177,6 +195,62 @@ const ShowEmptyMessage = styled.div`
   margin: 20px auto;
 `;
 
+const ArrangeNavWrapper = styled.div`
+  width: 1400px;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 70px auto 0 auto;
+`;
+
+const BackButton = styled.div`
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border: 1px solid lightgray;
+  border-radius: 50px;
+  margin: auto 20px auto 0;
+  cursor: pointer;
+  box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
+  transition: 0.4s;
+
+  &:hover {
+    transform: scale(0.97);
+    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+`;
+
+const SaveButton = styled.button`
+  width: 130px;
+  height: 50px;
+  color: white;
+  background-color: gray;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  margin: auto 10px;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  font-size: 1.25rem;
+  box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
+  transition: 0.4s;
+
+  &:hover {
+    /* transform: scale(1.1);
+    box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
+      rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
+      rgba(67, 67, 67, 0.05) 12px 12px; */
+    background-color: coral;
+    transform: scale(0.97);
+    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+`;
+
 export {
   CollectionHeader,
   UserPhoto,
@@ -193,4 +267,8 @@ export {
   RemoveButton,
   DragPinWrapper,
   ShowEmptyMessage,
+  PinImageArrange,
+  ArrangeNavWrapper,
+  BackButton,
+  SaveButton,
 };

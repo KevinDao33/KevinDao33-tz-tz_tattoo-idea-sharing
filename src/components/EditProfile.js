@@ -35,49 +35,42 @@ import {
   InputDesc,
 } from "../styles/EditProfile.module";
 
-
 function EditProfile(props) {
-  const [userData, setUserData] = useState("");
+  const [userData, setUserData] = useState(null);
   const [displayPhoto, setDisplayPhoto] = useState("");
   const [selectedFile, setSelectedFile] = useState("");
   const [newName, setNewName] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [newLink, setNewLink] = useState("");
   const [newUserPhotoName, setNewUserPhotoName] = useState("");
-  
+
   const storage = getStorage(props.app);
   const redirect = useNavigate();
 
-  const getUserData = (userId) => {
-    // eslint-disable-next-line no-unused-vars
-    // change from onSnapShot to getDoc to prevent infinite loop
-    const unsub = getDoc(doc(props.db, "user", userId), (doc) => {
-      if (!props.uid) {
-        return;
-      } else if (props.uid && !userData) {
-        // setUserData({
-        //   name: doc.data().name,
-        //   email: doc.data().email,
-        //   role: doc.data().role,
-        //   following: doc.data().following,
-        //   follower: doc.data().follower,
-        //   pic: doc.data().pic,
-        //   id: doc.data().uid,
-        //   link: doc.data().link,
-        //   desc: doc.data().desc,
-        // });
-        setDisplayPhoto(doc.data().pic);
-        setNewDescription(doc.data().desc);
-        setNewName(doc.data().name);
-        setNewLink(doc.data().link);
-        return;
-      }
-      return;
+  const getUserData = async () => {
+    const userquery = await getDoc(doc(props.db, "user", props.uid));
+    const userAAA = userquery.data();
+    console.log("userAAA", userAAA);
+
+    setUserData({
+      name: userAAA.name,
+      email: userAAA.email,
+      role: userAAA.role,
+      following: userAAA.following,
+      follower: userAAA.follower,
+      pic: userAAA.pic,
+      id: userAAA.uid,
+      link: userAAA.link,
+      desc: userAAA.desc,
     });
+    setDisplayPhoto(userAAA.pic);
+    setNewDescription(userAAA.desc);
+    setNewName(userAAA.name);
+    setNewLink(userAAA.link);
   };
 
   useEffect(() => {
-    props.uid && !userData && getUserData(props.uid);
+    props.uid && !userData && getUserData();
   }, [props.uid]);
 
   const handleImageUpload = async (e) => {
@@ -182,7 +175,9 @@ function EditProfile(props) {
         await uploadNewUserPhotoImage();
       } else if ((newName || newDescription || newLink) && !selectedFile) {
         // no new photo but other updates
-        updateUserData();
+        await updateUserData();
+        alert("changes saved");
+        redirect("/profile");
       } else if ((newName || newDescription || newLink) && selectedFile) {
         // new photo and other updates
         //first upload new data to firestore

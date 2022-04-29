@@ -5,8 +5,8 @@ import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 // import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import {v4 as uuid} from "uuid";
 import "../styles/style.css";
-import {doc, getDoc, onSnapshot} from "firebase/firestore";
-
+import {doc, getDoc, updateDoc} from "firebase/firestore";
+import {useNavigate} from "react-router-dom";
 // import Masonry from "react-masonry-css";
 // import arrangeIcon from "../icon/arrange.png";
 // import removeIcon from "../icon/remove.png";
@@ -15,17 +15,21 @@ import {doc, getDoc, onSnapshot} from "firebase/firestore";
 // import {DELETE_PINS} from "../const";
 
 import {
-  CollectionHeader,
+  // CollectionHeader,
   //   UserPhoto,
-  CollectionName,
+  // CollectionName,
   //   AllButtonWrapper,
   //   ButtonWrapper,
-  //   Button,
+  // Button,
   //   ButtonName,
   //   SaveOrderButton,
   //   AllPinsWrapper,
   //   PinWrapper,
-  PinImage,
+  // PinImage,
+  PinImageArrange,
+  ArrangeNavWrapper,
+  BackButton,
+  SaveButton,
   //   RemoveButton,
   //   ShowEmptyMessage,
   // DragPinWrapper,
@@ -35,6 +39,12 @@ function ArrangeCollection(props) {
   const [columns, setColumns] = useState([]);
   const [collectionName, setCollectionName] = useState("");
   const [pinsInCollection, setPinsInCollection] = useState([]);
+  const [columnA, setColumnA] = useState([]);
+  const [columnB, setColumnB] = useState([]);
+  const [columnC, setColumnC] = useState([]);
+  const [columnD, setColumnD] = useState([]);
+
+  const redirect = useNavigate();
 
   const getCollectionName = () => {
     const url = window.location.href;
@@ -58,31 +68,48 @@ function ArrangeCollection(props) {
     props.uid && getCollectionName();
   }, [props.uid]);
 
-  const itemsFromBackend = [
-    {id: uuid(), content: "First task"},
-    {id: uuid(), content: "Second task"},
-    {id: uuid(), content: "Third task"},
-    {id: uuid(), content: "Fourth task"},
-    {id: uuid(), content: "Fifth task"},
-  ];
+  const seperateTestingArray = (array) => {
+    let columnAArrange = [];
+    let columnBArrange = [];
+    let columnCArrange = [];
+    let columnDArrange = [];
+    array.forEach((element, index) => {
+      if (index % 4 === 0) {
+        columnA.push(element);
+      } else if (index % 4 === 1) {
+        columnB.push(element);
+      } else if (index % 4 === 2) {
+        columnC.push(element);
+      } else if (index % 4 === 3) {
+        columnD.push(element);
+      }
+    });
+    setColumnA(columnAArrange);
+    setColumnB(columnBArrange);
+    setColumnC(columnCArrange);
+    setColumnD(columnDArrange);
+  };
+
+  useEffect(() => {
+    pinsInCollection.length > 0 && seperateTestingArray(pinsInCollection);
+  }, [pinsInCollection]);
 
   const columnsFromBackend = {
-    [uuid()]: {
-      name: "Requested",
-      //   items: itemsFromBackend,
-      items: pinsInCollection,
+    column0A: {
+      name: "column-A",
+      items: columnA,
     },
-    [uuid()]: {
-      name: "To do",
-      items: [],
+    column1B: {
+      name: "column-B",
+      items: columnB,
     },
-    [uuid()]: {
-      name: "In Progress",
-      items: [],
+    column2C: {
+      name: "column-C",
+      items: columnC,
     },
-    [uuid()]: {
-      name: "Done",
-      items: [],
+    column3D: {
+      name: "column-D",
+      items: columnD,
     },
   };
 
@@ -127,32 +154,79 @@ function ArrangeCollection(props) {
     }
   };
 
-  //   <CollectionHeader>
-  //   {/* <UserPhoto src={photo}></UserPhoto> */}
-  //   <CollectionName onClick={switch2Show}>
-  //     {collectionName}
-  //   </CollectionName>
+  const saveNewPinOrder = () => {
+    // console.log(columnA.items.concat(columnB.items).concat(columnC.items).concat(columnD.items));
+    Object.values(columns).length > 0
+      ? upDateCombinedColumns()
+      : console.log("there's nothing");
+  };
+
+  const upDateCombinedColumns = async () => {
+    let unprocessedColumns = [
+      columns.column0A.items,
+      columns.column1B.items,
+      columns.column2C.items,
+      columns.column3D.items,
+    ];
+    let combinedColumn = [];
+    for (let i = 0; i < unprocessedColumns[0].length; i++) {
+      for (let j = 0; j < unprocessedColumns.length; j++) {
+        if (!unprocessedColumns[j][i]) {
+          break;
+        }
+        combinedColumn.push(unprocessedColumns[j][i]);
+      }
+    }
+
+    const collectionRef = doc(
+      props.db,
+      "user",
+      props.uid,
+      "collection",
+      collectionName
+    );
+
+    await updateDoc(collectionRef, {
+      pins: combinedColumn,
+    });
+    alert("changes saved");
+    window.location.reload();
+
+    return;
+  };
 
   return (
-    // <div style={{display: "flex", justifyContent: "center", height: "100%"}}>
     <>
-      <h2
-        styled={{
-          fontSize: "2rem",
-          textAlign: "center",
-          margin: "30px auto 10px auto",
-          cursor: "pointer",
-        }}>
-        {collectionName}
-      </h2>
+      <ArrangeNavWrapper>
+        <BackButton
+          onClick={() => {
+            const leave = confirm(
+              "changes not saved yet, do you want to leave?"
+            );
+            if (leave) {
+              props.switch2Show();
+            }
+          }}>
+          {"<-"}
+        </BackButton>
+        <h2
+          style={{
+            fontSize: "2rem",
+            textAlign: "center",
+            margin: "auto",
+          }}>
+          Arranging : {collectionName}
+        </h2>
+        <SaveButton onClick={saveNewPinOrder}>save</SaveButton>
+      </ArrangeNavWrapper>
+      {/* <Button>save</Button> */}
       <div
         style={{
           display: "flex",
           flexDirection: "row",
           flexWrap: "wrap",
           width: "1400px",
-          /* height: 300px; */
-          margin: "90px auto 10px auto",
+          margin: "30px auto 10px auto",
           borderRadius: "20px",
           boxShadow: "inset 0 4px 10px rgba(0, 0, 0, 0.3)",
         }}>
@@ -177,8 +251,8 @@ function ArrangeCollection(props) {
                           ref={provided.innerRef}
                           style={{
                             background: snapshot.isDraggingOver
-                              ? "lightblue"
-                              : "lightgrey",
+                              ? "white"
+                              : "white",
                             padding: 4,
                             width: "330px",
                             minHeight: "100vh",
@@ -213,7 +287,7 @@ function ArrangeCollection(props) {
                                     //     }}>
                                     //     {item.pinName}
                                     //   </div>
-                                    <PinImage
+                                    <PinImageArrange
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
@@ -234,7 +308,7 @@ function ArrangeCollection(props) {
 
                                       //   ...provided.draggableProps.style,
                                       // }}
-                                    ></PinImage>
+                                    ></PinImageArrange>
                                   );
                                 }}
                               </Draggable>

@@ -123,7 +123,7 @@ function Collection(props) {
   return (
     <>
       {handlePin === ARRANGE_PINS ? (
-        <ArrangeCollection uid={props.uid} db={props.db}/>
+        <ArrangeCollection uid={props.uid} db={props.db} switch2Show={switch2Show}/>
       ) : (
         <CollectionHeader>
           {/* <UserPhoto src={photo}></UserPhoto> */}
