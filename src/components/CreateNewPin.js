@@ -4,14 +4,11 @@ import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {initializeApp} from "firebase/app";
-import {
-  getFirestore,
-  collection,
-  // addDoc,
-  doc,
-  setDoc,
-} from "firebase/firestore";
+import {getFirestore, collection, doc, setDoc} from "firebase/firestore";
 import imageCompression from "browser-image-compression";
+import "../styles/style.css";
+import {placement} from "../const";
+import {v4 as uuid} from "uuid";
 
 import {
   CreateNewPinWrapper,
@@ -23,30 +20,21 @@ import {
   UploadNewPinImageLabel,
   UploadNewPinImageInput,
   PreviewImage,
+  PlacementTitle,
+  PinTypeWrapper,
+  PinTypeLabel,
+  PinTypeInput,
 } from "../styles/CreateNewPin.module";
 import MultipleCombobox from "./MultipleCombobox";
-
-// const firebaseConfig = {
-//   // eslint-disable-next-line no-undef
-//   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-//   authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
-//   projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
-//   storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
-//   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
-//   appId: process.env.REACT_APP_FIREBASE_APPID,
-//   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
 
 function CreateNewPin(props) {
   const [pinName, setPinName] = useState("");
   const [pinDescription, setPinDescription] = useState("");
   const [pinLink, setPinLink] = useState("");
   const [pinTags, setPinTags] = useState([]);
+  const [pinType, setPinType] = useState("tattoo");
   const [pinImage, setPinImage] = useState("");
+  const [pinPlacement, setPinPlacement] = useState("");
   const [isGetPinImage, setIsGetPinImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState("");
   const [preview, setPreview] = useState("");
@@ -118,7 +106,7 @@ function CreateNewPin(props) {
   };
 
   const submitPinData = () => {
-    if (!pinName || !pinDescription || !pinLink || !pinTags) {
+    if (!pinName || !pinDescription || !pinLink || !pinTags || !pinPlacement) {
       alert("please check if all fields are filled");
 
       return;
@@ -147,30 +135,29 @@ function CreateNewPin(props) {
     );
 
     setDoc(collectionRefUser, {
-      pinAutor: {
-        // email: userInfo.email,
-        // name: userInfo.name,
-        uid: props.uid,
-      },
+      pinAutor: {uid: props.uid},
+      // email: userInfo.email,
+      // name: userInfo.name,
       pinId: docRefCollectionRefPin.id,
       pinDesc: pinDescription,
       pinName: pinName,
       pinImage: pinImage,
       pinLink: pinLink,
       pinTags: pinTags,
+      pinPlacement: pinPlacement,
+      pinType: pinType,
     });
     setDoc(docRefCollectionRefPin, {
-      pinAutor: {
-        // email: userInfo.email,
-        // name: userInfo.name,
-        uid: props.uid,
-      },
+      // change pinAuthor to contain only author uid
+      pinAutor: {uid: props.uid},
       pinId: docRefCollectionRefPin.id,
       pinDesc: pinDescription,
       pinName: pinName,
       pinImage: pinImage,
       pinLink: pinLink,
       pinTags: pinTags,
+      pinPlacement: pinPlacement,
+      pinType: pinType,
     });
     setIsPinCreated(true);
   };
@@ -242,12 +229,14 @@ function CreateNewPin(props) {
       {/* Pin Info */}
       <PinDataUploadWrapper>
         <NewPinDataWrapper>
+          <PlacementTitle>Pin Name :</PlacementTitle>
           <NewPinDataInput
             placeholder='Enter Pin Name'
             value={pinName}
             onChange={(e) => setPinName(e.target.value)}></NewPinDataInput>
         </NewPinDataWrapper>
         <NewPinDataWrapper>
+          <PlacementTitle>Description :</PlacementTitle>
           <NewPinDataInput
             placeholder='Enter Pin Desc'
             value={pinDescription}
@@ -256,11 +245,77 @@ function CreateNewPin(props) {
             }></NewPinDataInput>
         </NewPinDataWrapper>
         <NewPinDataWrapper>
+          <PlacementTitle>Pin Link :</PlacementTitle>
           <NewPinDataInput
             placeholder='Enter Pin Link'
             value={pinLink}
             onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
         </NewPinDataWrapper>
+
+        {/* add flash /tattoo selector */}
+        <NewPinDataWrapper>
+          <PlacementTitle>Type :</PlacementTitle>
+
+          <PinTypeWrapper>
+            <PinTypeLabel htmlFor='tattoo'>
+              <PinTypeInput
+                type='radio'
+                name='type'
+                value='tattoo'
+                id='tattoo'
+                defaultChecked={true}
+                onClick={() => {
+                  // document.getElementById("tattoo").checked = true;
+                  setPinType("tattoo");
+                }}
+              />
+              Tattoo
+            </PinTypeLabel>
+            <PinTypeLabel htmlFor='flash'>
+              <PinTypeInput
+                type='radio'
+                name='type'
+                value='flash'
+                id='flash'
+                onClick={() => {
+                  // document.getElementById("flash").checked = true;
+                  setPinType("flash");
+                }}
+              />
+              Flash
+            </PinTypeLabel>
+          </PinTypeWrapper>
+        </NewPinDataWrapper>
+
+        {/* add placement selector */}
+        <NewPinDataWrapper>
+          <PlacementTitle>Placement :</PlacementTitle>
+          <div className='list-choice'>
+            <div className='list-choice-title'>
+              {pinPlacement ? pinPlacement : "Choose Placement"}
+            </div>
+            <div className='list-choice-objects'>
+              {placement &&
+                placement.map((option) => {
+                  return (
+                    <label key={uuid()}>
+                      <input
+                        type='radio'
+                        name='placement'
+                        id={option}
+                        onClick={() => {
+                          document.getElementById(option).checked = true;
+                          setPinPlacement(option);
+                        }}
+                      />
+                      <span>{option}</span>
+                    </label>
+                  );
+                })}
+            </div>
+          </div>
+        </NewPinDataWrapper>
+
         <NewPinDataWrapper>
           <MultipleCombobox
             pinTags={pinTags}

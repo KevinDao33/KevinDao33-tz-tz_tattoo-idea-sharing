@@ -1,34 +1,135 @@
 /* css bolow are for masonry-style, which is accoomplished with my-masonry-grid */
 
 .my-masonry-grid {
-    display: -webkit-box; /* Not needed if autoprefixing */
-     display: -ms-flexbox;
-      /*Not needed if autoprefixing  */
-    display: flex;
-    margin-left: -5px; /* gutter size offset */
-    width: auto;
-  }
-  .my-masonry-grid_column {
-    padding-left: 5px; /* gutter size */
-    background-clip: padding-box;
-  }
-  
-  /* Style your items */
-  .my-masonry-grid_column > div { /* change div to reference your elements you put in <Masonry> */
-    /* background: grey; */
-    margin-bottom: 10px;
-  }
+  display: -webkit-box; /* Not needed if autoprefixing */
+  display: -ms-flexbox;
+  /*Not needed if autoprefixing  */
+  display: flex;
+  margin-left: -5px; /* gutter size offset */
+  width: auto;
+}
+.my-masonry-grid_column {
+  padding-left: 5px; /* gutter size */
+  background-clip: padding-box;
+}
 
-  @keyframes shake {
-    0% { transform: translate(1px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: translate(-3px, 0px) rotate(1deg); }
-    30% { transform: translate(3px, 2px) rotate(0deg); }
-    40% { transform: translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: translate(-3px, 1px) rotate(0deg); }
-    70% { transform: translate(3px, 1px) rotate(-1deg); }
-    80% { transform: translate(-1px, -1px) rotate(1deg); }
-    90% { transform: translate(1px, 2px) rotate(0deg); }
-    100% { transform: translate(1px, -2px) rotate(-1deg); }
+/* Style your items */
+.my-masonry-grid_column > div {
+  /* change div to reference your elements you put in <Masonry> */
+  /* background: grey; */
+  margin-bottom: 10px;
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
   }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
+}
+
+@import url(https://fonts.googleapis.com/css?family=Raleway);
+.list-choice {
+  width: 333px;
+  margin: 20px;
+  position: relative;
+  cursor: pointer;
+  z-index: 500;
+  font-size: 1.25rem;
+  -webkit-filter: drop-shadow(12px 12px 7px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(5px 5px 2px rgba(0, 0, 0, 0.2));
+}
+.list-choice input[type="radio"] {
+  position: absolute;
+  left: -9999px;
+}
+
+.list-choice-title {
+  height: 40px;
+  width: 100%;
+  display: block;
+  background: #7e7e7e;
+  text-align: center;
+  padding: 0.55em 1em;
+  box-sizing: border-box;
+  color: #fff;
+  text-shadow: 0 1px 0 #cacaca;
+  border-radius: 10px;
+  z-index: 1001;
+}
+.list-choice:hover .list-choice-title {
+  transition: 0.4s;
+  border-radius: 0.2em 0.2em 0 0;
+  transform: scale(0.98);
+}
+.list-choice-objects label:nth-last-of-type(1) span {
+  border-radius: 0 0 0.2em 0.2em;
+}
+.list-choice input[type="radio"] + span {
+  color: #fff;
+  background: #d8d8d8;
+  padding: 0.55em 1em;
+  display: block;
+  text-align: center;
+  box-sizing: border-box;
+  cursor: pointer;
+  width: 98%;
+}
+.list-choice-objects {
+  position: absolute;
+  top: 0;
+  padding-top: 2.1em;
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
+  max-height: 0;
+  transition: all 0.2s ease;
+}
+.list-choice:hover .list-choice-objects input[type="radio"] + span {
+  position: relative;
+  top: 0;
+  transition: all 0.4s ease-in-out;
+}
+.list-choice:hover input[type="radio"] + span:hover {
+  background: #bbb;
+}
+.list-choice:hover
+  .list-choice-objects
+  label:nth-last-of-type(1)
+  input[type="radio"]:checked
+  + span {
+  border-radius: 0 0 0.2em 0.2em;
+}
+
+.list-choice:hover .list-choice-objects {
+  max-height: 1400px;
+  /* overflow: scroll; */
+}

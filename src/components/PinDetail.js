@@ -73,15 +73,19 @@ function PinDetail(props) {
 
   const getAuthorData = async (authorId) => {
     if (!authorId) {
+      
       return;
     }
     const authorSnapshot = await getDoc(doc(props.db, "user", authorId));
+    console.log('authorId', authorId);
+    console.log('authorSnapshot.data()', authorSnapshot.data());
     setAuthorData(authorSnapshot.data());
 
     return;
   };
 
   useEffect(() => {
+    
     pinData && getAuthorData(pinData.pinAutor.uid);
   }, [pinData]);
 

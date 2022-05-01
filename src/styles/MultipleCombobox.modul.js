@@ -2,45 +2,58 @@ import styled from "styled-components";
 
 const AllComboboxWrapper = styled.div`
   display: flex;
-  flex-direction: column;
   flex-wrap: wrap;
+  justify-content: space-between;
   width: 100%;
-  min-height: 150px;
   margin: 20px auto;
-  padding-bottom: 110px;
   position: relative;
 `;
 
 const MenuMultiple = styled.ul`
   border-radius: 20px;
-  max-height: 100px;
+  max-height: 200px;
   overflow-y: auto;
-  width: 200px;
+  width: 260px;
   margin: 0;
   border-top: 0;
-  background: white;
+  background: #d8d8d8;
+  color: white;
+  font-size: 1.25rem;
   position: absolute;
   z-index: 1000;
   list-style: none;
   padding: 0 0 0 20px;
-  left: 35px;
-  bottom: 0;
+  right: 75px;
+  top: 70px;
+  z-index: 1000;
 `;
 
 const Combobox = styled.div`
+  width: 100%;
   display: inline-block;
-  margin-left: 5px;
+  margin: 0 0 10px 0;
 `;
 
 const ComboboxWrapper = styled.div`
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 60%;
+`;
+
+const SelectedItemWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
 `;
 
 const SelectedItem = styled.span`
   margin: 5px 0 5px 20px;
   padding: 5px;
-  background-color: aliceblue;
+  background-color: purple;
+  color: white;
   border-radius: 10px;
   cursor: default;
 `;
@@ -53,40 +66,57 @@ const SelectedItemIcon = styled.span`
 
 const ShowTagOptions = styled.button`
   color: white;
-  /* width: 90px; */
+  width: 10%;
   height: 40px;
   background-color: gray;
   border: none;
   margin: 20px 0 0 0;
-  border-radius: 0 30px 30px 0;
-  padding: 3px 5px;
+  border-radius: 10px 30px 30px 10px;
+  /* padding: 3px 5px; */
   font: inherit;
   cursor: pointer;
   outline: inherit;
   font-size: 1.5rem;
   -webkit-filter: drop-shadow(12px 12px 7px rgba(0, 0, 0, 0.2));
   filter: drop-shadow(5px 5px 2px rgba(0, 0, 0, 0.2));
+  transition: 0.4s;
+
+  &:hover {
+    transform: scale(0.97);
+    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const TagTitle = styled.label`
   font-size: 1.5rem;
-  margin: 20px auto 20px 20px;
+  margin: 20px 0 20px 20px;
+  width: 30%;
 `;
 
 const SearchTagInput = styled.input`
-  width: 260px;
+  width: 72%;
   /* min-width: 90px; */
   height: 40px;
-  border-radius: 30px 0 0 30px;
+  border-radius: 10px;
   border: none;
-  margin: 20px 0 0 20px;
-  background-color: white;
+  margin: 20px 3px 0 20px;
+  background-color: #7e7e7e;
+  color: white;
   padding-left: 20px;
   cursor: text;
   -webkit-filter: drop-shadow(12px 12px 7px rgba(0, 0, 0, 0.2));
   filter: drop-shadow(5px 5px 2px rgba(0, 0, 0, 0.2));
   font-size: 1.5rem;
+  transition: 0.4s;
+
+  :focus {
+    outline: none;
+    transform: scale(0.97);
+    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
 `;
+
+
 
 export {
   AllComboboxWrapper,
@@ -98,4 +128,5 @@ export {
   ShowTagOptions,
   TagTitle,
   SearchTagInput,
+  SelectedItemWrapper,
 };

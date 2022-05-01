@@ -17,7 +17,8 @@ import {
 } from "../styles/Homepage.module";
 
 function Homapage(props) {
-  const [isShowVideo, setIsShowVideo] = useState(true);
+  // check user visit is not done pageYOffset, so to prevent replay video everytime entering homepage, set isShowVideo' init to false
+  const [isShowVideo, setIsShowVideo] = useState(false);
   const [isShowAddPin, setIsShowAddPin] = useState(false);
   const [pins, setPins] = useState([]);
 
