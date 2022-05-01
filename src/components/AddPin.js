@@ -1,7 +1,18 @@
-import React, {useState} from "react";
-import chicken from "../test-images/chicken.jpg";
+/* eslint-disable react/prop-types */
+/* eslint-disable no-undef */
+import React, {useState, useEffect} from "react";
+import {
+  collection as co,
+  getDocs,
+  doc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
+
 import {
   Overlay,
+  AllAddPinWrapper,
   AddPinOptions,
   LeaveButton,
   PinImage,
@@ -14,51 +25,116 @@ import {
   NameNewCollection,
 } from "../styles/AddPin.module";
 
-const mockAllCollections = [
-  "arm ideas",
-  "back ideas",
-  "black & white",
-  "vintage",
-  "dootwork",
-  "others",
-];
-
 function AddPin(props) {
   const [collections, setCollections] = useState([]);
+  const [newCollectionName, setNewCollectionName] = useState("");
 
-  useState(()=>{
-    setCollections(mockAllCollections)
-  },[])
+  const getCollections = async (id) => {
+    const querySnapshot = await getDocs(co(props.db, "user", id, "collection"));
 
-  const closeAddPin = () => {
-    // eslint-disable-next-line react/prop-types
-    props.setIsShowAddPin(false);
+    let myCollections = [];
+    querySnapshot.forEach((doc) => {
+      myCollections.push({...doc.data()});
+    });
+    setCollections(myCollections);
+  };
+
+  useEffect(() => {
+    props.uid && getCollections(props.uid);
+  }, []);
+
+  const addPinToCollection = (collection, pin) => {
+    const collectionRef = doc(
+      props.db,
+      "user",
+      props.uid,
+      "collection",
+      collection.collectionName
+    );
+    updateDoc(
+      collectionRef,
+      {
+        pins: arrayUnion({
+          pinName: pin.pinName,
+          pinId: pin.pinId,
+          pinImage: pin.pinImage,
+        }),
+      },
+      {merge: true}
+    );
+    alert(`pin added to ${collection.collectionName}`);
+  };
+
+  const setCollection2Firestore = (uid) => {
+    const newCollectionRef = doc(
+      props.db,
+      "user",
+      uid,
+      "collection",
+      newCollectionName
+    );
+    setDoc(
+      newCollectionRef,
+      {
+        collectionName: newCollectionName,
+        pins: [
+          {
+            pinId: props.pin.pinId,
+            pinImage: props.pin.pinImage,
+            pinName: props.pin.pinName,
+          },
+        ],
+      },
+      {merge: true}
+    );
+    alert(`pin added to new collection ${newCollectionName}!`);
+  };
+
+  const createNewCollection = () => {
+    newCollectionName.length > 0
+      ? setCollection2Firestore(props.uid)
+      : alert("please enter a name for the new collection");
   };
 
   return (
-    <>
+    <AllAddPinWrapper>
       <AddPinOptions>
-        <LeaveButton onClick={closeAddPin}>x</LeaveButton>
-        <PinName>Skateboard Chicken</PinName>
-        <PinImage src={chicken} />
+        <LeaveButton
+          onClick={() => {
+            props.handleClosePinShow(props.indexxx);
+          }}>
+          x
+        </LeaveButton>
+        <PinName>{props.pin.pinName}</PinName>
+        <PinImage src={props.pin.pinImage} />
 
-        {collections.length>0 &&
-          collections.map((collectionName, index) => (
+        {collections.length > 0 &&
+          collections.map((collection, index) => (
             <AddToCollection key={index}>
-              <CollectionName>{collectionName}</CollectionName>
-              <SaveButton>save</SaveButton>
+              {/* <CollectionName>{Object.keys(collection)}</CollectionName> */}
+              <CollectionName>{collection.collectionName}</CollectionName>
+              <SaveButton
+                onClick={() => {
+                  addPinToCollection(collection, props.pin);
+                }}>
+                save
+              </SaveButton>
             </AddToCollection>
           ))}
       </AddPinOptions>
 
       <CreateCollectionWrapper>
         <NameNewCollectionTitle>new collection</NameNewCollectionTitle>
-        <NameNewCollection></NameNewCollection>
-        <SaveButton>create</SaveButton>
+        <NameNewCollection
+          value={newCollectionName}
+          onChange={(e) =>
+            setNewCollectionName(e.target.value)
+          }></NameNewCollection>
+        <SaveButton onClick={createNewCollection}>create</SaveButton>
       </CreateCollectionWrapper>
 
       <Overlay />
-    </>
+    </AllAddPinWrapper>
   );
 }
 

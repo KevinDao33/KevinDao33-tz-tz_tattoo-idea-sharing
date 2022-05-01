@@ -1,10 +1,17 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {initializeApp} from "firebase/app";
+import {
+  getFirestore,
+  collection,
+  // addDoc,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 import imageCompression from "browser-image-compression";
-import {getFirestore, collection, addDoc} from "firebase/firestore";
 
 import {
   CreateNewPinWrapper,
@@ -17,11 +24,13 @@ import {
   UploadNewPinImageInput,
   PreviewImage,
 } from "../styles/CreateNewPin.module";
+import MultipleCombobox from "./MultipleCombobox";
 
 function CreateNewPin(props) {
   const [pinName, setPinName] = useState("");
   const [pinDescription, setPinDescription] = useState("");
   const [pinLink, setPinLink] = useState("");
+  const [pinTags, setPinTags] = useState([]);
   const [pinImage, setPinImage] = useState("");
   const [isGetPinImage, setIsGetPinImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState("");
@@ -29,10 +38,8 @@ function CreateNewPin(props) {
   const [isPinCreated, setIsPinCreated] = useState(false);
 
   const redirect = useNavigate();
+  const storage = getStorage(props.app);
 
-  // Initialize Firebase
-  const app = initializeApp(props.firebaseConfig);
-  const db = getFirestore(app);
 
   async function handleImageUpload(e) {
     // show image preview
@@ -95,8 +102,8 @@ function CreateNewPin(props) {
     alert("pin successfully created!");
   };
 
-  const submitPinData = (dataUrl2Blob) => {
-    if (!pinName || !pinDescription || !pinLink) {
+  const submitPinData = () => {
+    if (!pinName || !pinDescription || !pinLink || !pinTags) {
       alert("please check if all fields are filled");
 
       return;
@@ -111,59 +118,49 @@ function CreateNewPin(props) {
       : alert("something went wrong, please try again :(");
   };
 
-  const writeUserData = async () => {
-    const userInfo = await JSON.parse(localStorage.getItem("userInfo"));
-    const collectionRefPin = await collection(db, "pin");
-    const collectionRefUser = await collection(db, "user", userInfo.id, "pin");
+  const writeUserData = () => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const collectionRefPin = collection(props.db, "pin");
+    const docRefCollectionRefPin = doc(collectionRefPin);
 
-    try {
-      userInfo &&
-        (await addDoc(collectionRefUser, {
-          pinAutor: {
-            email: userInfo.email,
-            name: userInfo.name,
-            uid: userInfo.id,
-          },
-          pinDesc: pinDescription,
-          pinName: pinName,
-          pinImage: pinImage,
-          pinLink: pinLink,
-          pinTags: [
-            "vintage",
-            "arm ideas",
-            "black & white",
-            "dot-work",
-            "animal",
-          ],
-        }));
-      userInfo &&
-        (await addDoc(collectionRefPin, {
-          pinAutor: {
-            email: userInfo.email,
-            name: userInfo.name,
-            uid: userInfo.id,
-          },
-          pinDesc: pinDescription,
-          pinName: pinName,
-          pinImage: pinImage,
-          pinLink: pinLink,
-          pinTags: [
-            "vintage",
-            "arm ideas",
-            "black & white",
-            "dot-work",
-            "animal",
-          ],
-        }));
-      setIsPinCreated(true);
-    } catch (error) {
-      console.error(error);
-    }
+    const collectionRefUser = doc(
+      props.db,
+      "user",
+      props.uid,
+      "pin",
+      docRefCollectionRefPin.id
+    );
+
+    setDoc(collectionRefUser, {
+      pinAutor: {
+        email: userInfo.email,
+        name: userInfo.name,
+        uid: userInfo.id,
+      },
+      pinId: docRefCollectionRefPin.id,
+      pinDesc: pinDescription,
+      pinName: pinName,
+      pinImage: pinImage,
+      pinLink: pinLink,
+      pinTags: pinTags,
+    });
+    setDoc(docRefCollectionRefPin, {
+      pinAutor: {
+        email: userInfo.email,
+        name: userInfo.name,
+        uid: userInfo.id,
+      },
+      pinId: docRefCollectionRefPin.id,
+      pinDesc: pinDescription,
+      pinName: pinName,
+      pinImage: pinImage,
+      pinLink: pinLink,
+      pinTags: pinTags,
+    });
+    setIsPinCreated(true);
   };
 
   const getPinImageUrl = (name) => {
-    const app = initializeApp(props.firebaseConfig);
-    const storage = getStorage(app);
     getDownloadURL(ref(storage, `pinImages/${name}`)).then((url) => {
       setPinImage(url);
     });
@@ -187,7 +184,6 @@ function CreateNewPin(props) {
     const uploadedImage = localStorage.getItem("uploadedImage");
     const uploadedImageName = localStorage.getItem("uploadedImageName");
     const result = dataUrl2Blob(uploadedImage);
-    const storage = getStorage(app);
     const storageRef = ref(storage, `pinImages/${uploadedImageName}`);
 
     try {
@@ -200,7 +196,7 @@ function CreateNewPin(props) {
     }
   }
 
-  async function handleCeatePin() {
+  async function handleCreatePin() {
     try {
       submitPinData(dataUrl2Blob);
       writeUserData();
@@ -249,7 +245,16 @@ function CreateNewPin(props) {
             value={pinLink}
             onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
         </NewPinDataWrapper>
-        <CreatePinButton onClick={handleCeatePin}>Create</CreatePinButton>
+        <NewPinDataWrapper>
+          <MultipleCombobox
+            pinTags={pinTags}
+            setPinTags={setPinTags}></MultipleCombobox>
+        </NewPinDataWrapper>
+
+        <CreatePinButton
+          onClick={handleCreatePin}>
+          Create
+        </CreatePinButton>
       </PinDataUploadWrapper>
     </CreateNewPinWrapper>
   );
