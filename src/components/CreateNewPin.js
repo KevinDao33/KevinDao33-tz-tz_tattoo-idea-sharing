@@ -7,7 +7,7 @@ import {initializeApp} from "firebase/app";
 import {getFirestore, collection, doc, setDoc} from "firebase/firestore";
 import imageCompression from "browser-image-compression";
 import "../styles/style.css";
-import {placement} from "../const";
+import {placements} from "../const";
 import {v4 as uuid} from "uuid";
 
 import {
@@ -295,8 +295,8 @@ function CreateNewPin(props) {
               {pinPlacement ? pinPlacement : "Choose Placement"}
             </div>
             <div className='list-choice-objects'>
-              {placement &&
-                placement.map((option) => {
+              {placements &&
+                placements.map((option) => {
                   return (
                     <label key={uuid()}>
                       <input

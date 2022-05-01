@@ -37,7 +37,7 @@ export const items = [
   "Watercolor",
 ];
 
-export const placement = [
+export const placements = [
   "Any",
   "Ankle",
   "Back-full",
