@@ -42,7 +42,7 @@ const PinDetailSubNav = styled.div`
 const CollectionSelector = styled.select`
   width: 110px;
   height: 40px;
-  border-radius: 20px;
+  border-radius: 10px;
   background-color: lightgray;
   border: none;
   color: gray;
@@ -57,9 +57,9 @@ const CollectionName = styled.option`
 
 const SaveButton = styled.button`
   color: white;
-  background-color: lightcoral;
+  background-color: black;
   border: none;
-  border-radius: 30px;
+  border-radius: 10px;
   padding: 10px;
   font: inherit;
   cursor: pointer;
@@ -169,7 +169,7 @@ const PinCommentInput = styled.input`
   height: 30px;
   font-size: 1.5rem;
   border: 2px solid gray;
-  border-radius: 20px;
+  border-radius: 10px;
   background-color: white;
   padding-left: 15px;
   margin: auto 10px auto 0;
@@ -196,9 +196,9 @@ const RelatedPinsTitle = styled.h2`
 
 const SubmitButton = styled.button`
   color: white;
-  background-color: lightgray;
+  background-color: #92C9B1;
   border: none;
-  border-radius: 30px;
+  border-radius: 10px;
   padding: 3px 10px;
   font: inherit;
   cursor: pointer;

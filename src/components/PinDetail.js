@@ -5,7 +5,9 @@ import {
   getDoc,
   getDocs,
   doc,
-  // setDoc,
+  addDoc,
+  serverTimestamp,
+  onSnapshot,
   query,
   where,
   updateDoc,
@@ -13,6 +15,7 @@ import {
 } from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
+import {v4 as uuid} from "uuid";
 
 import "../styles/style.css";
 import {
@@ -49,9 +52,13 @@ function PinDetail(props) {
   const [pinId, setPinid] = useState("");
   const [pinData, setPinData] = useState("");
   const [authorData, setAuthorData] = useState("");
+  const [userData, setUserData] = useState(null);
   const [userCollection, setUserCollection] = useState("");
   const [selectedCollection, setSelectedCollection] = useState("");
   const [similiarPins, setSimiliarPins] = useState([]);
+  const [newComment, setNewComment] = useState("");
+  const [pinCommentData, setPinCommentData] = useState([]);
+  const [pinCommentator, setPinCommentator] = useState([]);
 
   const redirect = useNavigate();
   const breakpointColumnsObj = {
@@ -73,21 +80,40 @@ function PinDetail(props) {
 
   const getAuthorData = async (authorId) => {
     if (!authorId) {
-      
       return;
     }
     const authorSnapshot = await getDoc(doc(props.db, "user", authorId));
-    console.log('authorId', authorId);
-    console.log('authorSnapshot.data()', authorSnapshot.data());
     setAuthorData(authorSnapshot.data());
 
     return;
   };
 
   useEffect(() => {
-    
     pinData && getAuthorData(pinData.pinAutor.uid);
   }, [pinData]);
+
+  const getUserData = async (userId) => {
+    if (!props.uid) {
+      return;
+    }
+    const docRef = doc(props.db, `user/${userId}`);
+    const docSnap = await getDoc(docRef);
+    setUserData({
+      name: docSnap.data().name,
+      email: docSnap.data().email,
+      role: docSnap.data().role,
+      following: docSnap.data().following,
+      follower: docSnap.data().follower,
+      pic: docSnap.data().pic,
+      id: docSnap.data().uid,
+      link: docSnap.data().link,
+      desc: docSnap.data().desc,
+    });
+  };
+
+  useEffect(() => {
+    getUserData(props.uid);
+  }, [props.uid]);
 
   const getUserCollection = async (userId) => {
     if (!userId) {
@@ -125,7 +151,6 @@ function PinDetail(props) {
   }, [pinId]);
 
   const handleCollectionSelector = (e) => {
-    console.log(e.target.value);
     setSelectedCollection(e.target.value);
   };
 
@@ -172,13 +197,61 @@ function PinDetail(props) {
     querySnapshot.forEach((doc) => {
       localSimiliarPins.push(doc.data());
     });
-    console.log(localSimiliarPins);
     setSimiliarPins(localSimiliarPins);
   };
 
   useEffect(() => {
     getRelatedPins();
   }, [pinData]);
+
+  const sendNewComment = async () => {
+    if (!newComment) {
+      alert("type a comment before sending");
+      return;
+    }
+    await addDoc(collection(props.db, "pin", pinId, "comment"), {
+      commentator: props.uid,
+      commentTime: serverTimestamp(),
+      commentMessage: newComment,
+    });
+    setNewComment("");
+  };
+
+  const getPinCommentData = async () => {
+    const allCommentsDataRef = query(
+      collection(props.db, "pin", pinId, "comment")
+    );
+    const allCommentsData = onSnapshot(allCommentsDataRef, (querySnapshot) => {
+      const allComments = [];
+      querySnapshot.forEach((doc) => {
+        allComments.push(doc.data());
+      });
+      setPinCommentData(allComments.reverse());
+    });
+  };
+
+  useEffect(() => {
+    pinId && getPinCommentData();
+  }, [pinId]);
+
+  const getPinCommentator = async () => {
+    if (pinCommentData.length < 0) {
+      return;
+    }
+
+    let commentatorData = [];
+    for (let i = 0; i < pinCommentData.length; i++) {
+      let test = await getDoc(
+        doc(props.db, "user", pinCommentData[i].commentator)
+      );
+      commentatorData.push(test.data());
+    }
+    setPinCommentator(commentatorData);
+  };
+
+  useEffect(() => {
+    pinCommentData.length > 0 && getPinCommentator();
+  }, [pinCommentData]);
 
   return (
     <>
@@ -209,37 +282,30 @@ function PinDetail(props) {
               <PinDescription>{pinData.pinDesc}</PinDescription>
               <PinAuthorWrapper>
                 <PinAuthorPhoto src={authorData.pic}></PinAuthorPhoto>
-                {/* missSpelling : pinAutor, need to be fix later */}
                 <PinAuthorName>{authorData.name}</PinAuthorName>
               </PinAuthorWrapper>
               <PinCommentTitle>comment</PinCommentTitle>
               <AllPinCommentWrapper>
                 <OtherPinCommentWrapper>
-                  <PinCommentWrapper>
-                    <UserPhoto
-                      src={
-                        "https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/pinImages%2Fcat?alt=media&token=b08b7508-c236-4ab5-b785-e93ea0b1feaf"
-                      }></UserPhoto>
-                    <UserName>kev</UserName>
-                    <PinComment>This is soooooo cooooooool~~~</PinComment>
-                  </PinCommentWrapper>
-                  <PinCommentWrapper>
-                    <UserPhoto
-                      src={
-                        "https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/profileImages%2F%E7%9C%9F%E5%A3%9E%E4%BB%BD%E5%AD%90%E9%98%BF%E7%86%8A.jpg?alt=media&token=d8c84a59-8fcc-429d-8bdc-4707685fd2ec"
-                      }></UserPhoto>
-                    <UserName>chieh</UserName>
-                    <PinComment>Good Work!</PinComment>
-                  </PinCommentWrapper>
+                  {pinCommentData &&
+                    pinCommentator.length > 0 &&
+                    pinCommentData.map((data, index) => (
+                      <PinCommentWrapper key={uuid()}>
+                        <UserPhoto src={pinCommentator[index].pic}></UserPhoto>
+                        <UserName>{pinCommentator[index].name}</UserName>
+                        <PinComment>{data.commentMessage}</PinComment>
+                      </PinCommentWrapper>
+                    ))}
                 </OtherPinCommentWrapper>
               </AllPinCommentWrapper>
               <MyPinCommentWrapper>
-                <MyPhoto
-                  src={
-                    "https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/profileImages%2F%E9%98%BF%E7%86%8A%E7%B2%89.jpg?alt=media&token=522d68aa-ed41-4917-a840-c68861fe8199"
-                  }></MyPhoto>
-                <PinCommentInput></PinCommentInput>
-                <SubmitButton>Send</SubmitButton>
+                {userData && <MyPhoto src={userData.pic}></MyPhoto>}
+                <PinCommentInput
+                  vaule={newComment}
+                  onChange={(e) => {
+                    setNewComment(e.target.value);
+                  }}></PinCommentInput>
+                <SubmitButton onClick={sendNewComment}>Send</SubmitButton>
               </MyPinCommentWrapper>
             </PinDetailDataWrapper>
           </PinDetailWrapper>
