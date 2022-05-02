@@ -12,6 +12,7 @@ import {
   where,
   updateDoc,
   arrayUnion,
+  orderBy,
 } from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
@@ -214,19 +215,21 @@ function PinDetail(props) {
       commentTime: serverTimestamp(),
       commentMessage: newComment,
     });
+    document.getElementById("commentInputField").value = "";
     setNewComment("");
   };
 
   const getPinCommentData = async () => {
     const allCommentsDataRef = query(
-      collection(props.db, "pin", pinId, "comment")
+      collection(props.db, "pin", pinId, "comment"),
+      orderBy("commentTime")
     );
     const allCommentsData = onSnapshot(allCommentsDataRef, (querySnapshot) => {
-      const allComments = [];
+      let allComments = [];
       querySnapshot.forEach((doc) => {
         allComments.push(doc.data());
       });
-      setPinCommentData(allComments.reverse());
+      setPinCommentData(allComments);
     });
   };
 
@@ -236,6 +239,8 @@ function PinDetail(props) {
 
   const getPinCommentator = async () => {
     if (pinCommentData.length < 0) {
+      console.log("no comment");
+
       return;
     }
 
@@ -244,6 +249,7 @@ function PinDetail(props) {
       let test = await getDoc(
         doc(props.db, "user", pinCommentData[i].commentator)
       );
+      // console.log('test', test.data());
       commentatorData.push(test.data());
     }
     setPinCommentator(commentatorData);
@@ -291,8 +297,16 @@ function PinDetail(props) {
                     pinCommentator.length > 0 &&
                     pinCommentData.map((data, index) => (
                       <PinCommentWrapper key={uuid()}>
-                        <UserPhoto src={pinCommentator[index].pic}></UserPhoto>
-                        <UserName>{pinCommentator[index].name}</UserName>
+                        {pinCommentator[index] && (
+                          <>
+                            <UserPhoto
+                              src={pinCommentator[index].pic}></UserPhoto>
+                            <UserName>{pinCommentator[index].name}</UserName>
+                          </>
+                        )}
+
+                        {/* <UserPhoto src={pinCommentator[index].pic}></UserPhoto>
+                        <UserName>{pinCommentator[index].name}</UserName> */}
                         <PinComment>{data.commentMessage}</PinComment>
                       </PinCommentWrapper>
                     ))}
@@ -301,6 +315,7 @@ function PinDetail(props) {
               <MyPinCommentWrapper>
                 {userData && <MyPhoto src={userData.pic}></MyPhoto>}
                 <PinCommentInput
+                  id='commentInputField'
                   vaule={newComment}
                   onChange={(e) => {
                     setNewComment(e.target.value);
