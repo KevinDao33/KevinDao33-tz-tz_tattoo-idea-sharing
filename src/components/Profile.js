@@ -253,8 +253,8 @@ function Profile(props) {
           <PorfileWrapper>
             <UserImage src={userData.pic}></UserImage>
             <UserName>{userData.name}</UserName>
-            <ShowFollow>{userData.follower.length} following</ShowFollow>
-            <ShowFollow>{userData.following.length} follower</ShowFollow>
+            <ShowFollow>{userData.following.length} following</ShowFollow>
+            <ShowFollow>{userData.follower.length} follower</ShowFollow>
             <ButtonWrapper>
               <Button>share</Button>
               <Button

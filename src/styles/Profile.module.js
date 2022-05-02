@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const PorfileWrapper = styled.div`
-  width: 90vw;
+  width: 1350px;
   margin: 15px auto;
   border: 1px solid red;
   display: flex;
@@ -48,10 +48,11 @@ const Button = styled.button`
 `;
 
 const UserStuffWrapper = styled.div`
-  width: 90%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   border: 1px solid purple;
+  margin: 20px auto;
 `;
 
 const SelectSection = styled.p`

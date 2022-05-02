@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {NavLink} from "react-router-dom";
 
 const PinDetailWrapper = styled.div`
   width: 1300px;
@@ -81,12 +82,15 @@ const PinDescription = styled.p`
   border: 1px solid red;
 `;
 
-const PinAuthorWrapper = styled.div`
-  width: 100%;
+const PinAuthorWrapper = styled(NavLink)`
+  /* width: 100%; */
   display: flex;
   align-items: center;
   cursor: pointer;
+  margin: 5px auto 5px 5px;
   border: 1px solid orange;
+  text-decoration: none;
+  color: inherit;
 `;
 
 const PinAuthorPhoto = styled.img`
@@ -133,6 +137,14 @@ const PinCommentWrapper = styled.div`
   flex-wrap: nowrap;
   border: 1px solid red;
   margin: 10px 0;
+`;
+
+const Link2CommentatorProfile = styled(NavLink)`
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
 `;
 
 const MyPinCommentWrapper = styled.div`
@@ -182,7 +194,9 @@ const UserName = styled.h6`
   cursor: pointer;
 `;
 
-const PinComment = styled.p`
+const PinComment = styled.div`
+  display: flex;
+  align-items: center;
   font-size: 1rem;
   margin: 0 auto 0 10px;
   border: 1px solid red;
@@ -196,7 +210,7 @@ const RelatedPinsTitle = styled.h2`
 
 const SubmitButton = styled.button`
   color: white;
-  background-color: #92C9B1;
+  background-color: #92c9b1;
   border: none;
   border-radius: 10px;
   padding: 3px 10px;
@@ -264,4 +278,5 @@ export {
   SubmitButton,
   SimiliarPinsWrapper,
   SimiliarPin,
+  Link2CommentatorProfile,
 };

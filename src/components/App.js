@@ -5,6 +5,7 @@ import React, {useState, useEffect} from "react";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {initializeApp} from "firebase/app";
+import {getFirestore} from "firebase/firestore";
 
 import Collection from "./Collcetion";
 import Navbar from "./Navbar";
@@ -14,7 +15,7 @@ import CreateNewPin from "./CreateNewPin";
 import Login from "./Login";
 import PinDetail from "./PinDetail";
 import EditProfile from "./EditProfile";
-import {getFirestore} from "firebase/firestore";
+import OtherUserProfile from "./OtherUserProfile";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -28,7 +29,7 @@ function App() {
     messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
     appId: process.env.REACT_APP_FIREBASE_APPID,
     measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
-  };  
+  };
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
@@ -74,6 +75,10 @@ function App() {
               setIsLogin={setIsLogin}
             />
           }
+        />
+        <Route
+          path={`user/:otherUserId`}
+          element={<OtherUserProfile uid={uid} db={db} />}
         />
         <Route
           path='edit-profile'

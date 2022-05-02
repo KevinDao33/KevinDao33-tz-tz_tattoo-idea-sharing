@@ -21,6 +21,7 @@ import {
   FilterTagLink,
   ClearFitlerTagWrapper,
   ClearFilterTagLink,
+  MainFilterWrapper,
 } from "../styles/Homepage.module";
 import {items} from "../const";
 import {placements} from "../const";
@@ -145,78 +146,83 @@ function Homapage(props) {
       <FilterWrapper>
         <FilterButton onClick={handleIsShowFilter}>Filters</FilterButton>
       </FilterWrapper>
-      {isShowFilter ? (
-        <>
-          <FilterWrapper>
-            <FilterTitle>Placement : </FilterTitle>
-            <ClearFitlerTagWrapper>
-              <ClearFilterTagLink
-                to={!filterByTag ? "/" : `/?tag=${filterByTag}`}
-                onClick={handlePlacementClear}>
-                Clear
-              </ClearFilterTagLink>
-            </ClearFitlerTagWrapper>
-            {placements.map((placement) => {
-              return (
-                <FitlerTagWrapper key={uuid()}>
-                  <FilterTagLink
-                    to={
-                      !filterByTag
-                        ? `/?placement=${placement}`
-                        : `/?placement=${placement}?tag=${filterByTag}`
-                    }
-                    onClick={() => {
-                      handleFilterByPlacement(placement);
-                    }}
-                    style={({isActive}) => {
-                      return {
-                        color: isActive ? "white" : "black",
-                      };
-                    }}>
-                    {placement}
-                  </FilterTagLink>
-                </FitlerTagWrapper>
-              );
-            })}
-          </FilterWrapper>
-          <FilterWrapper>
-            <FilterTitle>Tags : </FilterTitle>
-            <ClearFitlerTagWrapper>
-              <ClearFilterTagLink
-                to={
-                  !filterByPlacement ? "/" : `/?placement=${filterByPlacement}`
-                }
-                onClick={handleTagClear}>
-                Clear
-              </ClearFilterTagLink>
-            </ClearFitlerTagWrapper>
-            {items.map((item) => {
-              return (
-                <FitlerTagWrapper key={uuid()}>
-                  <FilterTagLink
-                    to={
-                      !filterByPlacement
-                        ? `/?tag=${item}`
-                        : `/?placement=${filterByPlacement}?tag=${item}`
-                    }
-                    onClick={() => {
-                      handleFilterByTag(item);
-                    }}
-                    style={({isActive}) => {
-                      return {
-                        color: isActive ? "white" : "black",
-                      };
-                    }}>
-                    {item}
-                  </FilterTagLink>
-                </FitlerTagWrapper>
-              );
-            })}
-          </FilterWrapper>
-        </>
-      ) : (
-        <></>
-      )}
+      {/* MainFilterWrapper is set up for display filter smoothly, but its not working now, will fix it later */}
+      <MainFilterWrapper>
+        {isShowFilter ? (
+          <>
+            <FilterWrapper>
+              <FilterTitle>Placement : </FilterTitle>
+              <ClearFitlerTagWrapper>
+                <ClearFilterTagLink
+                  to={!filterByTag ? "/" : `/?tag=${filterByTag}`}
+                  onClick={handlePlacementClear}>
+                  Clear
+                </ClearFilterTagLink>
+              </ClearFitlerTagWrapper>
+              {placements.map((placement) => {
+                return (
+                  <FitlerTagWrapper key={uuid()}>
+                    <FilterTagLink
+                      to={
+                        !filterByTag
+                          ? `/?placement=${placement}`
+                          : `/?placement=${placement}?tag=${filterByTag}`
+                      }
+                      onClick={() => {
+                        handleFilterByPlacement(placement);
+                      }}
+                      style={({isActive}) => {
+                        return {
+                          color: isActive ? "white" : "black",
+                        };
+                      }}>
+                      {placement}
+                    </FilterTagLink>
+                  </FitlerTagWrapper>
+                );
+              })}
+            </FilterWrapper>
+            <FilterWrapper>
+              <FilterTitle>Tags : </FilterTitle>
+              <ClearFitlerTagWrapper>
+                <ClearFilterTagLink
+                  to={
+                    !filterByPlacement
+                      ? "/"
+                      : `/?placement=${filterByPlacement}`
+                  }
+                  onClick={handleTagClear}>
+                  Clear
+                </ClearFilterTagLink>
+              </ClearFitlerTagWrapper>
+              {items.map((item) => {
+                return (
+                  <FitlerTagWrapper key={uuid()}>
+                    <FilterTagLink
+                      to={
+                        !filterByPlacement
+                          ? `/?tag=${item}`
+                          : `/?placement=${filterByPlacement}?tag=${item}`
+                      }
+                      onClick={() => {
+                        handleFilterByTag(item);
+                      }}
+                      style={({isActive}) => {
+                        return {
+                          color: isActive ? "white" : "black",
+                        };
+                      }}>
+                      {item}
+                    </FilterTagLink>
+                  </FitlerTagWrapper>
+                );
+              })}
+            </FilterWrapper>
+          </>
+        ) : (
+          <></>
+        )}
+      </MainFilterWrapper>
 
       <MainWrapper>
         <AllPinsWrapper>

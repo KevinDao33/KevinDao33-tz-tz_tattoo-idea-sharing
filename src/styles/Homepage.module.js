@@ -18,7 +18,7 @@ const AllPinsWrapper = styled.div`
   justify-content: center;
   border: 1px solid blue;
   height: auto;
-  width:100%;
+  width: 100%;
 `;
 
 const PinWrapper = styled.div`
@@ -193,6 +193,15 @@ const ClearFilterTagLink = styled(NavLink)`
   }
 `;
 
+{
+  /* MainFilterWrapper is set up for display filter smoothly, but its not working now, will fix it later */
+}
+const MainFilterWrapper = styled.div`
+  width: 100%;
+  transition: height 0.25s linear;
+  border: 1px solid green;
+`;
+
 export {
   MainWrapper,
   AllPinsWrapper,
@@ -205,5 +214,6 @@ export {
   FitlerTagWrapper,
   FilterTagLink,
   ClearFitlerTagWrapper,
-  ClearFilterTagLink
+  ClearFilterTagLink,
+  MainFilterWrapper,
 };

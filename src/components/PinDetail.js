@@ -47,6 +47,7 @@ import {
   SubmitButton,
   SimiliarPinsWrapper,
   SimiliarPin,
+  Link2CommentatorProfile,
 } from "../styles/PinDetail.module";
 
 function PinDetail(props) {
@@ -286,7 +287,7 @@ function PinDetail(props) {
               </PinDetailSubNav>
               <PinName>{pinData.pinName}</PinName>
               <PinDescription>{pinData.pinDesc}</PinDescription>
-              <PinAuthorWrapper>
+              <PinAuthorWrapper to={`/user/${authorData.uid}`}>
                 <PinAuthorPhoto src={authorData.pic}></PinAuthorPhoto>
                 <PinAuthorName>{authorData.name}</PinAuthorName>
               </PinAuthorWrapper>
@@ -298,15 +299,13 @@ function PinDetail(props) {
                     pinCommentData.map((data, index) => (
                       <PinCommentWrapper key={uuid()}>
                         {pinCommentator[index] && (
-                          <>
+                          <Link2CommentatorProfile
+                            to={`/user/${pinCommentator[index].uid}`}>
                             <UserPhoto
                               src={pinCommentator[index].pic}></UserPhoto>
                             <UserName>{pinCommentator[index].name}</UserName>
-                          </>
+                          </Link2CommentatorProfile>
                         )}
-
-                        {/* <UserPhoto src={pinCommentator[index].pic}></UserPhoto>
-                        <UserName>{pinCommentator[index].name}</UserName> */}
                         <PinComment>{data.commentMessage}</PinComment>
                       </PinCommentWrapper>
                     ))}
