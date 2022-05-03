@@ -4,7 +4,7 @@ import {NavLink} from "react-router-dom";
 const MainWrapper = styled.div`
   width: 1400px;
   margin: 15px auto;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   display: flex;
   justify-content: center;
 `;
@@ -16,7 +16,7 @@ const AllPinsWrapper = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   justify-content: center;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   height: auto;
   width: 100%;
 `;
@@ -75,7 +75,7 @@ const FilterWrapper = styled.div`
   flex-direction: row;
   width: 1400px;
   margin: 15px auto;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   justify-content: flex-start;
   align-items: flex-end;
   flex-wrap: wrap;
@@ -199,7 +199,7 @@ const ClearFilterTagLink = styled(NavLink)`
 const MainFilterWrapper = styled.div`
   width: 100%;
   transition: height 0.25s linear;
-  border: 1px solid green;
+  /* border: 1px solid green; */
 `;
 
 export {

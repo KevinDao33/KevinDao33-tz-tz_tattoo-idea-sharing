@@ -38,6 +38,16 @@ function Homapage(props) {
 
   const redirect = useNavigate();
 
+  const checkIsShowVideo = () => {
+    const isVisted = localStorage.getItem("isShowVideo");
+
+    isVisted && setIsShowVideo(true);
+  };
+
+  useEffect(() => {
+    checkIsShowVideo();
+  }, []);
+
   const getPins = async () => {
     try {
       const notesSnapshot = await getDocs(collection(props.db, "pin"));
@@ -139,7 +149,7 @@ function Homapage(props) {
     setFilteredPins(filteredResult);
   };
 
-  return isShowVideo ? (
+  return !isShowVideo ? (
     <LandingPage setIsShowVideo={setIsShowVideo}></LandingPage>
   ) : (
     <>

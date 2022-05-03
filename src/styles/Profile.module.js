@@ -26,7 +26,14 @@ const UserName = styled.p`
 
 const ShowFollow = styled.p`
   font-size: 1rem;
-  margin: 2px auto;
+  margin: 5px auto;
+  cursor: pointer;
+  transition: 0.4s;
+
+  &:hover {
+    transform: scale(1.1);
+    text-shadow: 1px 1px 2px #ffb2e6;
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -194,6 +201,13 @@ const LeaveButton = styled.button`
   font-size: 1.5rem;
 `;
 
+const FollowListWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  border:1px solid yellowgreen;
+`;
+
 export {
   PorfileWrapper,
   UserImage,
@@ -214,4 +228,5 @@ export {
   NameNewCollectionTitle,
   NameNewCollection,
   LeaveButton,
+  FollowListWrapper
 };

@@ -26,7 +26,7 @@ import {
   PinImage,
   RemoveButton,
   ShowEmptyMessage,
-  PinImageDelete
+  PinImageDelete,
   // DragPinWrapper,
 } from "../styles/Collection.module";
 import ArrangeCollection from "./ArrangeCollection";
@@ -56,7 +56,7 @@ function Collection(props) {
     getCollectionName();
   }, [props.uid]);
 
-  const removePinFromCollection = (collecName, pin, index) => {
+  const removePinFromCollection = async(collecName, pin, index) => {
     const collectionRef = doc(
       props.db,
       "user",
@@ -64,7 +64,7 @@ function Collection(props) {
       "collection",
       collecName
     );
-    updateDoc(collectionRef, {
+    await updateDoc(collectionRef, {
       pins: arrayRemove({
         pinName: pin.pinName,
         pinId: pin.pinId,
@@ -73,6 +73,7 @@ function Collection(props) {
     });
     setPinsInCollection((prev) => prev.pins.splice(index, 1));
     alert(`pin removed from ${collectionName}`);
+    window.location.reload();
   };
 
   const breakpointColumnsObj = {
@@ -133,34 +134,37 @@ function Collection(props) {
                   breakpointCols={breakpointColumnsObj}
                   className='my-masonry-grid'
                   columnClassName='my-masonry-grid_column'>
-
                   {pinsInCollection.collectionName &&
-                    pinsInCollection.pins.length > 0 &&
-                    handlePin === DELETE_PINS ?
-                    pinsInCollection.pins.map((pin, index) => (
-                      <PinWrapper key={uuid()}>
-                        <PinImageDelete src={pin.pinImage} />
+                  pinsInCollection.pins.length > 0 &&
+                  handlePin === DELETE_PINS
+                    ? pinsInCollection.pins.map((pin, index) => (
+                        <PinWrapper key={uuid()}>
+                          <PinImageDelete src={pin.pinImage} />
 
-                        <RemoveButton
-                          onClick={() => {
-                            removePinFromCollection(collectionName, pin, index);
-                          }}>
-                          -
-                        </RemoveButton>
-                      </PinWrapper>
-                    )): pinsInCollection.pins.map((pin, index) => (
-                      <PinWrapper key={uuid()}>
-                        <PinImage src={pin.pinImage} />
+                          <RemoveButton
+                            onClick={() => {
+                              removePinFromCollection(
+                                collectionName,
+                                pin,
+                                index
+                              );
+                            }}>
+                            -
+                          </RemoveButton>
+                        </PinWrapper>
+                      ))
+                    : pinsInCollection.pins.map((pin, index) => (
+                        <PinWrapper key={uuid()}>
+                          <PinImage src={pin.pinImage} />
 
-                        {/* <RemoveButton
+                          {/* <RemoveButton
                           onClick={() => {
                             removePinFromCollection(collectionName, pin, index);
                           }}>
                           -
                         </RemoveButton> */}
-                      </PinWrapper>
-                    ))}
-
+                        </PinWrapper>
+                      ))}
                 </Masonry>
               </AllPinsWrapper>
             </>

@@ -69,6 +69,7 @@ function AddPin(props) {
       {merge: true}
     );
     alert(`pin added to ${collection.collectionName}`);
+
   };
 
   const setCollection2Firestore = (uid) => {
@@ -123,6 +124,7 @@ function AddPin(props) {
               <SaveButton
                 onClick={() => {
                   addPinToCollection(collection, props.pin);
+                  props.handleClosePinShow(props.indexxx);
                 }}>
                 save
               </SaveButton>

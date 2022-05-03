@@ -3,15 +3,15 @@ import {
   LandingPageVideoWrapper,
   LandingPageVideo,
 } from "../styles/LandingPageVideo.module";
-import testVideo2 from "../icon/test2.mp4";
-import testVideo1 from "../icon/test1.webm";
+// import testVideo2 from "../icon/test2.mp4";
+// import testVideo1 from "../icon/test1.webm";
+import tztzVideo from "../icon/tztz-video.mp4";
 
 function LandingPage(props) {
-
   const closeVideo = () => {
-    const closeTime = setTimeout(() => {
-      props.setIsShowVideo(false);
-      localStorage.setItem("visitHomepage", true);
+    setTimeout(() => {
+      localStorage.setItem("isShowVideo", true);
+      props.setIsShowVideo(true);
     }, 7000);
   };
 
@@ -22,8 +22,7 @@ function LandingPage(props) {
   return (
     <LandingPageVideoWrapper>
       <LandingPageVideo autoPlay={true} muted={true}>
-        <source src={testVideo1} type='video/webm' />
-        <source src={testVideo2} type='video/mp4' />
+        <source src={tztzVideo} type='video/mp4' />
         Sorry, your browser doesn&apos;t support embedded videos.
       </LandingPageVideo>
     </LandingPageVideoWrapper>

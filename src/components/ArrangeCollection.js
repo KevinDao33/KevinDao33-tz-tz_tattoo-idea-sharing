@@ -194,7 +194,6 @@ function ArrangeCollection(props) {
         </h2>
         <SaveButton onClick={saveNewPinOrder}>save</SaveButton>
       </ArrangeNavWrapper>
-      {/* <Button>save</Button> */}
       <div
         style={{
           display: "flex",

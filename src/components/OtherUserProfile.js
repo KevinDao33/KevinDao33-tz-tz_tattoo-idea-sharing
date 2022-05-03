@@ -23,6 +23,7 @@ import {
   ShowFollow,
   ButtonWrapper,
   UserStuffWrapper,
+  FollowListWrapper,
 } from "../styles/Profile.module";
 import {
   AllPinsWrapper,
@@ -167,8 +168,12 @@ function OtherUserProfile(props) {
               <FollowButton onClick={handleFollow}>Follow</FollowButton>
             )}
 
-            {/* <FollowButton onClick={handleFollow}>Follow</FollowButton> */}
           </ButtonWrapper>
+{/* ============================================ */}
+            <FollowListWrapper>
+
+            </FollowListWrapper>
+{/* ============================================ */}
           <UserStuffWrapper>
             <AllPinsWrapper>
               <Masonry
