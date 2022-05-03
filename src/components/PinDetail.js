@@ -225,6 +225,7 @@ function PinDetail(props) {
       collection(props.db, "pin", pinId, "comment"),
       orderBy("commentTime")
     );
+    // eslint-disable-next-line no-unused-vars
     const allCommentsData = onSnapshot(allCommentsDataRef, (querySnapshot) => {
       let allComments = [];
       querySnapshot.forEach((doc) => {

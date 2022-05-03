@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {
   LandingPageVideoWrapper,
   LandingPageVideo,
@@ -11,6 +11,7 @@ function LandingPage(props) {
   const closeVideo = () => {
     setTimeout(() => {
       localStorage.setItem("isShowVideo", true);
+      // eslint-disable-next-line react/prop-types
       props.setIsShowVideo(true);
     }, 7000);
   };

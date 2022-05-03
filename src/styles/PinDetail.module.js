@@ -8,7 +8,8 @@ const PinDetailWrapper = styled.div`
   margin: 100px auto 50px auto;
   display: flex;
   flex-wrap: wrap;
-  border: 1px solid red;
+  border: 1px solid lightgray;
+  box-shadow: 30px 38px 34px -26px hsla(0, 0%, 0%, 0.6);
 `;
 
 const PinImageWrapper = styled.div`
@@ -24,7 +25,8 @@ const PinImage = styled.img`
 `;
 
 const PinDetailDataWrapper = styled.div`
-  width: 45%;
+  width: 40%;
+  margin-left: 3%;
   /* height: 100%; */
   display: flex;
   flex-direction: column;
@@ -37,7 +39,7 @@ const PinDetailSubNav = styled.div`
   align-items: center;
   width: 100%;
   height: 50px;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
 `;
 
 const CollectionSelector = styled.select`
@@ -71,15 +73,15 @@ const SaveButton = styled.button`
 `;
 
 const PinName = styled.h2`
-  font-size: 2rem;
+  font-size: 3.5rem;
   margin: 20px auto 0 10px;
 `;
 
 const PinDescription = styled.p`
   width: 100%;
-  font-size: 1.5rem;
-  margin: 10px auto 10px 10px;
-  border: 1px solid red;
+  font-size: 1.75rem;
+  margin: 10px auto 30px 20px;
+  /* border: 1px solid red; */
 `;
 
 const PinAuthorWrapper = styled(NavLink)`
@@ -88,30 +90,30 @@ const PinAuthorWrapper = styled(NavLink)`
   align-items: center;
   cursor: pointer;
   margin: 5px auto 5px 5px;
-  border: 1px solid orange;
+  /* border: 1px solid orange; */
   text-decoration: none;
   color: inherit;
 `;
 
 const PinAuthorPhoto = styled.img`
   border-radius: 50px;
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   margin: auto 10px;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   cursor: pointer;
 `;
 
 const PinAuthorName = styled.h6`
-  font-size: 1.25rem;
-  margin: 0 10px 0 0;
+  font-size: 2rem;
+  margin: 0 10px 0 10px;
   cursor: pointer;
 `;
 
 const PinCommentTitle = styled.h4`
-  font-size: 1.25rem;
-  margin: 30px auto 0 10px;
-  border: 1px solid red;
+  font-size: 2rem;
+  margin: 70px auto 20px 10px;
+  /* border: 1px solid red; */
 `;
 
 const AllPinCommentWrapper = styled.div`
@@ -120,14 +122,17 @@ const AllPinCommentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid green;
+  border-radius: 10px;
+  border: 1px solid lightgray;
+  box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
 `;
 
 const OtherPinCommentWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  border: 1px solid orange;
+
+  /* border: 1px solid orange; */
 `;
 
 const PinCommentWrapper = styled.div`
@@ -135,8 +140,10 @@ const PinCommentWrapper = styled.div`
   min-height: 30px;
   display: flex;
   flex-wrap: nowrap;
-  border: 1px solid red;
-  margin: 10px 0;
+  margin: 20px 0;
+  /* border-radius: 10px; */
+  /* border: 1px solid lightgray; */
+  /* box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2); */
 `;
 
 const Link2CommentatorProfile = styled(NavLink)`
@@ -153,17 +160,17 @@ const MyPinCommentWrapper = styled.div`
   min-height: 30px;
   display: flex;
   flex-wrap: nowrap;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   margin: 10px 0;
   bottom: 0;
 `;
 
 const UserPhoto = styled.img`
   border-radius: 50px;
-  width: 30px;
-  height: 30px;
+  width: 45px;
+  height: 45px;
   margin: auto 10px;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   cursor: pointer;
 `;
 
@@ -172,24 +179,28 @@ const MyPhoto = styled.img`
   width: 60px;
   height: 60px;
   margin: auto 10px;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   cursor: pointer;
 `;
 
 const PinCommentInput = styled.input`
   width: calc(100% - 60px - 10px - 10px - 10px);
-  height: 30px;
+  height: 35px;
   font-size: 1.5rem;
-  border: 2px solid gray;
+  /* border: 2px solid gray; */
   border-radius: 10px;
   background-color: white;
   padding-left: 15px;
   margin: auto 10px auto 0;
+  border: 1px solid gray;
   cursor: text;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const UserName = styled.h6`
-  font-size: 1rem;
+  font-size: 1.25rem;
   margin: 0 10px 0 0;
   cursor: pointer;
 `;
@@ -199,7 +210,7 @@ const PinComment = styled.div`
   align-items: center;
   font-size: 1rem;
   margin: 0 auto 0 10px;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 `;
 
 const RelatedPinsTitle = styled.h2`
@@ -213,14 +224,14 @@ const SubmitButton = styled.button`
   background-color: #92c9b1;
   border: none;
   border-radius: 10px;
-  padding: 3px 10px;
+  padding: 3px 20px;
   font: inherit;
   cursor: pointer;
   outline: inherit;
-  font-size: 1rem;
+  font-size: 1.25rem;
   margin: auto 10px auto 0;
   text-align: center;
-  line-height: 30px;
+  line-height: 35px;
 `;
 
 const SimiliarPinsWrapper = styled.div`

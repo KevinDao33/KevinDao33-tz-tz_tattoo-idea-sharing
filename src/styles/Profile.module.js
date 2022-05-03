@@ -2,12 +2,13 @@ import styled from "styled-components";
 
 const PorfileWrapper = styled.div`
   width: 1350px;
-  margin: 15px auto;
-  border: 1px solid red;
+  margin: 100px auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
 `;
 
 const UserImage = styled.img`
@@ -16,6 +17,7 @@ const UserImage = styled.img`
   height: 150px;
   background-color: gray;
   margin: 20px auto 0px auto;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 `;
 
 const UserName = styled.p`
@@ -58,7 +60,7 @@ const UserStuffWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  border: 1px solid purple;
+  /* border: 1px solid purple; */
   margin: 20px auto;
 `;
 
@@ -73,14 +75,14 @@ const AllCollectionsWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   height: auto;
 `;
 
 const CollectionWarpper = styled.div`
   width: 200px;
   height: 270px;
-  border: 1px solid orange;
+  /* border: 1px solid orange; */
   border-radius: 20px;
   margin: 10px;
   display: flex;
@@ -205,7 +207,7 @@ const FollowListWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  border:1px solid yellowgreen;
+  /* border:1px solid yellowgreen; */
 `;
 
 export {
@@ -228,5 +230,5 @@ export {
   NameNewCollectionTitle,
   NameNewCollection,
   LeaveButton,
-  FollowListWrapper
+  FollowListWrapper,
 };

@@ -153,7 +153,7 @@ function Collection(props) {
                           </RemoveButton>
                         </PinWrapper>
                       ))
-                    : pinsInCollection.pins.map((pin, index) => (
+                    : pinsInCollection.pins.map((pin) => (
                         <PinWrapper key={uuid()}>
                           <PinImage src={pin.pinImage} />
 

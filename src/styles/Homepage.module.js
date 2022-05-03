@@ -1,6 +1,20 @@
 import styled from "styled-components";
 import {NavLink} from "react-router-dom";
 
+const MainTitle = styled.h1`
+  padding-left: 30px;
+  font-size: 3rem;
+  display: flex;
+  align-items: flex-end;
+  margin: 60px auto 20px 0;
+  transition: 0.4s;
+
+  :hover {
+    text-shadow: -10px 10px 0px #00e6e6, -20px 20px 0px #01cccc,
+      -30px 30px 0px #00bdbd;
+  }
+`;
+
 const MainWrapper = styled.div`
   width: 1400px;
   margin: 15px auto;
@@ -127,13 +141,14 @@ const FitlerTagWrapper = styled.div`
   background-color: white;
   transition: 0.4s;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
+  cursor: text;
 
   &:hover {
     background-color: black;
     box-shadow: 0px 1px 0px #b2a98f, 0px 8px 6px rgba(0, 0, 0, 0.15),
       0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1);
   }
-  &:focus {
+  &:focus-within {
     background-color: black;
     box-shadow: 0px 1px 0px #b2a98f, 0px 8px 6px rgba(0, 0, 0, 0.15),
       0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1);
@@ -149,7 +164,8 @@ const FilterTagLink = styled(NavLink)`
   &:hover {
     color: white;
   }
-  &:focus {
+
+  &:focus-within {
     color: white;
   }
 `;
@@ -168,7 +184,7 @@ const ClearFitlerTagWrapper = styled.div`
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
 
   &:hover {
-    background-color: black;
+    background-color: gray;
     box-shadow: 0px 1px 0px #b2a98f, 0px 8px 6px rgba(0, 0, 0, 0.15),
       0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1);
   }
@@ -188,8 +204,8 @@ const ClearFilterTagLink = styled(NavLink)`
   &:hover {
     color: white;
   }
-  &:focus {
-    color: white;
+  &:focus-within {
+    color: black;
   }
 `;
 
@@ -203,6 +219,7 @@ const MainFilterWrapper = styled.div`
 `;
 
 export {
+  MainTitle,
   MainWrapper,
   AllPinsWrapper,
   PinWrapper,

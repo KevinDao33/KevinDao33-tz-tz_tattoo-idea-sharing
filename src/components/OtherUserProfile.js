@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // /* eslint-disable react/prop-types */
 // /* eslint-disable no-undef */
 import React, {useEffect, useState} from "react";
@@ -5,7 +6,7 @@ import {v4 as uuid} from "uuid";
 import Masonry from "react-masonry-css";
 import {
   doc,
-  addDoc,
+  // addDoc,
   //   onSnapshot,
   getDoc,
   collection,

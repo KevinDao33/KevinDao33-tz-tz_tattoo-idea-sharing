@@ -4,7 +4,7 @@ import React, {useState, useEffect} from "react";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import "../styles/style.css";
 import {doc, getDoc, updateDoc} from "firebase/firestore";
-import {useNavigate} from "react-router-dom";
+// import {useNavigate} from "react-router-dom";
 
 import {
   PinImageArrange,
@@ -206,7 +206,7 @@ function ArrangeCollection(props) {
         }}>
         <DragDropContext
           onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
-          {Object.entries(columns).map(([columnId, column], index) => {
+          {Object.entries(columns).map(([columnId, column]) => {
             return (
               <div
                 style={{
@@ -218,7 +218,7 @@ function ArrangeCollection(props) {
                 <div
                   style={{margin: 8, border: "1px solid red", width: "330px"}}>
                   <Droppable droppableId={columnId} key={columnId}>
-                    {(provided, snapshot) => {
+                    {(provided) => {
                       return (
                         <div
                           {...provided.droppableProps}
@@ -235,7 +235,7 @@ function ArrangeCollection(props) {
                                 key={item.pinId}
                                 draggableId={item.pinId}
                                 index={index}>
-                                {(provided, snapshot) => {
+                                {(provided) => {
                                   return (
                                     <PinImageArrange
                                       ref={provided.innerRef}

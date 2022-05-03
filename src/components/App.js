@@ -37,7 +37,7 @@ function App() {
   const db = getFirestore(app);
 
   useEffect(() => {
-    const auth = getAuth();
+    // const auth = getAuth(app);
 
     onAuthStateChanged(auth, (user) => {
       if (!user) {
@@ -102,7 +102,7 @@ function App() {
             <Login
               uid={uid}
               db={db}
-              auth={auth}
+              // auth={auth}
               setUid={setUid}
               isLogin={isLogin}
               setIsLogin={setIsLogin}

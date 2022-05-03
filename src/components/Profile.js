@@ -281,7 +281,9 @@ function Profile(props) {
         <Login
           userData={userData}
           setUserData={setUserData}
-          firebaseConfig={props.firebaseConfig}></Login>
+          firebaseConfig={props.firebaseConfig}
+          auth={props.auth}
+          ></Login>
       )}
     </>
   );

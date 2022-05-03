@@ -69,10 +69,12 @@ function Login(props) {
   };
 
   const signIn = () => {
+    
     signInWithEmailAndPassword(props.auth, userEmail, userPassword)
       .then((userCredential) => {
+        
         const user = userCredential.user;
-        getUserData(user.uid);
+        user && getUserData(user.uid);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -87,8 +89,8 @@ function Login(props) {
           case "auth/user-not-found":
             alert("帳號不存在喔");
             break;
-          default:
-            alert("登入失敗QQ");
+          // default:
+          //   alert("登入失敗QQ");
         }
       });
   };

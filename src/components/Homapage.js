@@ -1,14 +1,16 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
 import {collection, getDocs} from "firebase/firestore";
-import {useNavigate, Link, NavLink} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import "../styles/style.css";
-import {v4 as uuid} from "uuid";
+// import {v4 as uuid} from "uuid";
 
 import LandingPage from "./LandingPageVideo";
 import AddPin from "./AddPin";
 import {
+  MainTitle,
   MainWrapper,
   AllPinsWrapper,
   PinWrapper,
@@ -137,7 +139,7 @@ function Homapage(props) {
   };
 
   const handleTagClear = () => {
-    setFilterByPlacement("");
+    setFilterByTag("");
     setFilteredPins([]);
     if (!filterByPlacement) {
       return;
@@ -153,10 +155,12 @@ function Homapage(props) {
     <LandingPage setIsShowVideo={setIsShowVideo}></LandingPage>
   ) : (
     <>
+    {/* <MainTitle>Explore Tattoos</MainTitle> */}
       <FilterWrapper>
+        <MainTitle>Explore Tattoos</MainTitle>
         <FilterButton onClick={handleIsShowFilter}>Filters</FilterButton>
       </FilterWrapper>
-      {/* MainFilterWrapper is set up for display filter smoothly, but its not working now, will fix it later */}
+      {/* MainFilterWrapper is set up for display filter smoothly, need to pass props to adjust its height to realize transition animation (the filter selectors should always be there, but default height 0) */}
       <MainFilterWrapper>
         {isShowFilter ? (
           <>
@@ -171,7 +175,7 @@ function Homapage(props) {
               </ClearFitlerTagWrapper>
               {placements.map((placement) => {
                 return (
-                  <FitlerTagWrapper key={uuid()}>
+                  <FitlerTagWrapper key={placement}>
                     <FilterTagLink
                       to={
                         !filterByTag
@@ -181,11 +185,7 @@ function Homapage(props) {
                       onClick={() => {
                         handleFilterByPlacement(placement);
                       }}
-                      style={({isActive}) => {
-                        return {
-                          color: isActive ? "white" : "black",
-                        };
-                      }}>
+                    >
                       {placement}
                     </FilterTagLink>
                   </FitlerTagWrapper>
@@ -207,7 +207,7 @@ function Homapage(props) {
               </ClearFitlerTagWrapper>
               {items.map((item) => {
                 return (
-                  <FitlerTagWrapper key={uuid()}>
+                  <FitlerTagWrapper key={item}>
                     <FilterTagLink
                       to={
                         !filterByPlacement
@@ -221,7 +221,8 @@ function Homapage(props) {
                         return {
                           color: isActive ? "white" : "black",
                         };
-                      }}>
+                      }}
+                      >
                       {item}
                     </FilterTagLink>
                   </FitlerTagWrapper>
@@ -243,7 +244,6 @@ function Homapage(props) {
             {filteredPins.length > 0
               ? filteredPins.map((pin, index) => (
                   <PinWrapper key={index}>
-                    {/* <PinWrapper key={pin.pinId}> */}
                     <PinImage
                       src={pin.pinImage}
                       onClick={() => {
@@ -256,7 +256,6 @@ function Homapage(props) {
                       }}>
                       save
                     </SaveButton>
-                    {/* </PinWrapper> */}
                     {pin.isShow && (
                       <AddPin
                         handleClosePinShow={handleClosePinShow}
