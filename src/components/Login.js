@@ -89,6 +89,7 @@ function Login(props) {
           case "auth/user-not-found":
             alert("帳號不存在喔");
             break;
+            // need to be fixed
           // default:
           //   alert("登入失敗QQ");
         }

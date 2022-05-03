@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import {NavLink} from "react-router-dom";
 
 const MainTitle = styled.h1`
@@ -8,11 +8,49 @@ const MainTitle = styled.h1`
   align-items: flex-end;
   margin: 60px auto 20px 0;
   transition: 0.4s;
+  color: gray;
+  font-weight: bolder;
+  cursor: default;
 
   :hover {
     text-shadow: -10px 10px 0px #00e6e6, -20px 20px 0px #01cccc,
       -30px 30px 0px #00bdbd;
   }
+`;
+
+const scroll = keyframes`
+ 100%{
+    background-position:0px -3000px;
+  }
+`;
+
+const BackgroundDisplay = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+  z-index: -100;
+  animation: ${scroll} 120s linear infinite;
+
+  background-color: #f9f9f9;
+  background: radial-gradient(
+      circle,
+      transparent 20%,
+      #f9f9f9 20%,
+      #f9f9f9 80%,
+      transparent 80%,
+      transparent
+    ),
+    radial-gradient(
+        circle,
+        transparent 20%,
+        #f9f9f9 20%,
+        #f9f9f9 80%,
+        transparent 80%,
+        transparent
+      )
+      27.5px 27.5px,
+    linear-gradient(#cdcdcd 2.2px, transparent 2.2px) 0 -1.1px,
+    linear-gradient(90deg, #cdcdcd 2.2px, #f9f9f9 2.2px) -1.1px 0;
+  background-size: 55px 55px, 55px 55px, 27.5px 27.5px, 27.5px 27.5px;
 `;
 
 const MainWrapper = styled.div`
@@ -108,6 +146,7 @@ const FilterButton = styled.button`
   padding: 6px 33px;
   margin: 20px 10px 20px auto;
   background-color: #fcfcfc;
+  cursor: pointer;
   transition: 0.2s;
 
   :hover {
@@ -213,12 +252,20 @@ const ClearFilterTagLink = styled(NavLink)`
   /* MainFilterWrapper is set up for display filter smoothly, but its not working now, will fix it later */
 }
 const MainFilterWrapper = styled.div`
-  width: 100%;
-  transition: height 0.25s linear;
-  /* border: 1px solid green; */
+  width: 1400px;
+  margin: 0 auto;
+  border-radius: 10px;
+  background-color: white;
+  border:1px solid lightgray;
+  box-shadow: 0px 1px 0px #b2a98f, 0px 8px 6px rgba(0, 0, 0, 0.15),
+    0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1);
+  transition: height 0.3s ease-in-out;
+  overflow: hidden;
+  height: ${(props) => (props.$filter ? "0px" : "450px")};
 `;
 
 export {
+  BackgroundDisplay,
   MainTitle,
   MainWrapper,
   AllPinsWrapper,

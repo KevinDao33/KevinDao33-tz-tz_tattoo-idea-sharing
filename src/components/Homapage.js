@@ -10,6 +10,7 @@ import "../styles/style.css";
 import LandingPage from "./LandingPageVideo";
 import AddPin from "./AddPin";
 import {
+  BackgroundDisplay,
   MainTitle,
   MainWrapper,
   AllPinsWrapper,
@@ -86,7 +87,7 @@ function Homapage(props) {
   };
 
   const handleIsShowFilter = () => {
-    !isShowFilter ? setIsShowFilter(true) : setIsShowFilter(false);
+    setIsShowFilter((prev) => !prev);
   };
 
   const handleFilterByPlacement = (placement) => {
@@ -154,86 +155,76 @@ function Homapage(props) {
   return !isShowVideo ? (
     <LandingPage setIsShowVideo={setIsShowVideo}></LandingPage>
   ) : (
-    <>
-    {/* <MainTitle>Explore Tattoos</MainTitle> */}
+    <BackgroundDisplay>
+      {/* <MainTitle>Explore Tattoos</MainTitle> */}
       <FilterWrapper>
         <MainTitle>Explore Tattoos</MainTitle>
         <FilterButton onClick={handleIsShowFilter}>Filters</FilterButton>
       </FilterWrapper>
-      {/* MainFilterWrapper is set up for display filter smoothly, need to pass props to adjust its height to realize transition animation (the filter selectors should always be there, but default height 0) */}
-      <MainFilterWrapper>
-        {isShowFilter ? (
-          <>
-            <FilterWrapper>
-              <FilterTitle>Placement : </FilterTitle>
-              <ClearFitlerTagWrapper>
-                <ClearFilterTagLink
-                  to={!filterByTag ? "/" : `/?tag=${filterByTag}`}
-                  onClick={handlePlacementClear}>
-                  Clear
-                </ClearFilterTagLink>
-              </ClearFitlerTagWrapper>
-              {placements.map((placement) => {
-                return (
-                  <FitlerTagWrapper key={placement}>
-                    <FilterTagLink
-                      to={
-                        !filterByTag
-                          ? `/?placement=${placement}`
-                          : `/?placement=${placement}?tag=${filterByTag}`
-                      }
-                      onClick={() => {
-                        handleFilterByPlacement(placement);
-                      }}
-                    >
-                      {placement}
-                    </FilterTagLink>
-                  </FitlerTagWrapper>
-                );
-              })}
-            </FilterWrapper>
-            <FilterWrapper>
-              <FilterTitle>Tags : </FilterTitle>
-              <ClearFitlerTagWrapper>
-                <ClearFilterTagLink
+
+      {/* ============================= */}
+      <MainFilterWrapper $filter={isShowFilter}>
+        <FilterWrapper>
+          <FilterTitle>Placement : </FilterTitle>
+          <ClearFitlerTagWrapper>
+            <ClearFilterTagLink
+              to={!filterByTag ? "/" : `/?tag=${filterByTag}`}
+              onClick={handlePlacementClear}>
+              Clear
+            </ClearFilterTagLink>
+          </ClearFitlerTagWrapper>
+          {placements.map((placement) => {
+            return (
+              <FitlerTagWrapper key={placement}>
+                <FilterTagLink
+                  to={
+                    !filterByTag
+                      ? `/?placement=${placement}`
+                      : `/?placement=${placement}?tag=${filterByTag}`
+                  }
+                  onClick={() => {
+                    handleFilterByPlacement(placement);
+                  }}>
+                  {placement}
+                </FilterTagLink>
+              </FitlerTagWrapper>
+            );
+          })}
+        </FilterWrapper>
+        <FilterWrapper>
+          <FilterTitle>Tags : </FilterTitle>
+          <ClearFitlerTagWrapper>
+            <ClearFilterTagLink
+              to={!filterByPlacement ? "/" : `/?placement=${filterByPlacement}`}
+              onClick={handleTagClear}>
+              Clear
+            </ClearFilterTagLink>
+          </ClearFitlerTagWrapper>
+          {items.map((item) => {
+            return (
+              <FitlerTagWrapper key={item}>
+                <FilterTagLink
                   to={
                     !filterByPlacement
-                      ? "/"
-                      : `/?placement=${filterByPlacement}`
+                      ? `/?tag=${item}`
+                      : `/?placement=${filterByPlacement}?tag=${item}`
                   }
-                  onClick={handleTagClear}>
-                  Clear
-                </ClearFilterTagLink>
-              </ClearFitlerTagWrapper>
-              {items.map((item) => {
-                return (
-                  <FitlerTagWrapper key={item}>
-                    <FilterTagLink
-                      to={
-                        !filterByPlacement
-                          ? `/?tag=${item}`
-                          : `/?placement=${filterByPlacement}?tag=${item}`
-                      }
-                      onClick={() => {
-                        handleFilterByTag(item);
-                      }}
-                      style={({isActive}) => {
-                        return {
-                          color: isActive ? "white" : "black",
-                        };
-                      }}
-                      >
-                      {item}
-                    </FilterTagLink>
-                  </FitlerTagWrapper>
-                );
-              })}
-            </FilterWrapper>
-          </>
-        ) : (
-          <></>
-        )}
+                  onClick={() => {
+                    handleFilterByTag(item);
+                  }}
+                  style={({isActive}) => {
+                    return {
+                      color: isActive ? "white" : "black",
+                    };
+                  }}>
+                  {item}
+                </FilterTagLink>
+              </FitlerTagWrapper>
+            );
+          })}
+        </FilterWrapper>
       </MainFilterWrapper>
+      {/* ============================= */}
 
       <MainWrapper>
         <AllPinsWrapper>
@@ -308,7 +299,7 @@ function Homapage(props) {
           </Masonry>
         </AllPinsWrapper>
       </MainWrapper>
-    </>
+    </BackgroundDisplay>
   );
 }
 
