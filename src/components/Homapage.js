@@ -26,9 +26,19 @@ import {
   ClearFitlerTagWrapper,
   ClearFilterTagLink,
   MainFilterWrapper,
+  Heart,
+  HoverPinName,
+  LinkButton,
+  PinTagIntroduction,
+  PinTagIntroductionTitle,
+  PinTagIntroductionContext,
 } from "../styles/Homepage.module";
-import {items} from "../const";
-import {placements} from "../const";
+import {
+  items,
+  placements,
+  tagsWithIntroduction,
+  tagIntroductions,
+} from "../const";
 
 function Homapage(props) {
   // check user visit is not done pageYOffset, so to prevent replay video everytime entering homepage, set isShowVideo' init to false
@@ -36,9 +46,10 @@ function Homapage(props) {
   const [isShowAddPin, setIsShowAddPin] = useState(false);
   const [pins, setPins] = useState([]);
   const [filteredPins, setFilteredPins] = useState([]);
-  const [isShowFilter, setIsShowFilter] = useState(false);
   const [filterByPlacement, setFilterByPlacement] = useState("");
   const [filterByTag, setFilterByTag] = useState("");
+  const [isShowFilter, setIsShowFilter] = useState(false);
+  const [isShowLike, setIsShowLike] = useState(false);
 
   const redirect = useNavigate();
 
@@ -80,6 +91,10 @@ function Homapage(props) {
     mockPin[index].isShow = true;
     setPins(mockPin);
   };
+
+  // const handleLikeShow = (index)=>{
+
+  // }
 
   const handleClosePinShow = (index) => {
     let mockPin = [...pins];
@@ -159,13 +174,14 @@ function Homapage(props) {
     <BackgroundDisplay>
       {/* <MainTitle>Explore Tattoos</MainTitle> */}
       <FilterWrapper>
-        <MainTitle>Explore Tattoos</MainTitle>
+        <MainTitle>{`Explore Tattoos | ${
+          filterByPlacement && filterByPlacement
+        } ${filterByTag && filterByTag}`}</MainTitle>
         <FilterButton onClick={handleIsShowFilter}>
           <FilterButtonSpan>Filters</FilterButtonSpan>
         </FilterButton>
       </FilterWrapper>
 
-      {/* ============================= */}
       <MainFilterWrapper $filter={isShowFilter}>
         <FilterWrapper>
           <FilterTitle>Placement : </FilterTitle>
@@ -227,7 +243,6 @@ function Homapage(props) {
           })}
         </FilterWrapper>
       </MainFilterWrapper>
-      {/* ============================= */}
 
       <MainWrapper>
         <AllPinsWrapper>
@@ -235,9 +250,24 @@ function Homapage(props) {
             breakpointCols={breakpointColumnsObj}
             className='my-masonry-grid'
             columnClassName='my-masonry-grid_column'>
+            {filterByTag && tagsWithIntroduction.includes(filterByTag) && (
+              <PinWrapper>
+                <PinTagIntroduction>
+                  <PinTagIntroductionTitle>
+                    {filterByTag}
+                  </PinTagIntroductionTitle>
+                  <PinTagIntroductionContext>
+                    {tagIntroductions[filterByTag]}
+                  </PinTagIntroductionContext>
+                </PinTagIntroduction>
+              </PinWrapper>
+            )}
             {filteredPins.length > 0
               ? filteredPins.map((pin, index) => (
-                  <PinWrapper key={index}>
+                  <PinWrapper
+                    key={index}
+                    onMouseEnter={() => setIsShowLike(index)}
+                    onMouseLeave={() => setIsShowLike(-1)}>
                     <PinImage
                       src={pin.pinImage}
                       onClick={() => {
@@ -245,11 +275,22 @@ function Homapage(props) {
                       }}
                     />
                     <SaveButton
+                      $like={isShowLike === index}
                       onClick={() => {
                         handleAddPinShow(index);
                       }}>
-                      save
+                      <Heart></Heart>
                     </SaveButton>
+
+                    <LinkButton
+                      $link={isShowLike === index}
+                      onClick={() => {
+                        window.location.assign(pin.pinLink);
+                      }}></LinkButton>
+
+                    <HoverPinName $name={isShowLike === index}>
+                      {pin.pinName}
+                    </HoverPinName>
                     {pin.isShow && (
                       <AddPin
                         handleClosePinShow={handleClosePinShow}
@@ -268,7 +309,10 @@ function Homapage(props) {
                 ))
               : pins.length > 0 &&
                 pins.map((pin, index) => (
-                  <PinWrapper key={index}>
+                  <PinWrapper
+                    key={index}
+                    onMouseEnter={() => setIsShowLike(index)}
+                    onMouseLeave={() => setIsShowLike(-1)}>
                     {/* <PinWrapper key={pin.pinId}> */}
                     <PinImage
                       src={pin.pinImage}
@@ -277,11 +321,22 @@ function Homapage(props) {
                       }}
                     />
                     <SaveButton
+                      $like={isShowLike === index}
                       onClick={() => {
                         handleAddPinShow(index);
                       }}>
-                      save
+                      <Heart></Heart>
                     </SaveButton>
+
+                    <LinkButton
+                      $link={isShowLike === index}
+                      onClick={() => {
+                        window.location.assign(pin.pinLink);
+                      }}></LinkButton>
+
+                    <HoverPinName $name={isShowLike === index}>
+                      {pin.pinName}
+                    </HoverPinName>
                     {/* </PinWrapper> */}
                     {pin.isShow && (
                       <AddPin

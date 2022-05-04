@@ -1,5 +1,6 @@
 import styled, {keyframes} from "styled-components";
 import {NavLink} from "react-router-dom";
+import link from "../icon/link.png";
 
 const MainTitle = styled.h1`
   padding-left: 10px;
@@ -99,27 +100,94 @@ const PinImage = styled.img`
   }
 `;
 
+const PinTagIntroduction = styled.div`
+  padding: 20px 10px;
+  width: 280px;
+  border-radius: 10px;
+  cursor: default;
+  background-color: black;
+  color: white;
+  margin: 15px;
+  transition: 0.4s;
+  box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
+  /* 
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: rgba(67, 67, 67, 0.4) 3px 3px, rgba(67, 67, 67, 0.3) 8px 8px,
+      rgba(67, 67, 67, 0.2) 12px 12px, rgba(67, 67, 67, 0.1) 18px 18px,
+      rgba(67, 67, 67, 0.05) 20px 20px;
+  } */
+`;
+
+const PinTagIntroductionTitle = styled.h1`
+  margin: 0px auto 20px 20px;
+  color: white;
+  font-size: 2rem;
+`;
+
+const PinTagIntroductionContext = styled.p`
+  margin: 0 20px 0 20px;
+  line-height: 2rem;
+  font-size: 1.15rem;
+  color: white;
+`;
+
 const SaveButton = styled.button`
-  color: gray;
-  background-color: lightgray;
-  opacity: 0.6;
+  width: 40px;
+  height: 40px;
+  background-color: rgb(255, 84, 84);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
-  border-radius: 30px;
+  border-radius: 50px;
   padding: 10px;
   font: inherit;
   cursor: pointer;
   outline: inherit;
   position: absolute;
-  right: 28px;
-  top: 28px;
+  right: ${(props) => (props.$like ? "28px" : "-30px")};
+  opacity: ${(props) => (props.$like ? 1 : 0)};
+  top: 15px;
   font-size: 1.5rem;
-  transition: 0.4s;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+`;
 
-  &:hover {
-    color: white;
-    background-color: coral;
-    opacity: 1;
-  }
+const Heart = styled.div`
+  display: inline-block;
+  width: 26px;
+  aspect-ratio: 1;
+  border-image: radial-gradient(white 69%, #0000 70%) 84.5% fill/100%;
+  clip-path: polygon(-41% 0, 50% 91%, 141% 0);
+`;
+
+const LinkButton = styled.button`
+  width: 40px;
+  height: 40px;
+  /* background-color: lightgray; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50px;
+  padding: 10px;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  position: absolute;
+  right: ${(props) => (props.$link ? "28px" : "-30px")};
+  opacity: ${(props) => (props.$link ? 1 : 0)};
+  top: 75px;
+  font-size: 1.5rem;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  transition: all 0.65s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  background: url(${link}) white;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 80%;
 `;
 
 const FilterWrapper = styled.div`
@@ -147,8 +215,8 @@ const FilterButton = styled.button`
     0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1);
 
   &:before {
-    border-radius: 5px;
     transition: all 0.65s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border-radius: 5px;
     content: "";
     width: 50%;
     height: 100%;
@@ -256,9 +324,6 @@ const ClearFilterTagLink = styled(NavLink)`
   }
 `;
 
-{
-  /* MainFilterWrapper is set up for display filter smoothly, but its not working now, will fix it later */
-}
 const MainFilterWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -272,6 +337,32 @@ const MainFilterWrapper = styled.div`
   transition: height 0.3s ease-in-out;
   overflow: hidden;
   height: ${(props) => (props.$filter ? "0px" : "500px")};
+`;
+
+const HoverPinName = styled.div`
+  display: flex;
+  width: calc(300px - 30px + 2px);
+  height: ${(props) => (props.$name ? "40px" : "0px")};
+  transform: scale(${(props) => (props.$name ? 1.1 : 1)});
+  align-items: flex-end;
+  padding: ${(props) => (props.$name ? "0 0 10px 30px" : "0px")};
+  color: white;
+  font-size: 1.75rem;
+  cursor: pointer;
+  position: absolute;
+  bottom: ${(props) => (props.$name ? "-1px" : "19px")};
+  left: 13px;
+  overflow: hidden;
+  border-radius: 0 0 10px 10px;
+  transition: 0.2s ease-in-out;
+  background-image: linear-gradient(
+    to top,
+    rgb(65, 65, 65, 0.8),
+    rgb(106, 106, 106, 0)
+  );
+  text-shadow: 0.25px 0.25px rgba(220, 220, 220, 0.8),
+    0.5px 0.5px rgba(220, 220, 220, 0.8), 0.75px 0.75px rgba(220, 220, 220, 0.8),
+    1px 1px rgba(220, 220, 220, 0.8), 1.25px 1.25px rgba(220, 220, 220, 0.8);
 `;
 
 export {
@@ -291,4 +382,10 @@ export {
   ClearFitlerTagWrapper,
   ClearFilterTagLink,
   MainFilterWrapper,
+  Heart,
+  HoverPinName,
+  LinkButton,
+  PinTagIntroduction,
+  PinTagIntroductionTitle,
+  PinTagIntroductionContext,
 };
