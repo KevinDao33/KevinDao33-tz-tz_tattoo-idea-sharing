@@ -2,13 +2,13 @@ import styled, {keyframes} from "styled-components";
 import {NavLink} from "react-router-dom";
 
 const MainTitle = styled.h1`
-  padding-left: 30px;
+  padding-left: 10px;
   font-size: 3rem;
   display: flex;
   align-items: flex-end;
-  margin: 60px auto 20px 0;
+  margin: 80px auto 15px 0;
   transition: 0.4s;
-  color: gray;
+  color: black;
   font-weight: bolder;
   cursor: default;
 
@@ -136,29 +136,37 @@ const FilterWrapper = styled.div`
 `;
 
 const FilterButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid lightgray;
-  color: gray;
-  border-radius: 10px;
-  font-size: 1.75rem;
-  padding: 6px 33px;
   margin: 20px 10px 20px auto;
-  background-color: #fcfcfc;
   cursor: pointer;
-  transition: 0.2s;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 33px;
+  font-size: 2rem;
+  position: relative;
+  box-shadow: 0px 1px 0px #b2a98f, 0px 8px 6px rgba(0, 0, 0, 0.15),
+    0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1);
 
-  :hover {
-    outline: none;
-    border: 1px solid gray;
-    color: black;
+  &:before {
+    border-radius: 5px;
+    transition: all 0.65s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    content: "";
+    width: 50%;
+    height: 100%;
+    background: black;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
-  :focus {
-    outline: none;
-    border: 1px solid gray;
-    color: black;
+  &:hover {
+    &::before {
+      width: 100%;
+    }
   }
+`;
+
+const FilterButtonSpan = styled.span`
+  color: white;
+  mix-blend-mode: difference;
 `;
 
 const FilterTitle = styled.div`
@@ -180,7 +188,7 @@ const FitlerTagWrapper = styled.div`
   background-color: white;
   transition: 0.4s;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
-  cursor: text;
+  cursor: pointer;
 
   &:hover {
     background-color: black;
@@ -214,7 +222,7 @@ const ClearFitlerTagWrapper = styled.div`
   /* align-items: center; */
   height: 1.25rem;
   justify-content: center;
-  margin: 10px;
+  margin: 10px 10px 10px 0;
   padding: 8px 10px;
   border-radius: 10px;
   /* border: 1px solid white; */
@@ -252,16 +260,18 @@ const ClearFilterTagLink = styled(NavLink)`
   /* MainFilterWrapper is set up for display filter smoothly, but its not working now, will fix it later */
 }
 const MainFilterWrapper = styled.div`
-  width: 1400px;
-  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  width: 1380px;
+  margin: 10px auto 30px auto;
   border-radius: 10px;
   background-color: white;
-  border:1px solid lightgray;
+  border: 1px solid lightgray;
   box-shadow: 0px 1px 0px #b2a98f, 0px 8px 6px rgba(0, 0, 0, 0.15),
     0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1);
   transition: height 0.3s ease-in-out;
   overflow: hidden;
-  height: ${(props) => (props.$filter ? "0px" : "450px")};
+  height: ${(props) => (props.$filter ? "0px" : "500px")};
 `;
 
 export {
@@ -274,6 +284,7 @@ export {
   SaveButton,
   FilterWrapper,
   FilterButton,
+  FilterButtonSpan,
   FilterTitle,
   FitlerTagWrapper,
   FilterTagLink,

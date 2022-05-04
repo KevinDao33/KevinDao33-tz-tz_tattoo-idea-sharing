@@ -19,6 +19,7 @@ import {
   SaveButton,
   FilterWrapper,
   FilterButton,
+  FilterButtonSpan,
   FilterTitle,
   FitlerTagWrapper,
   FilterTagLink,
@@ -159,7 +160,9 @@ function Homapage(props) {
       {/* <MainTitle>Explore Tattoos</MainTitle> */}
       <FilterWrapper>
         <MainTitle>Explore Tattoos</MainTitle>
-        <FilterButton onClick={handleIsShowFilter}>Filters</FilterButton>
+        <FilterButton onClick={handleIsShowFilter}>
+          <FilterButtonSpan>Filters</FilterButtonSpan>
+        </FilterButton>
       </FilterWrapper>
 
       {/* ============================= */}
