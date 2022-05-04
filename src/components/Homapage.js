@@ -21,6 +21,8 @@ import {
   FilterButton,
   FilterButtonSpan,
   FilterTitle,
+  ShowFilterKeyWrapper,
+  ShowFilterKey,
   FitlerTagWrapper,
   FilterTagLink,
   ClearFitlerTagWrapper,
@@ -174,9 +176,15 @@ function Homapage(props) {
     <BackgroundDisplay>
       {/* <MainTitle>Explore Tattoos</MainTitle> */}
       <FilterWrapper>
-        <MainTitle>{`Explore Tattoos | ${
-          filterByPlacement && filterByPlacement
-        } ${filterByTag && filterByTag}`}</MainTitle>
+        <MainTitle>Explore Tattoos | </MainTitle>
+
+        <ShowFilterKeyWrapper>
+          <ShowFilterKey>{`${
+            filterByPlacement && filterByPlacement
+          } `}</ShowFilterKey>
+          <ShowFilterKey>{`${filterByTag && filterByTag}`}</ShowFilterKey>
+        </ShowFilterKeyWrapper>
+
         <FilterButton onClick={handleIsShowFilter}>
           <FilterButtonSpan>Filters</FilterButtonSpan>
         </FilterButton>

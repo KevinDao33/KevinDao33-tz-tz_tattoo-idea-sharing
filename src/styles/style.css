@@ -11,7 +11,6 @@
 .my-masonry-grid_column {
   padding-left: 5px; /* gutter size */
   background-clip: padding-box;
-  color:rgb(65, 65, 65);
 }
 
 /* Style your items */
@@ -74,6 +73,7 @@
 }
 
 .list-choice-title {
+  /* color: rgb(39, 39, 39); */
   height: 40px;
   width: 100%;
   display: block;

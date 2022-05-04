@@ -4,19 +4,43 @@ import link from "../icon/link.png";
 
 const MainTitle = styled.h1`
   padding-left: 10px;
-  font-size: 3rem;
+  font-size: 4rem;
   display: flex;
   align-items: flex-end;
-  margin: 80px auto 15px 0;
+  margin: 80px 20px 15px 0;
   transition: 0.4s;
   color: black;
   font-weight: bolder;
   cursor: default;
 
   :hover {
-    text-shadow: -10px 10px 0px #00e6e6, -20px 20px 0px #01cccc,
-      -30px 30px 0px #00bdbd;
+    color: rgb(242, 242, 242);
+    text-shadow: -5px 5px 0px rgba(204, 104, 35, 255), -10px 10px 0px #db9565,
+      -15px 15px 0px #e6b491;
+    /* text-shadow: -10px 10px 0px #00e6e6, -20px 20px 0px #01cccc,
+      -30px 30px 0px #00bdbd; */
   }
+`;
+
+const ShowFilterKeyWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height:85px;
+`;
+
+const ShowFilterKey = styled.h3`
+  font-size: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 5px auto 5px 0;
+  /* margin: 80px auto 15px 0; */
+  /* transition: 0.4s; */
+  color: gray;
+  font-weight: bolder;
+  cursor: default;
 `;
 
 const scroll = keyframes`
@@ -377,6 +401,8 @@ export {
   FilterButton,
   FilterButtonSpan,
   FilterTitle,
+  ShowFilterKeyWrapper,
+  ShowFilterKey,
   FitlerTagWrapper,
   FilterTagLink,
   ClearFitlerTagWrapper,

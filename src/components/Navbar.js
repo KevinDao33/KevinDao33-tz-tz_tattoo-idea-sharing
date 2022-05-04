@@ -1,11 +1,10 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-import notifyIcon from "../icon/noti.png";
-import photo from "../icon/profile.png";
+import {NavLink} from "react-router-dom";
 import {
   NavbarBlank,
   NavbarWrapper,
   LogoWrapper,
+  NavRightWrapper,
   Searchbar,
   Notify,
   MemberPictureWrapper,
@@ -19,11 +18,15 @@ function Navbar() {
         <NavLink to='/'>
           <LogoWrapper />
         </NavLink>
-        <Searchbar />
-        <Notify src={notifyIcon} />
-        <NavLink to='/profile'>
-          <MemberPictureWrapper src={photo} />
-        </NavLink>
+
+        <NavRightWrapper>
+          <Searchbar placeholder="Search" />
+          <Notify />
+          <NavLink to='/profile'>
+            <MemberPictureWrapper />
+          </NavLink>
+        </NavRightWrapper>
+
       </NavbarWrapper>
     </>
   );
