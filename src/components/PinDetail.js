@@ -20,6 +20,7 @@ import {v4 as uuid} from "uuid";
 
 import "../styles/style.css";
 import {
+  DarkBackgroundDisplay,
   PinDetailWrapper,
   PinImageWrapper,
   PinImage,
@@ -47,8 +48,10 @@ import {
   SubmitButton,
   SimiliarPinsWrapper,
   SimiliarPin,
+  ViewMoreIconWrapper,
   Link2CommentatorProfile,
 } from "../styles/PinDetail.module";
+// import {BackgroundDisplay} from "../styles/Homepage.module"
 
 function PinDetail(props) {
   const [pinId, setPinid] = useState("");
@@ -61,6 +64,7 @@ function PinDetail(props) {
   const [newComment, setNewComment] = useState("");
   const [pinCommentData, setPinCommentData] = useState([]);
   const [pinCommentator, setPinCommentator] = useState([]);
+  const [isShowSimilarPin, setIsShowSimilarPin] = useState(false);
 
   const redirect = useNavigate();
   const breakpointColumnsObj = {
@@ -197,7 +201,8 @@ function PinDetail(props) {
     const querySnapshot = await getDocs(q);
     let localSimiliarPins = [];
     querySnapshot.forEach((doc) => {
-      localSimiliarPins.push(doc.data());
+      pinData.pinName !== doc.data().pinName &&
+        localSimiliarPins.push(doc.data());
     });
     setSimiliarPins(localSimiliarPins);
   };
@@ -261,16 +266,21 @@ function PinDetail(props) {
     pinCommentData.length > 0 && getPinCommentator();
   }, [pinCommentData]);
 
+  const handleIsShowSimilar = () => {
+    setIsShowSimilarPin((prev) => !prev);
+  };
+
   return (
     <>
       {pinData && authorData ? (
-        <>
+        <DarkBackgroundDisplay>
           <PinDetailWrapper>
             <PinImageWrapper>
               <PinImage src={pinData.pinImage}></PinImage>
             </PinImageWrapper>
 
             <PinDetailDataWrapper>
+              <PinName>{pinData.pinName}</PinName>
               <PinDetailSubNav>
                 <CollectionSelector
                   value={selectedCollection}
@@ -286,7 +296,7 @@ function PinDetail(props) {
                 </CollectionSelector>
                 <SaveButton onClick={addPinToCollection}>save</SaveButton>
               </PinDetailSubNav>
-              <PinName>{pinData.pinName}</PinName>
+              {/* <PinName>{pinData.pinName}</PinName> */}
               <PinDescription>{pinData.pinDesc}</PinDescription>
               <PinAuthorWrapper to={`/user/${authorData.uid}`}>
                 <PinAuthorPhoto src={authorData.pic}></PinAuthorPhoto>
@@ -325,7 +335,9 @@ function PinDetail(props) {
             </PinDetailDataWrapper>
           </PinDetailWrapper>
           <RelatedPinsTitle>Similiar Pins</RelatedPinsTitle>
-          <SimiliarPinsWrapper>
+          <ViewMoreIconWrapper
+            onClick={handleIsShowSimilar}></ViewMoreIconWrapper>
+          <SimiliarPinsWrapper $similar={isShowSimilarPin}>
             <Masonry
               breakpointCols={breakpointColumnsObj}
               className='my-masonry-grid'
@@ -342,7 +354,7 @@ function PinDetail(props) {
                 ))}
             </Masonry>
           </SimiliarPinsWrapper>
-        </>
+        </DarkBackgroundDisplay>
       ) : (
         <div>Loading</div>
       )}

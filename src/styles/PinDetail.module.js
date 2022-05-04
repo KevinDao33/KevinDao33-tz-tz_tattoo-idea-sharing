@@ -1,15 +1,59 @@
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 import {NavLink} from "react-router-dom";
+import viewMore from "../icon/more.png";
+import viewMoreMove from "../icon/more-gif.gif";
+
+const scroll = keyframes`
+ 100%{
+    background-position: -3000px 0px;
+  }
+`;
+
+const DarkBackgroundDisplay = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+  z-index: -100;
+  animation: ${scroll} 120s linear infinite;
+  padding: 100px 0 0 0;
+
+  background-color: #1c1c1c;
+  opacity: 1;
+  background-image: radial-gradient(#515151 1.1px, transparent 1.1px),
+    radial-gradient(#515151 1.1px, #1c1c1c 1.1px);
+  background-size: 44px 44px;
+  background-position: 0 0, 22px 22px;
+`;
+
+const breath = keyframes`
+  0% {
+    box-shadow: 20px 28px 24px -20px gray;
+  }
+
+  33% {
+    box-shadow: 30px 38px 34px -26px lightgray;
+  }
+
+  /* 60% {
+    box-shadow: 20px 28px 24px -20px gray;
+  } */
+
+  100% {
+    /* box-shadow: 30px 38px 34px -26px lightgray; */
+    box-shadow: 20px 28px 24px -20px gray;
+  }
+`;
 
 const PinDetailWrapper = styled.div`
   width: 1300px;
   height: auto;
   border-radius: 20px;
-  margin: 100px auto 50px auto;
+  margin: 0 auto 50px auto;
   display: flex;
   flex-wrap: wrap;
   border: 1px solid lightgray;
-  box-shadow: 30px 38px 34px -26px hsla(0, 0%, 0%, 0.6);
+  box-shadow: 20px 28px 24px -20px gray;
+  transition: 0.4s;
+  animation: ${breath} 2.5s ease-in-out infinite;
 `;
 
 const PinImageWrapper = styled.div`
@@ -34,12 +78,13 @@ const PinDetailDataWrapper = styled.div`
 `;
 
 const PinDetailSubNav = styled.div`
+  position: absolute;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  width: 100%;
-  height: 50px;
-  /* border: 1px solid blue; */
+  width: 40%;
+  right: 0px;
+  top: 20px;
 `;
 
 const CollectionSelector = styled.select`
@@ -48,7 +93,8 @@ const CollectionSelector = styled.select`
   border-radius: 10px;
   background-color: lightgray;
   border: none;
-  color: gray;
+  /* color: gray; */
+  color: snow;
   font-size: 1rem;
   text-align: center;
   margin: auto 0;
@@ -56,11 +102,14 @@ const CollectionSelector = styled.select`
 
 const CollectionName = styled.option`
   font-size: 1rem;
+  /* color: snow; */
 `;
 
 const SaveButton = styled.button`
-  color: white;
-  background-color: black;
+  color: black;
+  /* color: white; */
+  /* background-color: black; */
+  background-color: snow;
   border: none;
   border-radius: 10px;
   padding: 10px;
@@ -70,24 +119,35 @@ const SaveButton = styled.button`
   font-size: 1rem;
   margin: 10px;
   text-align: center;
+  transition: 0.4s;
+
+  &:hover {
+    background-color: #f68535;
+    color: white;
+  }
 `;
 
 const PinName = styled.h2`
   font-size: 3.5rem;
-  margin: 20px auto 0 10px;
+  color: snow;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 100px auto 20px 0;
 `;
 
 const PinDescription = styled.p`
-  width: 100%;
-  font-size: 1.75rem;
-  margin: 10px auto 30px 20px;
-  /* border: 1px solid red; */
+  font-size: 1.25rem;
+  margin: 0 auto 30px 10px;
+  color: snow;
+  line-height: 1.75rem;
+  text-align: justify;
 `;
 
 const PinAuthorWrapper = styled(NavLink)`
   /* width: 100%; */
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   cursor: pointer;
   margin: 5px auto 5px 5px;
   /* border: 1px solid orange; */
@@ -97,9 +157,9 @@ const PinAuthorWrapper = styled(NavLink)`
 
 const PinAuthorPhoto = styled.img`
   border-radius: 50px;
-  width: 80px;
-  height: 80px;
-  margin: auto 10px;
+  width: 60px;
+  height: 60px;
+  margin: 0 10px 0 10px;
   /* border: 1px solid red; */
   cursor: pointer;
 `;
@@ -108,17 +168,20 @@ const PinAuthorName = styled.h6`
   font-size: 2rem;
   margin: 0 10px 0 10px;
   cursor: pointer;
+  color: snow;
 `;
 
 const PinCommentTitle = styled.h4`
   font-size: 2rem;
-  margin: 70px auto 20px 10px;
+  margin: 30px auto 20px 10px;
+  color: snow;
   /* border: 1px solid red; */
 `;
 
 const AllPinCommentWrapper = styled.div`
   width: 100%;
-  min-height: 50px;
+  max-height: 200px;
+  overflow: scroll;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -162,7 +225,7 @@ const MyPinCommentWrapper = styled.div`
   flex-wrap: nowrap;
   /* border: 1px solid red; */
   margin: 10px 0;
-  bottom: 0;
+  bottom: 20px;
 `;
 
 const UserPhoto = styled.img`
@@ -202,6 +265,7 @@ const PinCommentInput = styled.input`
 const UserName = styled.h6`
   font-size: 1.25rem;
   margin: 0 10px 0 0;
+  color: snow;
   cursor: pointer;
 `;
 
@@ -210,6 +274,7 @@ const PinComment = styled.div`
   align-items: center;
   font-size: 1rem;
   margin: 0 auto 0 10px;
+  color: snow;
   /* border: 1px solid red; */
 `;
 
@@ -217,11 +282,37 @@ const RelatedPinsTitle = styled.h2`
   margin: 0 auto 15px auto;
   font-size: 1.5rem;
   text-align: center;
+  color: snow;
+`;
+
+const ViewMoreIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  margin: 25px auto 30px auto;
+  cursor: pointer;
+
+  background: url(${viewMore}) snow;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 80%;
+
+  &:hover {
+    transform: scale(1.1);
+    background: url(${viewMoreMove}) snow;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 80%;
+  }
 `;
 
 const SubmitButton = styled.button`
-  color: white;
-  background-color: #92c9b1;
+  color: black;
+  background-color: lightgray;
   border: none;
   border-radius: 10px;
   padding: 3px 20px;
@@ -232,16 +323,26 @@ const SubmitButton = styled.button`
   margin: auto 10px auto 0;
   text-align: center;
   line-height: 35px;
+  transition: 0.4s;
+
+  &:hover {
+    color: white;
+    background-color: #f68535;
+  }
 `;
 
 const SimiliarPinsWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 80vw;
-  min-height: 150px;
-  border: 1px solid gray;
+  min-height: ${(props) => (props.$similar ? "150px" : "0px")};
+  height: ${(props) => (props.$similar ? "auto" : "0px")};
+  overflow: hidden;
+  border: ${(props) => (props.$similar ? "1px solid gray" : "none")};
   border-radius: 20px;
-  margin: 30px auto;
+  margin: 30px auto 0 auto;
+  padding-bottom: ${(props) => (props.$similar ? "50px" : "0")};
+  transition: 0.4s;
 `;
 
 const SimiliarPin = styled.img`
@@ -262,6 +363,7 @@ const SimiliarPin = styled.img`
 `;
 
 export {
+  DarkBackgroundDisplay,
   PinDetailWrapper,
   PinImageWrapper,
   PinImage,
@@ -289,5 +391,6 @@ export {
   SubmitButton,
   SimiliarPinsWrapper,
   SimiliarPin,
+  ViewMoreIconWrapper,
   Link2CommentatorProfile,
 };

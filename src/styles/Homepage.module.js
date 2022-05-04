@@ -360,7 +360,7 @@ const MainFilterWrapper = styled.div`
     0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1);
   transition: height 0.3s ease-in-out;
   overflow: hidden;
-  height: ${(props) => (props.$filter ? "0px" : "500px")};
+  height: ${(props) => (props.$filter ? "500px" : "0px")};
 `;
 
 const HoverPinName = styled.div`
