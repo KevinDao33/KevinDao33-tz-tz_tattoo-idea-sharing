@@ -329,17 +329,17 @@ const FollowTitle = styled.div`
   font-weight: bold;
   background-color: #dc762e;
   color: white;
+  cursor: default;
 `;
 
 const FollowUserWrapper = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-around;
   align-items: center;
   width: calc(100% - 25px - 25px);
   min-height: 210px;
   overflow-x: scroll;
   margin: auto 25px;
-  border: 1px solid red;
 `;
 
 const FollowUser = styled.div`
@@ -351,11 +351,17 @@ const FollowUser = styled.div`
 `;
 
 const FollowUserImage = styled.img`
-  width: 130px;
-  height: 130px;
-  border-radius: 10px;
-  margin: 10px auto;
-  border: 1px solid red;
+  width: 110px;
+  height: 110px;
+  border-radius: 100px;
+  margin: 0 auto 10px auto;
+  transition: 0.4s;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px,
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
+  
+  &:hover{
+    transform: scale(1.1);
+  }
 `;
 
 const FollowUserName = styled.div`

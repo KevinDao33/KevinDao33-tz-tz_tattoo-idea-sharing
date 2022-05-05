@@ -55,6 +55,7 @@ function Profile(props) {
   const [newCollectionName, setNewCollectionName] = useState("");
   const [isShowFollower, setIsShowFollower] = useState(false);
   const [isShowFollowing, setIsShowFollowing] = useState(false);
+
   const [followingUserData, setFollowingUserData] = useState([]);
   const [followerUserData, setFollowerUserData] = useState([]);
 
@@ -259,29 +260,75 @@ function Profile(props) {
 
   const getFollowingUserData = async () => {
     if (!userData) {
+      console.log("No Following");
       return;
     }
 
     const clonedFollowing = [...userData.following];
-    console.log('clonedFollowing', clonedFollowing);
-    
+
     let result = [];
-    clonedFollowing.map(async(user) => {
-      console.log('user', user);
-      
+    clonedFollowing.map(async (user) => {
       const docRef = doc(props.db, "user", user);
 
       const docSnap = await getDoc(docRef);
-      console.log('docSnap.data()', docSnap.data());
       result.push(docSnap.data());
     });
     console.log("result", result);
     setFollowingUserData(result);
   };
 
+  const getFollowerUserData = async () => {
+    if (!userData) {
+      return;
+    }
+
+    const clonedFollower = [...userData.follower];
+
+    let result = [];
+    clonedFollower.map(async (user) => {
+      const docRef = doc(props.db, "user", user);
+      const docSnap = await getDoc(docRef);
+      result.push(docSnap.data());
+    });
+    setFollowerUserData(result);
+  };
+
   useEffect(() => {
     getFollowingUserData();
+    getFollowerUserData();
   }, [userData]);
+
+  const renderFollow = () => {
+    if (!isShowFollowing && !isShowFollower) {
+      return;
+    } else if (isShowFollowing && followingUserData.length > 0) {
+      return followingUserData.map((data) => (
+        // to={`/user/${authorData.uid}`}
+        <NavLink
+          key={data.uid}
+          to={`/user/${data.uid}`}
+          style={{color: "inherit", textDecoration: "none"}}>
+          <FollowUser>
+            <FollowUserImage src={data.pic}></FollowUserImage>
+            <FollowUserName>{data.name}</FollowUserName>
+          </FollowUser>
+        </NavLink>
+      ));
+    } else if (isShowFollower && followerUserData.length > 0) {
+      return followerUserData.map((data) => (
+        // to={`/user/${authorData.uid}`}
+        <NavLink
+          key={data.uid}
+          to={`/user/${data.uid}`}
+          style={{color: "inherit", textDecoration: "none"}}>
+          <FollowUser>
+            <FollowUserImage src={data.pic}></FollowUserImage>
+            <FollowUserName>{data.name}</FollowUserName>
+          </FollowUser>
+        </NavLink>
+      ));
+    }
+  };
 
   return (
     <ProfileBackgroundDisplay>
@@ -329,10 +376,21 @@ function Profile(props) {
                 x
               </CloseButton>
               <FollowUserWrapper>
-                <FollowUser>
-                  <FollowUserImage></FollowUserImage>
-                  <FollowUserName>kev</FollowUserName>
-                </FollowUser>
+                {renderFollow()}
+                {/* {followingUserData &&
+                  followingUserData.length > 0 &&
+                  followingUserData.map((data) => (
+                    // to={`/user/${authorData.uid}`}
+                    <NavLink
+                      key={data.uid}
+                      to={`/user/${data.uid}`}
+                      style={{color: "inherit", textDecoration: "none"}}>
+                      <FollowUser>
+                        <FollowUserImage src={data.pic}></FollowUserImage>
+                        <FollowUserName>{data.name}</FollowUserName>
+                      </FollowUser>
+                    </NavLink>
+                  ))} */}
               </FollowUserWrapper>
             </FollowInfoWrapper>
             {/* ======================= */}
