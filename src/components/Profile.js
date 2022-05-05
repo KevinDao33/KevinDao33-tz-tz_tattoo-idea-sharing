@@ -4,16 +4,10 @@ import React, {useState, useEffect} from "react";
 import {NavLink, useNavigate} from "react-router-dom";
 import {getAuth, signOut} from "firebase/auth";
 import Masonry from "react-masonry-css";
-import {
-  collection,
-  getDocs,
-  // onSnapshot,
-  getDoc,
-  doc,
-  setDoc,
-} from "firebase/firestore";
+import {collection, getDocs, getDoc, doc, setDoc} from "firebase/firestore";
 
 import {
+  ProfileBackgroundDisplay,
   PorfileWrapper,
   UserImage,
   UserName,
@@ -26,13 +20,23 @@ import {
   CollectionWarpper,
   CollectionImage,
   CollectionName,
+  CreateButtonWrapper,
   CreateButton,
+  CreateButtonSpan,
   Overlay,
   SaveButton,
   CreateCollectionWrapper,
   NameNewCollectionTitle,
   NameNewCollection,
   LeaveButton,
+  UserInfoWrapper,
+  FollowInfoWrapper,
+  FollowTitle,
+  FollowUserWrapper,
+  FollowUser,
+  FollowUserImage,
+  FollowUserName,
+  CloseButton,
 } from "../styles/Profile.module";
 import Login from "./Login";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
@@ -49,6 +53,10 @@ function Profile(props) {
   const [collections, setCollections] = useState([]);
   const [showCreateCollection, setShowCreateCollection] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState("");
+  const [isShowFollower, setIsShowFollower] = useState(false);
+  const [isShowFollowing, setIsShowFollowing] = useState(false);
+  const [followingUserData, setFollowingUserData] = useState([]);
+  const [followerUserData, setFollowerUserData] = useState([]);
 
   const breakpointColumnsObj = {
     default: 4,
@@ -104,11 +112,11 @@ function Profile(props) {
                 </PinWrapper>
               ))}
           </Masonry>
-          <NavLink to='/create-pin'>
+          {/* <NavLink to='/create-pin'>
             <CreateButton>
-              +<br></br>pin
+              <CreateButtonSpan> New Pin</CreateButtonSpan>
             </CreateButton>
-          </NavLink>
+          </NavLink> */}
         </AllPinsWrapper>
       );
     } else if (showSection === MY_COLLECTION) {
@@ -122,18 +130,22 @@ function Profile(props) {
                   // eslint-disable-next-line no-unused-vars
                   redirect(`/collection/${collection.collectionName}`);
                 }}>
-                <CollectionImage></CollectionImage>
-                <CollectionName>{collection.collectionName}</CollectionName>
+                <CollectionImage
+                  $pinImg={
+                    collection.pins.length > 0
+                      ? collection.pins[0].pinImage
+                      : null
+                  }></CollectionImage>
+                <CollectionName>{`${collection.collectionName}`}</CollectionName>
               </CollectionWarpper>
             ))}
 
-          <CreateButton
-            // onClick={setShowCreateCollection(true)}>
+          {/* <CreateButton
             onClick={() => {
               setShowCreateCollection(true);
             }}>
-            create<br></br>collec
-          </CreateButton>
+            <CreateButtonSpan>+ New Collection</CreateButtonSpan>
+          </CreateButton> */}
         </AllCollectionsWrapper>
       );
     } else if (showSection === MY_SCHEDULE) {
@@ -161,6 +173,7 @@ function Profile(props) {
     querySnapshot.forEach((doc) => {
       myCollections.push({...doc.data()});
     });
+
     setCollections(myCollections);
 
     return;
@@ -194,8 +207,6 @@ function Profile(props) {
   useEffect(() => {
     getUserInfoAndPinsAndCollection();
   }, [props.uid]);
-
-  // =================================================================
 
   const setCollection2Firestore = (uid) => {
     const newCollectionRef = doc(
@@ -246,31 +257,116 @@ function Profile(props) {
     );
   };
 
+  const getFollowingUserData = async () => {
+    if (!userData) {
+      return;
+    }
+
+    const clonedFollowing = [...userData.following];
+    console.log('clonedFollowing', clonedFollowing);
+    
+    let result = [];
+    clonedFollowing.map(async(user) => {
+      console.log('user', user);
+      
+      const docRef = doc(props.db, "user", user);
+
+      const docSnap = await getDoc(docRef);
+      console.log('docSnap.data()', docSnap.data());
+      result.push(docSnap.data());
+    });
+    console.log("result", result);
+    setFollowingUserData(result);
+  };
+
+  useEffect(() => {
+    getFollowingUserData();
+  }, [userData]);
+
   return (
-    <>
+    <ProfileBackgroundDisplay>
       {props.isLogin ? (
         userData && (
           <PorfileWrapper>
-            <UserImage src={userData.pic}></UserImage>
-            <UserName>{userData.name}</UserName>
-            <ShowFollow>{userData.following.length} following</ShowFollow>
-            <ShowFollow>{userData.follower.length} follower</ShowFollow>
-            <ButtonWrapper>
-              <Button>share</Button>
-              <Button
+            <UserInfoWrapper $showFollow={isShowFollower || isShowFollowing}>
+              <UserImage src={userData.pic}></UserImage>
+              <UserName>{userData.name}</UserName>
+              <ShowFollow onClick={() => setIsShowFollowing((prev) => !prev)}>
+                {userData.following.length} following
+              </ShowFollow>
+              <ShowFollow onClick={() => setIsShowFollower((prev) => !prev)}>
+                {userData.follower.length} follower
+              </ShowFollow>
+              <ButtonWrapper>
+                <Button>share</Button>
+                <Button
+                  onClick={() => {
+                    redirect("/edit-profile");
+                  }}>
+                  edit
+                </Button>
+                <Button onClick={logOut}>logOut</Button>
+              </ButtonWrapper>
+            </UserInfoWrapper>
+
+            {/* ======================= */}
+            <FollowInfoWrapper $showFollow={isShowFollower || isShowFollowing}>
+              <FollowTitle
+                onClick={() =>
+                  console.log("userData.following", userData.following)
+                }>
+                {isShowFollower
+                  ? "My Follower"
+                  : isShowFollowing
+                  ? "My Following"
+                  : "Try again"}
+              </FollowTitle>
+              <CloseButton
                 onClick={() => {
-                  redirect("/edit-profile");
+                  setIsShowFollower(false);
+                  setIsShowFollowing(false);
                 }}>
-                edit
-              </Button>
-              <Button onClick={logOut}>logOut</Button>
-            </ButtonWrapper>
+                x
+              </CloseButton>
+              <FollowUserWrapper>
+                <FollowUser>
+                  <FollowUserImage></FollowUserImage>
+                  <FollowUserName>kev</FollowUserName>
+                </FollowUser>
+              </FollowUserWrapper>
+            </FollowInfoWrapper>
+            {/* ======================= */}
+
             <UserStuffWrapper>
               <ButtonWrapper>
-                <SelectSection onClick={showMyPin}>my pin</SelectSection>
-                <SelectSection onClick={showMyCollection}>
+                <SelectSection
+                  onClick={showMyPin}
+                  $section={showSection === MY_PIN}>
+                  my pin
+                </SelectSection>
+                <SelectSection
+                  $section={showSection === MY_COLLECTION}
+                  onClick={showMyCollection}>
                   my collection
                 </SelectSection>
+                <CreateButtonWrapper>
+                  {showSection === MY_PIN ? (
+                    <NavLink to='/create-pin'>
+                      <CreateButton>
+                        <CreateButtonSpan>+ New Pin</CreateButtonSpan>
+                      </CreateButton>
+                    </NavLink>
+                  ) : showSection === MY_COLLECTION ? (
+                    <CreateButton
+                      onClick={() => {
+                        setShowCreateCollection(true);
+                      }}>
+                      <CreateButtonSpan>+ New Collection</CreateButtonSpan>
+                    </CreateButton>
+                  ) : (
+                    <h2>Something went wrong</h2>
+                  )}
+                </CreateButtonWrapper>
               </ButtonWrapper>
               {renderUserSection()}
               {showCreateCollectionSection()}
@@ -282,10 +378,9 @@ function Profile(props) {
           userData={userData}
           setUserData={setUserData}
           firebaseConfig={props.firebaseConfig}
-          auth={props.auth}
-          ></Login>
+          auth={props.auth}></Login>
       )}
-    </>
+    </ProfileBackgroundDisplay>
   );
 }
 

@@ -24,7 +24,6 @@ import {
   ShowFollow,
   ButtonWrapper,
   UserStuffWrapper,
-  FollowListWrapper,
 } from "../styles/Profile.module";
 import {
   AllPinsWrapper,
@@ -170,11 +169,6 @@ function OtherUserProfile(props) {
             )}
 
           </ButtonWrapper>
-{/* ============================================ */}
-            <FollowListWrapper>
-
-            </FollowListWrapper>
-{/* ============================================ */}
           <UserStuffWrapper>
             <AllPinsWrapper>
               <Masonry

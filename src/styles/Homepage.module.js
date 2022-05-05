@@ -17,8 +17,6 @@ const MainTitle = styled.h1`
     color: rgb(242, 242, 242);
     text-shadow: -5px 5px 0px rgba(204, 104, 35, 255), -10px 10px 0px #db9565,
       -15px 15px 0px #e6b491;
-    /* text-shadow: -10px 10px 0px #00e6e6, -20px 20px 0px #01cccc,
-      -30px 30px 0px #00bdbd; */
   }
 `;
 
@@ -27,7 +25,7 @@ const ShowFilterKeyWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height:85px;
+  height: 85px;
 `;
 
 const ShowFilterKey = styled.h3`

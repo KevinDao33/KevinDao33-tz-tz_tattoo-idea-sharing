@@ -7,15 +7,16 @@ import PhotoMove from "../icon/profile-gif.gif";
 
 const NavbarBlank = styled.div`
   width: 100vw;
-  height: 110px;
+  height: 80px;
 `;
 
 const NavbarWrapper = styled.div`
   width: 100vw;
-  height: 110px;
+  height: 90px;
   position: absolute;
   top: 0;
-  background-color: rgb(39, 39, 39, 0.9);
+  /* background-color: rgb(39, 39, 39, 0.9); */
+  background-color: snow;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
