@@ -30,6 +30,7 @@ import {
   CollectionName,
   SaveButton,
   PinName,
+  PinDescriptionWrapper,
   PinDescription,
   PinAuthorWrapper,
   PinAuthorPhoto,
@@ -38,6 +39,7 @@ import {
   AllPinCommentWrapper,
   OtherPinCommentWrapper,
   PinCommentWrapper,
+  NoCommentMessage,
   MyPinCommentWrapper,
   UserPhoto,
   MyPhoto,
@@ -297,16 +299,22 @@ function PinDetail(props) {
                 <SaveButton onClick={addPinToCollection}>save</SaveButton>
               </PinDetailSubNav>
               {/* <PinName>{pinData.pinName}</PinName> */}
-              <PinDescription>{pinData.pinDesc}</PinDescription>
+              <PinDescriptionWrapper>
+                <PinDescription>{pinData.pinDesc}</PinDescription>
+              </PinDescriptionWrapper>
               <PinAuthorWrapper to={`/user/${authorData.uid}`}>
+                <PinAuthorName>- {authorData.name}</PinAuthorName>
                 <PinAuthorPhoto src={authorData.pic}></PinAuthorPhoto>
-                <PinAuthorName>{authorData.name}</PinAuthorName>
               </PinAuthorWrapper>
-              <PinCommentTitle>comment</PinCommentTitle>
+              <PinCommentTitle>
+                {pinCommentator.length > 0
+                  ? `comment (${pinCommentator.length})`
+                  : `comment`}
+              </PinCommentTitle>
               <AllPinCommentWrapper>
                 <OtherPinCommentWrapper>
                   {pinCommentData &&
-                    pinCommentator.length > 0 &&
+                    pinCommentator.length > 0 ?
                     pinCommentData.map((data, index) => (
                       <PinCommentWrapper key={uuid()}>
                         {pinCommentator[index] && (
@@ -319,7 +327,7 @@ function PinDetail(props) {
                         )}
                         <PinComment>{data.commentMessage}</PinComment>
                       </PinCommentWrapper>
-                    ))}
+                    )):<NoCommentMessage>Be the first to leave a comment!</NoCommentMessage>}
                 </OtherPinCommentWrapper>
               </AllPinCommentWrapper>
               <MyPinCommentWrapper>
@@ -336,13 +344,14 @@ function PinDetail(props) {
           </PinDetailWrapper>
           <RelatedPinsTitle>Similiar Pins</RelatedPinsTitle>
           <ViewMoreIconWrapper
-            onClick={handleIsShowSimilar}></ViewMoreIconWrapper>
+            onClick={handleIsShowSimilar}
+            $similar={isShowSimilarPin}></ViewMoreIconWrapper>
           <SimiliarPinsWrapper $similar={isShowSimilarPin}>
             <Masonry
               breakpointCols={breakpointColumnsObj}
               className='my-masonry-grid'
               columnClassName='my-masonry-grid_column'>
-              {similiarPins &&
+              {similiarPins.length > 0 ? (
                 similiarPins.map((similiarPin) => (
                   <SimiliarPin
                     key={similiarPin.pinId}
@@ -351,12 +360,28 @@ function PinDetail(props) {
                       redirect(`/pin-detail/${similiarPin.pinId}`);
                       window.location.reload();
                     }}></SimiliarPin>
-                ))}
+                ))
+              ) : (
+                <RelatedPinsTitle>
+                  sorry, no related pins found :(
+                </RelatedPinsTitle>
+              )}
             </Masonry>
           </SimiliarPinsWrapper>
         </DarkBackgroundDisplay>
       ) : (
-        <div>Loading</div>
+        <div
+          style={{
+            backgroundColor: "#39393a",
+            color: "snow",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "20rem",
+          }}>
+          Loading...
+        </div>
       )}
     </>
   );
