@@ -19,6 +19,7 @@ const ProfileBackgroundDisplay = styled.div`
   background-image: linear-gradient(#cdcdcd 4px, transparent 4px),
     linear-gradient(to right, #cdcdcd 4px, #f9f9f9 4px);
   background-size: 80px 80px;
+  /* position: relative; */
 `;
 
 const PorfileWrapper = styled.div`
@@ -206,22 +207,23 @@ const CreateButtonSpan = styled.span`
 `;
 
 const Overlay = styled.div`
-  position: absolute;
+  /* opacity: ${(props) => (props.$showOverlay ? "0.7" : "0")}; */
   opacity: 0.7;
-  background-color: black;
-  border-radius: 10px;
+  background-color: gray;
   position: fixed;
+  border-radius: 10px;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
+  /* z-index: ${(props) => (props.$showOverlay ? "20" : "0")}; */
   z-index: 2;
 `;
 
 const CreateCollectionWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 50vw;
+  width: 40vw;
   max-width: 650px;
   height: 30vh;
   right: 25%;
@@ -231,7 +233,7 @@ const CreateCollectionWrapper = styled.div`
   bottom: 45px;
   position: fixed;
   background-color: #f2f1eb;
-  border-radius: 20px;
+  border-radius: 10px;
   z-index: 3;
 `;
 
@@ -241,7 +243,7 @@ const NameNewCollectionTitle = styled.label`
   line-height: normal;
   text-align: center;
   z-index: 3;
-  margin: 30px auto 10px auto;
+  margin: 15px auto 20px auto;
 `;
 
 const NameNewCollection = styled.input`
@@ -251,16 +253,18 @@ const NameNewCollection = styled.input`
   border-radius: 10px;
   border: 1.5px solid #e3e0e0;
   background-color: white;
-  margin: 10px auto;
+  margin: 10px auto 15px auto;
   padding-left: 10px;
   cursor: text;
   z-index: 3;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 `;
 
 const SaveButton = styled.button`
-  width: 35%;
-  color: white;
-  background-color: coral;
+  width: 30%;
+  color: snow;
+  background-color: #39393a;
   border: none;
   border-radius: 10px;
   padding: 10px;
@@ -268,8 +272,20 @@ const SaveButton = styled.button`
   cursor: pointer;
   outline: inherit;
   font-size: 1.5rem;
-  margin: 15px;
+  margin: 20px auto;
   z-index: 5;
+  transition: 0.3s;
+
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  &:hover {
+    color: snow;
+    background-color: #f68535;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+      rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+      rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  }
 `;
 
 const LeaveButton = styled.button`
@@ -358,8 +374,8 @@ const FollowUserImage = styled.img`
   transition: 0.4s;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px,
     rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
-  
-  &:hover{
+
+  &:hover {
     transform: scale(1.1);
   }
 `;

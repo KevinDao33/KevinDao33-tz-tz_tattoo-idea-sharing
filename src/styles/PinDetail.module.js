@@ -203,7 +203,7 @@ const PinCommentTitle = styled.h4`
   margin: 30px auto 15px 30px;
   color: #39393a;
   position: absolute;
-  bottom: 475px;
+  bottom: 375px;
   /* border: 1px solid red; */
 `;
 
@@ -213,7 +213,7 @@ const AllPinCommentWrapper = styled.div`
   background-color: rgba(230, 230, 230, 0.8);
   width: 90%;
   /* max-height: 380px; */
-  height: 380px;
+  height: 280px;
   overflow: scroll;
   display: flex;
   flex-direction: column;

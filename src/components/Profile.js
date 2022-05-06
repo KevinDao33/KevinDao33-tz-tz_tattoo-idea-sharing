@@ -209,7 +209,7 @@ function Profile(props) {
     getUserInfoAndPinsAndCollection();
   }, [props.uid]);
 
-  const setCollection2Firestore = (uid) => {
+  const setCollection2Firestore = async (uid) => {
     const newCollectionRef = doc(
       props.db,
       "user",
@@ -217,7 +217,7 @@ function Profile(props) {
       "collection",
       newCollectionName
     );
-    setDoc(
+    await setDoc(
       newCollectionRef,
       {
         collectionName: newCollectionName,
@@ -226,6 +226,7 @@ function Profile(props) {
       {merge: true}
     );
     alert(`collection ${newCollectionName} created!`);
+    window.location.reload();
   };
 
   const createNewCollection = () => {
@@ -251,6 +252,9 @@ function Profile(props) {
                   setNewCollectionName(e.target.value)
                 }></NameNewCollection>
               <SaveButton onClick={createNewCollection}>create</SaveButton>
+              {/* <CreateButton onClick={createNewCollection}>
+                <CreateButtonSpan>create</CreateButtonSpan>
+              </CreateButton> */}
             </CreateCollectionWrapper>
           </>
         )}
@@ -334,102 +338,93 @@ function Profile(props) {
     <ProfileBackgroundDisplay>
       {props.isLogin ? (
         userData && (
-          <PorfileWrapper>
-            <UserInfoWrapper $showFollow={isShowFollower || isShowFollowing}>
-              <UserImage src={userData.pic}></UserImage>
-              <UserName>{userData.name}</UserName>
-              <ShowFollow onClick={() => setIsShowFollowing((prev) => !prev)}>
-                {userData.following.length} following
-              </ShowFollow>
-              <ShowFollow onClick={() => setIsShowFollower((prev) => !prev)}>
-                {userData.follower.length} follower
-              </ShowFollow>
-              <ButtonWrapper>
-                <Button>share</Button>
-                <Button
+          <>
+            {/* {showCreateCollection && (
+              <Overlay id={"Overlay"} $showOverlay={showCreateCollection}>
+                {" "}
+              </Overlay>
+            )} */}
+
+            <PorfileWrapper>
+              <UserInfoWrapper $showFollow={isShowFollower || isShowFollowing}>
+                <UserImage src={userData.pic}></UserImage>
+                <UserName>{userData.name}</UserName>
+                <ShowFollow onClick={() => setIsShowFollowing((prev) => !prev)}>
+                  {userData.following.length} following
+                </ShowFollow>
+                <ShowFollow onClick={() => setIsShowFollower((prev) => !prev)}>
+                  {userData.follower.length} follower
+                </ShowFollow>
+                <ButtonWrapper>
+                  <Button>share</Button>
+                  <Button
+                    onClick={() => {
+                      redirect("/edit-profile");
+                    }}>
+                    edit
+                  </Button>
+                  <Button onClick={logOut}>logOut</Button>
+                </ButtonWrapper>
+              </UserInfoWrapper>
+
+              {/* ======================= */}
+              <FollowInfoWrapper
+                $showFollow={isShowFollower || isShowFollowing}>
+                <FollowTitle
+                  onClick={() =>
+                    console.log("userData.following", userData.following)
+                  }>
+                  {isShowFollower
+                    ? "My Follower"
+                    : isShowFollowing && "My Following"}
+                </FollowTitle>
+                <CloseButton
                   onClick={() => {
-                    redirect("/edit-profile");
+                    setIsShowFollower(false);
+                    setIsShowFollowing(false);
                   }}>
-                  edit
-                </Button>
-                <Button onClick={logOut}>logOut</Button>
-              </ButtonWrapper>
-            </UserInfoWrapper>
+                  x
+                </CloseButton>
+                <FollowUserWrapper>{renderFollow()}</FollowUserWrapper>
+              </FollowInfoWrapper>
+              {/* ======================= */}
 
-            {/* ======================= */}
-            <FollowInfoWrapper $showFollow={isShowFollower || isShowFollowing}>
-              <FollowTitle
-                onClick={() =>
-                  console.log("userData.following", userData.following)
-                }>
-                {isShowFollower
-                  ? "My Follower"
-                  : isShowFollowing
-                  ? "My Following"
-                  : "Try again"}
-              </FollowTitle>
-              <CloseButton
-                onClick={() => {
-                  setIsShowFollower(false);
-                  setIsShowFollowing(false);
-                }}>
-                x
-              </CloseButton>
-              <FollowUserWrapper>
-                {renderFollow()}
-                {/* {followingUserData &&
-                  followingUserData.length > 0 &&
-                  followingUserData.map((data) => (
-                    // to={`/user/${authorData.uid}`}
-                    <NavLink
-                      key={data.uid}
-                      to={`/user/${data.uid}`}
-                      style={{color: "inherit", textDecoration: "none"}}>
-                      <FollowUser>
-                        <FollowUserImage src={data.pic}></FollowUserImage>
-                        <FollowUserName>{data.name}</FollowUserName>
-                      </FollowUser>
-                    </NavLink>
-                  ))} */}
-              </FollowUserWrapper>
-            </FollowInfoWrapper>
-            {/* ======================= */}
-
-            <UserStuffWrapper>
-              <ButtonWrapper>
-                <SelectSection
-                  onClick={showMyPin}
-                  $section={showSection === MY_PIN}>
-                  my pin
-                </SelectSection>
-                <SelectSection
-                  $section={showSection === MY_COLLECTION}
-                  onClick={showMyCollection}>
-                  my collection
-                </SelectSection>
-                <CreateButtonWrapper>
-                  {showSection === MY_PIN ? (
-                    <NavLink to='/create-pin'>
-                      <CreateButton>
-                        <CreateButtonSpan>+ New Pin</CreateButtonSpan>
+              <UserStuffWrapper>
+                <ButtonWrapper>
+                  <SelectSection
+                    onClick={showMyPin}
+                    $section={showSection === MY_PIN}>
+                    my pin
+                  </SelectSection>
+                  <SelectSection
+                    $section={showSection === MY_COLLECTION}
+                    onClick={showMyCollection}>
+                    my collection
+                  </SelectSection>
+                  <CreateButtonWrapper>
+                    {showSection === MY_PIN ? (
+                      <NavLink to='/create-pin'>
+                        <CreateButton>
+                          <CreateButtonSpan>+ New Pin</CreateButtonSpan>
+                        </CreateButton>
+                      </NavLink>
+                    ) : showSection === MY_COLLECTION ? (
+                      <CreateButton
+                        onClick={() => {
+                          setShowCreateCollection(true);
+                        }}>
+                        <CreateButtonSpan>+ New Collection</CreateButtonSpan>
                       </CreateButton>
-                    </NavLink>
-                  ) : showSection === MY_COLLECTION ? (
-                    <CreateButton
-                      onClick={() => {
-                        setShowCreateCollection(true);
-                      }}>
-                      <CreateButtonSpan>+ New Collection</CreateButtonSpan>
-                    </CreateButton>
-                  ) : (
-                    <h2>Something went wrong</h2>
-                  )}
-                </CreateButtonWrapper>
-              </ButtonWrapper>
-              {renderUserSection()}
-              {showCreateCollectionSection()}
-            </UserStuffWrapper>
-          </PorfileWrapper>
+                    ) : (
+                      <h2>Something went wrong</h2>
+                    )}
+                  </CreateButtonWrapper>
+                </ButtonWrapper>
+                {renderUserSection()}
+                {showCreateCollectionSection()}
+              </UserStuffWrapper>
+            </PorfileWrapper>
+          </>
         )
       ) : (
         <Login
