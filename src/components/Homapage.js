@@ -166,6 +166,33 @@ function Homapage(props) {
     setFilteredPins(filteredResult);
   };
 
+  // ======================== page the pins (each page 16 pins) ====================================
+
+  const pagingPins = () => {
+    if (!filteredPins.length > 0 && !pins.length > 0) {
+      console.log("there is no pins");
+      return;
+    }
+
+    const chunk = (arr, size) =>
+      arr.reduce(
+        (carry, _, index, orig) =>
+          !(index % size)
+            ? carry.concat([orig.slice(index, index + size)])
+            : carry,
+        []
+      );
+    filteredPins.length > 0
+      ? console.log("paged filteredPins", chunk(filteredPins, 16))
+      : console.log("paged pins", chunk(pins, 16));
+  };
+
+  useEffect(() => {
+    pagingPins();
+  }, [filteredPins, pins]);
+
+  // ============================================================
+
   return !isShowVideo ? (
     <LandingPage setIsShowVideo={setIsShowVideo}></LandingPage>
   ) : (
