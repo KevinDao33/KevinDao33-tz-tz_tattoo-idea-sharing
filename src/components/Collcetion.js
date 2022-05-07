@@ -13,6 +13,7 @@ import {ARRANGE_PINS} from "../const";
 import {DELETE_PINS} from "../const";
 
 import {
+  CollectionBackgroundDisplay,
   CollectionHeader,
   // UserPhoto,
   CollectionName,
@@ -98,7 +99,7 @@ function Collection(props) {
   };
 
   return (
-    <>
+    <CollectionBackgroundDisplay id="CollectionBackgroundDisplay">
       {handlePin === ARRANGE_PINS ? (
         <ArrangeCollection
           uid={props.uid}
@@ -106,7 +107,7 @@ function Collection(props) {
           switch2Show={switch2Show}
         />
       ) : (
-        <CollectionHeader>
+        <CollectionHeader id="CollectionHeader">
           {/* <UserPhoto src={photo}></UserPhoto> */}
           <CollectionName onClick={switch2Show}>
             {collectionName}
@@ -173,7 +174,7 @@ function Collection(props) {
           )}
         </CollectionHeader>
       )}
-    </>
+    </CollectionBackgroundDisplay>
   );
 }
 

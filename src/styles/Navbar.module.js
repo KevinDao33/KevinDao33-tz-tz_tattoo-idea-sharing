@@ -7,7 +7,7 @@ import PhotoMove from "../icon/profile-gif.gif";
 
 const NavbarBlank = styled.div`
   width: 100vw;
-  height: 80px;
+  height: 90px;
 `;
 
 const NavbarWrapper = styled.div`

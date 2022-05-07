@@ -1,4 +1,21 @@
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
+
+const scroll = keyframes`
+ 100%{
+    background-position:-3000px 0px;
+  }
+`;
+
+const CollectionBackgroundDisplay = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+  z-index: -100;
+  padding-top: 120px;
+  animation: ${scroll} 120s linear infinite;
+
+  background-color: #f9f9f9;
+  background: url("data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='Page-1' fill='none' fill-rule='evenodd'%3E%3Cg id='brick-wall' fill='%23eeeeee' fill-opacity='1'%3E%3Cpath d='M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+`;
 
 // ======================header section==================================
 const CollectionHeader = styled.div`
@@ -6,7 +23,7 @@ const CollectionHeader = styled.div`
   flex-direction: column;
   width: 1350px;
   /* height: 300px; */
-  margin: 90px auto 10px auto;
+  margin: 0 auto 10px auto;
   border-radius: 20px;
   box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
 `;
@@ -19,9 +36,9 @@ const UserPhoto = styled.img`
 `;
 
 const CollectionName = styled.h2`
-  font-size: 2rem;
+  font-size: 2.5rem;
   text-align: center;
-  margin: 30px auto 10px auto;
+  margin: 60px auto 10px auto;
   cursor: pointer;
 `;
 
@@ -31,19 +48,19 @@ const AllButtonWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 const Button = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 55px;
+  height: 55px;
   margin: 10px auto;
   background-color: #ecebe4;
   opacity: 0.8;
@@ -52,7 +69,7 @@ const Button = styled.img`
   transition: 0.4s;
 
   &:hover {
-    transform: scale(1);
+    transform: scale(1.1);
     background-color: #d3d3d3;
     box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
       rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
@@ -61,7 +78,7 @@ const Button = styled.img`
 `;
 
 const ButtonName = styled.h2`
-  font-size: 0.5rem;
+  font-size: 1rem;
   text-align: center;
   margin: 0 auto;
 `;
@@ -93,7 +110,7 @@ const SaveOrderButton = styled.button`
 const MainWrapper = styled.div`
   width: 1400px;
   margin: 15px auto;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   display: flex;
   justify-content: center;
 `;
@@ -106,7 +123,7 @@ const AllPinsWrapper = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   justify-content: center;
-  border-top: 1px solid gray;
+  /* border-top: 1px solid gray; */
 
   /* border: 1px solid blue; */
   height: auto;
@@ -155,7 +172,6 @@ const PinImageDelete = styled.img`
     box-shadow: rgba(67, 67, 67, 0.4) 3px 3px, rgba(67, 67, 67, 0.3) 8px 8px,
       rgba(67, 67, 67, 0.2) 12px 12px, rgba(67, 67, 67, 0.1) 18px 18px,
       rgba(67, 67, 67, 0.05) 20px 20px;
-      
   }
 `;
 
@@ -271,6 +287,7 @@ const SaveButton = styled.button`
 `;
 
 export {
+  CollectionBackgroundDisplay,
   CollectionHeader,
   UserPhoto,
   CollectionName,
@@ -290,5 +307,5 @@ export {
   ArrangeNavWrapper,
   BackButton,
   SaveButton,
-  PinImageDelete
+  PinImageDelete,
 };

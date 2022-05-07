@@ -94,10 +94,6 @@ function Homapage(props) {
     setPins(mockPin);
   };
 
-  // const handleLikeShow = (index)=>{
-
-  // }
-
   const handleClosePinShow = (index) => {
     let mockPin = [...pins];
     mockPin[index].isShow = false;

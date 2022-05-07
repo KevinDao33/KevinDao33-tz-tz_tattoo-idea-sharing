@@ -216,7 +216,7 @@ function ArrangeCollection(props) {
                 }}
                 key={columnId}>
                 <div
-                  style={{margin: 8, border: "1px solid red", width: "330px"}}>
+                  style={{margin: 8, width: "330px"}}>
                   <Droppable droppableId={columnId} key={columnId}>
                     {(provided) => {
                       return (
