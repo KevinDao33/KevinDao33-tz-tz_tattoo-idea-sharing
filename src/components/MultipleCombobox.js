@@ -119,7 +119,7 @@ function MultipleCombobox(props) {
           getFilteredItems(items).map((item, index) => (
             <li
               style={
-                highlightedIndex === index ? {backgroundColor: "gray"} : {}
+                highlightedIndex === index ? {backgroundColor: "snow", color:"black"} : {}
               }
               key={`${item}${index}`}
               {...getItemProps({item, index})}>

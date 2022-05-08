@@ -391,7 +391,7 @@ const HoverPinName = styled.div`
 const FooterBlank = styled.div`
   width: 100vw;
   height: 50px;
-  border: 1px solid rebeccapurple;
+  /* border: 1px solid rebeccapurple; */
 `;
 
 export {

@@ -12,6 +12,7 @@ import {placements} from "../const";
 import {v4 as uuid} from "uuid";
 
 import {
+  DarkBackgroundDisplay,
   CreateNewPinWrapper,
   PinDataUploadWrapper,
   NewPinDataWrapper,
@@ -211,121 +212,125 @@ function CreateNewPin(props) {
   }
 
   return (
-    <CreateNewPinWrapper>
-      {/* Pin Image */}
-      <PinImageUploadWrapper>
-        <UploadNewPinImageLabel>
-          Upload Pin Image
-          <UploadNewPinImageInput
-            placeholder='Upload your Pin Image'
-            type='file'
-            accept='image/gif, image/jpeg, image/png, image/webp'
-            multiple={false}
-            onChange={handleImageUpload}></UploadNewPinImageInput>
-          {selectedFile && <PreviewImage src={preview} />}
-        </UploadNewPinImageLabel>
-        <CreatePinButton onClick={uploadPinImage}>Check Image</CreatePinButton>
-      </PinImageUploadWrapper>
+    <DarkBackgroundDisplay>
+      <CreateNewPinWrapper>
+        {/* Pin Image */}
+        <PinImageUploadWrapper>
+          <UploadNewPinImageLabel>
+            Upload Pin Image
+            <UploadNewPinImageInput
+              placeholder='Upload your Pin Image'
+              type='file'
+              accept='image/gif, image/jpeg, image/png, image/webp'
+              multiple={false}
+              onChange={handleImageUpload}></UploadNewPinImageInput>
+            {selectedFile && <PreviewImage src={preview} />}
+          </UploadNewPinImageLabel>
+          <CreatePinButton onClick={uploadPinImage}>
+            Check Image
+          </CreatePinButton>
+        </PinImageUploadWrapper>
 
-      {/* Pin Info */}
-      <PinDataUploadWrapper>
-        <NewPinDataWrapper>
-          <PlacementTitle>Pin Name :</PlacementTitle>
-          <NewPinDataInput
-            placeholder='Enter Pin Name'
-            value={pinName}
-            onChange={(e) => setPinName(e.target.value)}></NewPinDataInput>
-        </NewPinDataWrapper>
-        <NewPinDataWrapper>
-          <PlacementTitle>Description :</PlacementTitle>
-          <NewPinDataInput
-            placeholder='Enter Pin Desc'
-            value={pinDescription}
-            onChange={(e) =>
-              setPinDescription(e.target.value)
-            }></NewPinDataInput>
-        </NewPinDataWrapper>
-        <NewPinDataWrapper>
-          <PlacementTitle>Pin Link :</PlacementTitle>
-          <NewPinDataInput
-            placeholder='Enter Pin Link'
-            value={pinLink}
-            onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
-        </NewPinDataWrapper>
+        {/* Pin Info */}
+        <PinDataUploadWrapper>
+          <NewPinDataWrapper>
+            <PlacementTitle>Pin Name :</PlacementTitle>
+            <NewPinDataInput
+              // placeholder='Enter Pin Name'
+              value={pinName}
+              onChange={(e) => setPinName(e.target.value)}></NewPinDataInput>
+          </NewPinDataWrapper>
+          <NewPinDataWrapper>
+            <PlacementTitle>Description :</PlacementTitle>
+            <NewPinDataInput
+              // placeholder='Enter Pin Desc'
+              value={pinDescription}
+              onChange={(e) =>
+                setPinDescription(e.target.value)
+              }></NewPinDataInput>
+          </NewPinDataWrapper>
+          <NewPinDataWrapper>
+            <PlacementTitle>Pin Link :</PlacementTitle>
+            <NewPinDataInput
+              // placeholder='Enter Pin Link'
+              value={pinLink}
+              onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
+          </NewPinDataWrapper>
 
-        {/* add flash /tattoo selector */}
-        <NewPinDataWrapper>
-          <PlacementTitle>Type :</PlacementTitle>
+          {/* add flash /tattoo selector */}
+          <NewPinDataWrapper>
+            <PlacementTitle>Type :</PlacementTitle>
 
-          <PinTypeWrapper>
-            <PinTypeLabel htmlFor='tattoo'>
-              <PinTypeInput
-                type='radio'
-                name='type'
-                value='tattoo'
-                id='tattoo'
-                defaultChecked={true}
-                onClick={() => {
-                  // document.getElementById("tattoo").checked = true;
-                  setPinType("tattoo");
-                }}
-              />
-              Tattoo
-            </PinTypeLabel>
-            <PinTypeLabel htmlFor='flash'>
-              <PinTypeInput
-                type='radio'
-                name='type'
-                value='flash'
-                id='flash'
-                onClick={() => {
-                  // document.getElementById("flash").checked = true;
-                  setPinType("flash");
-                }}
-              />
-              Flash
-            </PinTypeLabel>
-          </PinTypeWrapper>
-        </NewPinDataWrapper>
+            <PinTypeWrapper>
+              <PinTypeLabel htmlFor='tattoo'>
+                <PinTypeInput
+                  type='radio'
+                  name='type'
+                  value='tattoo'
+                  id='tattoo'
+                  defaultChecked={true}
+                  onClick={() => {
+                    // document.getElementById("tattoo").checked = true;
+                    setPinType("tattoo");
+                  }}
+                />
+                Tattoo
+              </PinTypeLabel>
+              <PinTypeLabel htmlFor='flash'>
+                <PinTypeInput
+                  type='radio'
+                  name='type'
+                  value='flash'
+                  id='flash'
+                  onClick={() => {
+                    // document.getElementById("flash").checked = true;
+                    setPinType("flash");
+                  }}
+                />
+                Flash
+              </PinTypeLabel>
+            </PinTypeWrapper>
+          </NewPinDataWrapper>
 
-        {/* add placement selector */}
-        <NewPinDataWrapper>
-          <PlacementTitle>Placement :</PlacementTitle>
-          <div className='list-choice'>
-            <div className='list-choice-title'>
-              {pinPlacement ? pinPlacement : "Choose Placement"}
+          {/* add placement selector */}
+          <NewPinDataWrapper>
+            <PlacementTitle>Placement :</PlacementTitle>
+            <div className='list-choice'>
+              <div className='list-choice-title'>
+                {pinPlacement ? pinPlacement : "Choose Placement"}
+              </div>
+              <div className='list-choice-objects'>
+                {placements &&
+                  placements.map((option) => {
+                    return (
+                      <label key={uuid()}>
+                        <input
+                          type='radio'
+                          name='placement'
+                          id={option}
+                          onClick={() => {
+                            document.getElementById(option).checked = true;
+                            setPinPlacement(option);
+                          }}
+                        />
+                        <span>{option}</span>
+                      </label>
+                    );
+                  })}
+              </div>
             </div>
-            <div className='list-choice-objects'>
-              {placements &&
-                placements.map((option) => {
-                  return (
-                    <label key={uuid()}>
-                      <input
-                        type='radio'
-                        name='placement'
-                        id={option}
-                        onClick={() => {
-                          document.getElementById(option).checked = true;
-                          setPinPlacement(option);
-                        }}
-                      />
-                      <span>{option}</span>
-                    </label>
-                  );
-                })}
-            </div>
-          </div>
-        </NewPinDataWrapper>
+          </NewPinDataWrapper>
 
-        <NewPinDataWrapper>
-          <MultipleCombobox
-            pinTags={pinTags}
-            setPinTags={setPinTags}></MultipleCombobox>
-        </NewPinDataWrapper>
+          <NewPinDataWrapper>
+            <MultipleCombobox
+              pinTags={pinTags}
+              setPinTags={setPinTags}></MultipleCombobox>
+          </NewPinDataWrapper>
 
-        <CreatePinButton onClick={handleCreatePin}>Create</CreatePinButton>
-      </PinDataUploadWrapper>
-    </CreateNewPinWrapper>
+          <CreatePinButton onClick={handleCreatePin}>Create</CreatePinButton>
+        </PinDataUploadWrapper>
+      </CreateNewPinWrapper>
+    </DarkBackgroundDisplay>
   );
 }
 

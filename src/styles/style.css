@@ -58,6 +58,9 @@
 
 @import url(https://fonts.googleapis.com/css?family=Raleway);
 .list-choice {
+  /* height: 200px; */
+  /* overflow: scroll; */
+
   width: 333px;
   margin: 20px;
   position: relative;
@@ -77,11 +80,11 @@
   height: 40px;
   width: 100%;
   display: block;
-  background: #7e7e7e;
+  background: snow;
   text-align: center;
   padding: 0.55em 1em;
   box-sizing: border-box;
-  color: #fff;
+  /* color: #fff; */
   text-shadow: 0 1px 0 #cacaca;
   border-radius: 10px;
   z-index: 1001;

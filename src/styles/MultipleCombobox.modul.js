@@ -16,7 +16,7 @@ const MenuMultiple = styled.ul`
   width: 260px;
   margin: 0;
   border-top: 0;
-  background: #d8d8d8;
+  background: #5A5A5A;
   color: white;
   font-size: 1.25rem;
   position: absolute;
@@ -52,8 +52,8 @@ const SelectedItemWrapper = styled.div`
 const SelectedItem = styled.span`
   margin: 5px 0 5px 20px;
   padding: 5px;
-  background-color: purple;
-  color: white;
+  background-color: #f68535;
+  color: snow;
   border-radius: 10px;
   cursor: default;
 `;
@@ -61,14 +61,14 @@ const SelectedItem = styled.span`
 const SelectedItemIcon = styled.span`
   margin-left: 3px;
   cursor: pointer;
-  color: gray;
+  color: lightgrey;
 `;
 
 const ShowTagOptions = styled.button`
-  color: white;
+  color: gray;
   width: 10%;
   height: 40px;
-  background-color: gray;
+  background-color: snow;
   border: none;
   margin: 20px 0 0 0;
   border-radius: 10px 30px 30px 10px;
@@ -91,6 +91,7 @@ const TagTitle = styled.label`
   font-size: 1.5rem;
   margin: 20px 0 20px 20px;
   width: 30%;
+  color: snow;
 `;
 
 const SearchTagInput = styled.input`
@@ -100,8 +101,8 @@ const SearchTagInput = styled.input`
   border-radius: 10px;
   border: none;
   margin: 20px 3px 0 20px;
-  background-color: #7e7e7e;
-  color: white;
+  background-color: snow;
+  color: #7e7e7e;
   padding-left: 20px;
   cursor: text;
   -webkit-filter: drop-shadow(12px 12px 7px rgba(0, 0, 0, 0.2));
@@ -115,8 +116,6 @@ const SearchTagInput = styled.input`
     box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
   }
 `;
-
-
 
 export {
   AllComboboxWrapper,
