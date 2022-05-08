@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import {collection, getDocs} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
@@ -34,6 +34,7 @@ import {
   PinTagIntroduction,
   PinTagIntroductionTitle,
   PinTagIntroductionContext,
+  FooterBlank,
 } from "../styles/Homepage.module";
 import {
   items,
@@ -48,10 +49,15 @@ function Homapage(props) {
   const [isShowAddPin, setIsShowAddPin] = useState(false);
   const [pins, setPins] = useState([]);
   const [filteredPins, setFilteredPins] = useState([]);
+  // ===========================================
+  const [pagedPins, setPagedPins] = useState([]);
+  const [renderPins, setRenderPins] = useState([]);
+  // ===========================================
   const [filterByPlacement, setFilterByPlacement] = useState("");
   const [filterByTag, setFilterByTag] = useState("");
   const [isShowFilter, setIsShowFilter] = useState(false);
   const [isShowLike, setIsShowLike] = useState(false);
+  const pageNow = useRef(0);
 
   const redirect = useNavigate();
 
@@ -113,13 +119,25 @@ function Homapage(props) {
       filteredResult = clonedPins.filter(
         (pin) => pin.pinPlacement === placement
       );
+      setRenderPins([]);
+      // setPagedPins([]);
       setFilteredPins(filteredResult);
+
+      setPagedPins(chunk(filteredResult, 16));
+
+      pageNow.current = 0;
     } else if (filterByTag) {
       filteredResult = clonedPins.filter(
         (pin) =>
           pin.pinPlacement === placement && pin.pinTags.includes(filterByTag)
       );
+      setRenderPins([]);
+      // setPagedPins([]);
       setFilteredPins(filteredResult);
+
+      setPagedPins(chunk(filteredResult, 16));
+
+      pageNow.current = 0;
     }
   };
 
@@ -130,18 +148,26 @@ function Homapage(props) {
     let filteredResult = [];
     if (!filterByPlacement) {
       filteredResult = clonedPins.filter((pin) => pin.pinTags.includes(item));
+      setRenderPins([]);
       setFilteredPins(filteredResult);
+      setPagedPins(chunk(filteredResult, 16));
+      pageNow.current = 0;
     } else if (filterByPlacement) {
       filteredResult = clonedPins.filter(
         (pin) =>
           pin.pinPlacement === filterByPlacement && pin.pinTags.includes(item)
       );
+      setRenderPins([]);
       setFilteredPins(filteredResult);
+      setPagedPins(chunk(filteredResult, 16));
+      pageNow.current = 0;
     }
   };
 
   const handlePlacementClear = () => {
     setFilterByPlacement("");
+    setPagedPins(chunk(pins, 16));
+    setRenderPins([]);
     setFilteredPins([]);
     if (!filterByTag) {
       return;
@@ -151,10 +177,13 @@ function Homapage(props) {
       pin.pinTags.includes(filterByTag)
     );
     setFilteredPins(filteredResult);
+    setPagedPins(chunk(filteredResult, 16));
+    pageNow.current = 0;
   };
 
   const handleTagClear = () => {
     setFilterByTag("");
+    setPagedPins(chunk(pins, 16));
     setFilteredPins([]);
     if (!filterByPlacement) {
       return;
@@ -163,33 +192,163 @@ function Homapage(props) {
     let filteredResult = clonedPins.filter(
       (pin) => pin.pinPlacement === filterByPlacement
     );
+    setRenderPins([]);
+    setPagedPins(chunk(filteredResult, 16));
     setFilteredPins(filteredResult);
+    pageNow.current = 0;
   };
 
   // ======================== page the pins (each page 16 pins) ====================================
+  const chunk = (arr, size) =>
+    arr.reduce(
+      (carry, _, index, orig) =>
+        !(index % size)
+          ? carry.concat([orig.slice(index, index + size)])
+          : carry,
+      []
+    );
 
   const pagingPins = () => {
     if (!filteredPins.length > 0 && !pins.length > 0) {
       console.log("there is no pins");
       return;
     }
-
-    const chunk = (arr, size) =>
-      arr.reduce(
-        (carry, _, index, orig) =>
-          !(index % size)
-            ? carry.concat([orig.slice(index, index + size)])
-            : carry,
-        []
-      );
-    filteredPins.length > 0
-      ? console.log("paged filteredPins", chunk(filteredPins, 16))
-      : console.log("paged pins", chunk(pins, 16));
+    !filteredPins.length > 0 && setPagedPins(chunk(pins, 16));
+    // filteredPins.length > 0
+    //   ? setPagedPins(chunk(filteredPins, 16))
+    //   : setPagedPins(chunk(pins, 16));
   };
 
   useEffect(() => {
     pagingPins();
-  }, [filteredPins, pins]);
+  }, [pins, filteredPins]);
+
+  // ======================== set up intersection obsever ====================================
+  // const makeInfiniteScrollPage = function () {
+  //   const options = {
+  //     rootMargin: "5px",
+  //     threshold: 1,
+  //   };
+
+  //   const callback = (entries) => {
+  //     entries.forEach((entry) => {
+  //       console.log("pageNow.current", pageNow.current);
+
+  //       if (entry.isIntersecting) {
+  //         // =========================
+  //         if (!pagedPins[pageNow.current]) {
+  //           console.log("there is no more pin");
+
+  //           return;
+  //         } else if (!pagedPins[pageNow.current - 1]) {
+  //           setRenderPins(pagedPins[pageNow.current]);
+  //           pageNow.current++;
+  //         } else {
+  //           setRenderPins((prev) =>
+  //             [...prev].concat(pagedPins[pageNow.current])
+  //           );
+  //           pageNow.current++;
+  //         }
+  //         // =========================
+  //       }
+  //     });
+  //   };
+  // const footerBlank = document.getElementById("footerBlank");
+  //   const observer = new IntersectionObserver(callback, options);
+  //   observer.observe(footerBlank);
+  // };
+  const options = {
+    rootMargin: "5px",
+    threshold: 1,
+  };
+  const footerBlank = document.getElementById("footerBlank");
+  // const makeInfiniteScrollPage = useCallback(() => {
+  //   // console.log(pins)
+  //   console.log("pagedPins", pagedPins);
+  //   console.log("renderPins", renderPins);
+  //   // if ( ) return
+
+  //       const callback = (entries) => {
+  //         entries.forEach((entry) => {
+  //           console.log("pageNow.current", pageNow.current);
+
+  //           if (entry.isIntersecting) {
+  //             // =========================
+  //             if (!pagedPins[pageNow.current]) {
+  //               console.log("there is no more pin", pagedPins[pageNow.current]);
+
+  //               return;
+  //             } else if (!pagedPins[pageNow.current - 1]) {
+  //               console.log(pagedPins)
+  //               setRenderPins(pagedPins[pageNow.current]);
+  //               pageNow.current++;
+  //             } else {
+  //               setRenderPins((prev) =>
+  //                 [...prev].concat(pagedPins[pageNow.current])
+  //               );
+  //               pageNow.current++;
+  //             }
+  //             // =========================
+  //           }
+  //         });
+  //       };
+
+  //       // const observer = new IntersectionObserver(callback, options);
+  //       observer.observe(footerBlank);
+  // },[pins, pagedPins,renderPins])
+
+  useEffect(() => {
+    // if (pagedPins.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        console.log("pageNow.current", pageNow.current);
+        console.log("pagedPins", pagedPins);
+        console.log("renderPins", renderPins);
+
+        if (entry.isIntersecting) {
+          // =========================
+          if (!pagedPins[pageNow.current]) {
+            console.log("there is no more pin", pagedPins[pageNow.current]);
+
+            return;
+          } else if (!pagedPins[pageNow.current - 1]) {
+            console.log(pagedPins);
+            setRenderPins(pagedPins[pageNow.current]);
+            pageNow.current++;
+          } else {
+            setRenderPins((prev) =>
+              [...prev].concat(pagedPins[pageNow.current])
+            );
+            pageNow.current++;
+          }
+          // =========================
+        }
+      });
+    }, options);
+    if (pins.length > 0 && pins) {
+      observer.observe(footerBlank);
+    }
+    return () => observer.disconnect();
+  }, [pagedPins, renderPins]);
+
+  useEffect(() => {
+    if (pagedPins.length < 1) return;
+    // makeInfiniteScrollPage();
+    console.log("pagedPins", pagedPins);
+    console.log("renderPins", renderPins);
+
+    // return () => makeInfiniteScrollPage()
+  }, []);
+  // useEffect(() => {
+  //   pagedPins.length > 0 && makeInfiniteScrollPage();
+
+  // }, [pagedPins, filterByPlacement]);
+
+  // useEffect(() => {
+  //   console.log("filteredPins", filteredPins);
+  //   console.log("pagedPins", pagedPins);
+  //   console.log("renderPins", renderPins);
+  // }, [pagedPins, renderPins, filteredPins]);
 
   // ============================================================
 
@@ -276,7 +435,7 @@ function Homapage(props) {
       </MainFilterWrapper>
 
       <MainWrapper>
-        <AllPinsWrapper>
+        <AllPinsWrapper id='AllPinsWrapper'>
           <Masonry
             breakpointCols={breakpointColumnsObj}
             className='my-masonry-grid'
@@ -293,7 +452,56 @@ function Homapage(props) {
                 </PinTagIntroduction>
               </PinWrapper>
             )}
-            {filteredPins.length > 0
+
+            {/* ================= */}
+
+            {renderPins.length > 0 &&
+              renderPins.map((pin, index) => (
+                <PinWrapper
+                  key={index}
+                  onMouseEnter={() => setIsShowLike(index)}
+                  onMouseLeave={() => setIsShowLike(-1)}>
+                  <PinImage
+                    src={pin.pinImage}
+                    onClick={() => {
+                      redirect(`/pin-detail/${pin.pinId}`);
+                    }}
+                  />
+                  <SaveButton
+                    $like={isShowLike === index}
+                    onClick={() => {
+                      handleAddPinShow(index);
+                    }}>
+                    <Heart></Heart>
+                  </SaveButton>
+
+                  <LinkButton
+                    $link={isShowLike === index}
+                    onClick={() => {
+                      window.location.assign(pin.pinLink);
+                    }}></LinkButton>
+
+                  <HoverPinName $name={isShowLike === index}>
+                    {pin.pinName}
+                  </HoverPinName>
+                  {pin.isShow && (
+                    <AddPin
+                      handleClosePinShow={handleClosePinShow}
+                      indexxx={index}
+                      key={pin.pinName}
+                      isShowAddPin={isShowAddPin}
+                      setIsShowAddPin={setIsShowAddPin}
+                      // eslint-disable-next-line react/prop-types
+                      db={props.db}
+                      uid={props.uid}
+                      pin={pin}
+                      pins={pins}
+                    />
+                  )}
+                </PinWrapper>
+              ))}
+
+            {/* {filteredPins.length > 0
               ? filteredPins.map((pin, index) => (
                   <PinWrapper
                     key={index}
@@ -344,7 +552,6 @@ function Homapage(props) {
                     key={index}
                     onMouseEnter={() => setIsShowLike(index)}
                     onMouseLeave={() => setIsShowLike(-1)}>
-                    {/* <PinWrapper key={pin.pinId}> */}
                     <PinImage
                       src={pin.pinImage}
                       onClick={() => {
@@ -368,7 +575,6 @@ function Homapage(props) {
                     <HoverPinName $name={isShowLike === index}>
                       {pin.pinName}
                     </HoverPinName>
-                    {/* </PinWrapper> */}
                     {pin.isShow && (
                       <AddPin
                         handleClosePinShow={handleClosePinShow}
@@ -384,10 +590,13 @@ function Homapage(props) {
                       />
                     )}
                   </PinWrapper>
-                ))}
+                ))} */}
+
+            {/* ================= */}
           </Masonry>
         </AllPinsWrapper>
       </MainWrapper>
+      <FooterBlank id='footerBlank' />
     </BackgroundDisplay>
   );
 }

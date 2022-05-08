@@ -91,9 +91,10 @@ const AllPinsWrapper = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   justify-content: center;
-  /* border: 1px solid blue; */
   height: auto;
   width: 100%;
+  // to prevent
+  /* min-height: 100vh; */
 `;
 
 const PinWrapper = styled.div`
@@ -387,6 +388,12 @@ const HoverPinName = styled.div`
     1px 1px rgba(220, 220, 220, 0.8), 1.25px 1.25px rgba(220, 220, 220, 0.8);
 `;
 
+const FooterBlank = styled.div`
+  width: 100vw;
+  height: 50px;
+  border: 1px solid rebeccapurple;
+`;
+
 export {
   BackgroundDisplay,
   MainTitle,
@@ -412,4 +419,5 @@ export {
   PinTagIntroduction,
   PinTagIntroductionTitle,
   PinTagIntroductionContext,
+  FooterBlank,
 };
