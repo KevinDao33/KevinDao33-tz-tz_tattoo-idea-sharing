@@ -74,7 +74,11 @@ const Notify = styled.div`
   margin: auto 30px auto 0;
   cursor: pointer;
   border-radius: 50px;
-  background: url(${NotifyIcon}) snow;
+  /* background: url(${NotifyIcon}) snow; */
+  background: ${(props) =>
+    props.$isUnRead
+      ? `url(${NotifyIconMove}) snow`
+      : `url(${NotifyIcon}) snow`};
   background-repeat: no-repeat;
   background-position: center;
   background-size: 80%;
@@ -107,6 +111,69 @@ const MemberPictureWrapper = styled.div`
   }
 `;
 
+const AllNotificationWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  transition: 0.4s;
+  width: 400px;
+  max-height: 550px;
+  height: ${(props) => (props.$showNoti ? "auto" : "0px")};
+
+  background-color: white;
+  position: absolute;
+  right: 30px;
+  top: 90px;
+  z-index: 1000;
+  border-radius: 10px;
+  border: ${(props) => (props.$showNoti ? "1px solid gray" : "none")};
+`;
+
+const NotificationWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 100px;
+  position: relative;
+  cursor: pointer;
+  border-bottom: 1px solid lightgray;
+
+  &:hover {
+    background-color: snow;
+  }
+`;
+
+const AuthorImageWrapper = styled.img`
+  border-radius: 50px;
+  width: 60px;
+  height: 60px;
+  border: 1px solid lightgray;
+  margin: auto 15px auto 30px;
+`;
+
+const NotificationMessageWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: auto 10px auto 0;
+
+  /* border: 1px solid blueviolet; */
+  color: black;
+`;
+
+const NotificationIsReadMark = styled.div`
+  border-radius: 100px;
+  background-color: coral;
+  width: 15px;
+  height: 14px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+`;
+
 export {
   NavbarBlank,
   NavbarWrapper,
@@ -115,4 +182,9 @@ export {
   Searchbar,
   Notify,
   MemberPictureWrapper,
+  AllNotificationWrapper,
+  NotificationWrapper,
+  AuthorImageWrapper,
+  NotificationMessageWrapper,
+  NotificationIsReadMark,
 };

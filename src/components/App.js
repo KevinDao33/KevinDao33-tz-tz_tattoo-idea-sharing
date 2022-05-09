@@ -57,7 +57,7 @@ function App() {
   return (
     <BrowserRouter>
       <GlobalStyle />
-      <Navbar />
+      <Navbar uid={uid} db={db} />
       <Routes>
         <Route
           path='/'

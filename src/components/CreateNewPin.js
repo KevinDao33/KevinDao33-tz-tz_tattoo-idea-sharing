@@ -4,8 +4,15 @@
 import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
-import {initializeApp} from "firebase/app";
-import {getFirestore, collection, doc, setDoc} from "firebase/firestore";
+import {
+  getDoc,
+  collection,
+  doc,
+  setDoc,
+  addDoc,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import imageCompression from "browser-image-compression";
 import "../styles/style.css";
 import {placements} from "../const";
@@ -37,10 +44,12 @@ function CreateNewPin(props) {
   const [pinType, setPinType] = useState("tattoo");
   const [pinImage, setPinImage] = useState("");
   const [pinPlacement, setPinPlacement] = useState("");
+  const [pinId, setPinId] = useState("");
   const [isGetPinImage, setIsGetPinImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState("");
   const [preview, setPreview] = useState("");
   const [isPinCreated, setIsPinCreated] = useState(false);
+  const [userData, setUserData] = useState(null);
 
   const redirect = useNavigate();
   const storage = getStorage(props.app);
@@ -124,7 +133,12 @@ function CreateNewPin(props) {
   };
 
   const writeUserData = () => {
-    // const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if (!pinImage) {
+      alert("please check image before creating a pin");
+
+      return;
+    }
+
     const collectionRefPin = collection(props.db, "pin");
     const docRefCollectionRefPin = doc(collectionRefPin);
 
@@ -161,7 +175,11 @@ function CreateNewPin(props) {
       pinPlacement: pinPlacement,
       pinType: pinType,
     });
+    // setPinId(docRefCollectionRefPin.id);
+    // console.log('pinId', docRefCollectionRefPin.id);
+
     setIsPinCreated(true);
+    return docRefCollectionRefPin.id;
   };
 
   const getPinImageUrl = (name) => {
@@ -201,11 +219,50 @@ function CreateNewPin(props) {
     }
   }
 
+  //get user follower list
+  const getUserData = async () => {
+    const userquery = await getDoc(doc(props.db, "user", props.uid));
+    const userAAA = userquery.data();
+    // console.log("userAAA", userAAA);
+    setUserData(userAAA);
+  };
+  useEffect(() => {
+    getUserData();
+  }, [props.uid]);
+
+  const sendNotification2Follower = (pinIddd) => {
+    if (!userData) {
+      console.log("no user data");
+      return;
+    }
+
+    userData.follower.map(async (user) => {
+      const docRef = collection(props.db, "user", user, "notification");
+      const notificationDocRef = await addDoc(docRef, {
+        isRead: false,
+        authorUid: props.uid,
+        authorName: userData.name,
+        authorPic: userData.pic,
+        timeStamp: serverTimestamp(),
+        pinId: pinIddd,
+        // notificationId: docRef.id,
+      });
+      updateDoc(
+        doc(props.db, "user", user, "notification", notificationDocRef.id),
+        {
+          notificationId: notificationDocRef.id,
+        }
+      );
+    });
+  };
+
   async function handleCreatePin() {
     try {
       submitPinData(dataUrl2Blob);
-      writeUserData();
-      isPinCreated && redirect("/profile");
+      const pinIddd = writeUserData();
+      //send alert to followers
+      sendNotification2Follower(pinIddd);
+      // isPinCreated && redirect("/profile");
     } catch (error) {
       console.error(error);
     }
