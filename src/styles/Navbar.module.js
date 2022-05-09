@@ -81,13 +81,13 @@ const Notify = styled.div`
       : `url(${NotifyIcon}) snow`};
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 80%;
+  background-size: 140%;
 
   :hover {
     background: url(${NotifyIconMove}) snow;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 80%;
+    background-size: 140%;
   }
 `;
 
@@ -101,13 +101,13 @@ const MemberPictureWrapper = styled.div`
   background: url(${Photo}) snow;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 80%;
+  background-size: 120%;
 
   :hover {
     background: url(${PhotoMove}) snow;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 80%;
+    background-size: 120%;
   }
 `;
 
