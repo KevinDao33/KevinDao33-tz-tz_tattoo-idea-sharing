@@ -38,7 +38,7 @@ const DarkBackgroundDisplay = styled.div`
 
 const CreateNewPinWrapper = styled.div`
   width: 1250px;
-  min-height: 75vh;
+  min-height: 900px;
   margin: 0 auto;
   display: flex;
   justify-content: center;
@@ -125,10 +125,6 @@ const CreatePinButton = styled.button`
   transition: 0.4s;
 
   &:hover {
-    /* transform: scale(1.1);
-    box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
-      rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
-      rgba(67, 67, 67, 0.05) 12px 12px; */
     transform: scale(0.97);
     background-color: #f68535;
     box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);

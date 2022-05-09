@@ -301,18 +301,18 @@ function Homapage(props) {
     // if (pagedPins.length > 0) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        console.log("pageNow.current", pageNow.current);
-        console.log("pagedPins", pagedPins);
-        console.log("renderPins", renderPins);
+        // console.log("pageNow.current", pageNow.current);
+        // console.log("pagedPins", pagedPins);
+        // console.log("renderPins", renderPins);
 
         if (entry.isIntersecting) {
           // =========================
           if (!pagedPins[pageNow.current]) {
-            console.log("there is no more pin", pagedPins[pageNow.current]);
+            // console.log("there is no more pin", pagedPins[pageNow.current]);
 
             return;
           } else if (!pagedPins[pageNow.current - 1]) {
-            console.log(pagedPins);
+            // console.log(pagedPins);
             setRenderPins(pagedPins[pageNow.current]);
             pageNow.current++;
           } else {
@@ -331,14 +331,14 @@ function Homapage(props) {
     return () => observer.disconnect();
   }, [pagedPins, renderPins]);
 
-  useEffect(() => {
-    if (pagedPins.length < 1) return;
+  // useEffect(() => {
+    // if (pagedPins.length < 1) return;
     // makeInfiniteScrollPage();
-    console.log("pagedPins", pagedPins);
-    console.log("renderPins", renderPins);
+    // console.log("pagedPins", pagedPins);
+    // console.log("renderPins", renderPins);
 
     // return () => makeInfiniteScrollPage()
-  }, []);
+  // }, []);
   // useEffect(() => {
   //   pagedPins.length > 0 && makeInfiniteScrollPage();
 

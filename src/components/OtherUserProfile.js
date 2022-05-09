@@ -16,7 +16,11 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 
-import {FollowButton, UnFollowButton} from "../styles/OtherUserProfile.module";
+import {
+  FollowButton,
+  UnFollowButton,
+  DarkBackgroundDisplay,
+} from "../styles/OtherUserProfile.module";
 import {
   PorfileWrapper,
   UserImage,
@@ -39,6 +43,7 @@ function OtherUserProfile(props) {
   const [myData, setMyData] = useState(null);
   const [myFollowingList, setMyFollowingList] = useState([]);
   const [otherUserFollowerList, setOtherUserFollowerList] = useState([]);
+  const [isSelf, setIsSelf] = useState(false);
 
   const breakpointColumnsObj = {
     default: 4,
@@ -73,6 +78,13 @@ function OtherUserProfile(props) {
   useEffect(() => {
     getOtherUserUid();
   }, []);
+
+  useEffect(() => {
+    if (otherUserUid && props.uid && otherUserUid !== props.uid) {
+      return;
+    }
+    setIsSelf(true);
+  }, [otherUserUid, props.uid]);
 
   const getOtherUserData = async (otherId) => {
     if (!otherUserUid) {
@@ -152,8 +164,8 @@ function OtherUserProfile(props) {
   };
 
   return (
-    <>
-      {otherUserData && (
+    <DarkBackgroundDisplay>
+      {otherUserData && props.uid && (
         <PorfileWrapper>
           <UserImage src={otherUserData.pic}></UserImage>
           <UserName>{otherUserData.name}</UserName>
@@ -165,9 +177,15 @@ function OtherUserProfile(props) {
             myFollowingList.includes(otherUserUid) ? (
               <UnFollowButton onClick={handleUnfollow}>Unfollow</UnFollowButton>
             ) : (
-              <FollowButton onClick={handleFollow}>Follow</FollowButton>
+              // <FollowButton onClick={handleFollow} $self={isSelf}>
+              <FollowButton
+                onClick={() => {
+                  isSelf ? "" : handleFollow();
+                }}
+                $self={isSelf}>
+                Follow
+              </FollowButton>
             )}
-
           </ButtonWrapper>
           <UserStuffWrapper>
             <AllPinsWrapper>
@@ -188,7 +206,7 @@ function OtherUserProfile(props) {
           </UserStuffWrapper>
         </PorfileWrapper>
       )}
-    </>
+    </DarkBackgroundDisplay>
   );
 }
 

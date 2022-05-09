@@ -15,6 +15,7 @@ import {
 // import {useNavigate} from "react-router-dom";
 
 import {
+  EditProfileBackgroundDisplay,
   EditWrapper,
   EditNavAllWrapper,
   EditNavLeftWrapper,
@@ -50,7 +51,7 @@ function EditProfile(props) {
   const getUserData = async () => {
     const userquery = await getDoc(doc(props.db, "user", props.uid));
     const userAAA = userquery.data();
-    console.log("userAAA", userAAA);
+    // console.log("userAAA", userAAA);
 
     setUserData({
       name: userAAA.name,
@@ -169,7 +170,7 @@ function EditProfile(props) {
 
       return;
     } else if (newName || newDescription || newLink || selectedFile) {
-      console.log("there are changes");
+      // console.log("there are changes");
       if (selectedFile && !newName && !newDescription && !newLink) {
         // only new photo
         await uploadNewUserPhotoImage();
@@ -190,55 +191,57 @@ function EditProfile(props) {
   // =======================================
 
   return userData ? (
-    <EditWrapper>
-      <EditNavAllWrapper>
-        <EditNavLeftWrapper>
-          <BackButton onClick={back2Profile}>{"<-"}</BackButton>
-          <EditTitle>Settings</EditTitle>
-        </EditNavLeftWrapper>
+    <EditProfileBackgroundDisplay>
+      <EditWrapper>
+        <EditNavAllWrapper>
+          <EditNavLeftWrapper>
+            <BackButton onClick={back2Profile}></BackButton>
+            <EditTitle>Settings</EditTitle>
+          </EditNavLeftWrapper>
 
-        <EditNavRightWrapper>
-          <CancelButton onClick={cancelDataChange}>Cancel</CancelButton>
-          <SaveButton onClick={submitNewUserData}>Save</SaveButton>
-        </EditNavRightWrapper>
-      </EditNavAllWrapper>
+          <EditNavRightWrapper>
+            <CancelButton onClick={cancelDataChange}>Cancel</CancelButton>
+            <SaveButton onClick={submitNewUserData}>Save</SaveButton>
+          </EditNavRightWrapper>
+        </EditNavAllWrapper>
 
-      <InputFileWrapper>
-        <LabelFile>
-          <PhotoDisplay src={displayPhoto} />
-          <InputFile
-            type='file'
-            accept='image/gif, image/jpeg, image/png, image/webp'
-            multiple={false}
-            onChange={handleImageUpload}></InputFile>
-        </LabelFile>
-        <InputFileTitle>{userData.name}</InputFileTitle>
-      </InputFileWrapper>
+        <InputFileWrapper>
+          <LabelFile>
+            <PhotoDisplay src={displayPhoto} />
+            <InputFile
+              type='file'
+              accept='image/gif, image/jpeg, image/png, image/webp'
+              multiple={false}
+              onChange={handleImageUpload}></InputFile>
+          </LabelFile>
+          <InputFileTitle>{userData.name}</InputFileTitle>
+        </InputFileWrapper>
 
-      <InputTextWrapper>
-        <InputTextTitle>Name</InputTextTitle>
-        <InputText
-          type='text'
-          value={newName}
-          onChange={handleNewName}></InputText>
-      </InputTextWrapper>
+        <InputTextWrapper>
+          <InputTextTitle>Name</InputTextTitle>
+          <InputText
+            type='text'
+            value={newName}
+            onChange={handleNewName}></InputText>
+        </InputTextWrapper>
 
-      <InputTextWrapper>
-        <InputTextTitle>Link</InputTextTitle>
-        <InputText
-          type='text'
-          value={newLink}
-          onChange={handleNewLink}></InputText>
-      </InputTextWrapper>
+        <InputTextWrapper>
+          <InputTextTitle>Link</InputTextTitle>
+          <InputText
+            type='text'
+            value={newLink}
+            onChange={handleNewLink}></InputText>
+        </InputTextWrapper>
 
-      <InputDescTextWrapper>
-        <InputTextTitle>About Me</InputTextTitle>
-        <InputDesc
-          type='text'
-          value={newDescription}
-          onChange={handleNewDesc}></InputDesc>
-      </InputDescTextWrapper>
-    </EditWrapper>
+        <InputDescTextWrapper>
+          <InputTextTitle>About Me</InputTextTitle>
+          <InputDesc
+            type='text'
+            value={newDescription}
+            onChange={handleNewDesc}></InputDesc>
+        </InputDescTextWrapper>
+      </EditWrapper>
+    </EditProfileBackgroundDisplay>
   ) : (
     <div>Loading</div>
   );

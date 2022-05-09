@@ -1,13 +1,55 @@
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
+import viewMore from "../icon/more.png";
+import viewMoreMove from "../icon/more-gif.gif";
+
+const scroll = keyframes`
+ 100%{
+    background-position: 1000px -3000px;
+  }
+`;
+
+const EditProfileBackgroundDisplay = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+  z-index: -100;
+  padding-top: 120px;
+  animation: ${scroll} 120s linear infinite;
+
+  background-color: #f9f9f9;
+  opacity: 1;
+  background-image: radial-gradient(
+      #272727 0.9500000000000001px,
+      transparent 0.9500000000000001px
+    ),
+    radial-gradient(#272727 0.9500000000000001px, #f9f9f9 0.9500000000000001px);
+  background-size: 38px 38px;
+  background-position: 0 0, 19px 19px;
+`;
+
+const breath = keyframes`
+  0% {
+    box-shadow: 20px 28px 24px -25px gray;
+  }
+  33% {
+    box-shadow: 30px 38px 34px -31px lightgray;
+  }
+  100% {
+    box-shadow: 20px 28px 24px -25px gray;
+  }
+`;
 
 const EditWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 1300px;
   height: 1100px;
-  margin: 90px auto 50px auto;
+  margin: 0 auto;
   border-radius: 20px;
-  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
+  border: 1px solid lightgray;
+  backdrop-filter: blur(3px);
+  background-color: white;
+  transition: 0.8s;
+  animation: ${breath} 2.5s ease-in-out infinite;
 `;
 
 const EditNavAllWrapper = styled.div`
@@ -37,33 +79,39 @@ const BackButton = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  border: 1px solid lightgray;
+  /* border: 1px solid lightgray; */
   border-radius: 50px;
   margin: auto 20px auto 0;
   cursor: pointer;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
   transition: 0.4s;
+  transform: rotate(90deg);
+
+  background: url(${viewMore});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 50%;
 
   &:hover {
-    /* transform: scale(1.1);
-    box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
-      rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
-      rgba(67, 67, 67, 0.05) 12px 12px; */
-    transform: scale(0.97);
-    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1) rotate(90deg);
+    background: url(${viewMoreMove});
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50%;
   }
 `;
 
 const EditTitle = styled.h2`
   font-size: 1.5rem;
   margin: auto 10px;
+  cursor: default;
 `;
 
 const CancelButton = styled.button`
   width: 130px;
   height: 50px;
-  color: gray;
-  background-color: white;
+  color: snow;
+  background-color: lightgray;
   border: 1px solid lightgray;
   border-radius: 10px;
   padding: 10px;
@@ -77,21 +125,21 @@ const CancelButton = styled.button`
   transition: 0.4s;
 
   &:hover {
-    /* transform: scale(1.1);
+    color: lightgray;
+    background-color: #404040;
     box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
       rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
-      rgba(67, 67, 67, 0.05) 12px 12px; */
+      rgba(67, 67, 67, 0.05) 12px 12px;
     transform: scale(0.97);
-    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
   }
 `;
 
 const SaveButton = styled.button`
   width: 130px;
   height: 50px;
-  color: white;
-  background-color: green;
-  border: none;
+  color: gray;
+  background-color: white;
+  border: 1px solid lightgray;
   border-radius: 10px;
   padding: 10px;
   margin: auto 10px;
@@ -103,12 +151,12 @@ const SaveButton = styled.button`
   transition: 0.4s;
 
   &:hover {
-    /* transform: scale(1.1);
+    color: snow;
+    background-color: #f68535;
     box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
       rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
-      rgba(67, 67, 67, 0.05) 12px 12px; */
+      rgba(67, 67, 67, 0.05) 12px 12px;
     transform: scale(0.97);
-    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
   }
 `;
 
@@ -120,8 +168,8 @@ const InputTextWrapper = styled.div`
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
   margin: 30px auto 0 auto;
   transition: 0.4s;
-  border-radius: 20px;
-  border: 1px solid green;
+  border-radius: 10px;
+  border: 1px solid lightgray;
 
   &:hover {
     transform: scale(1);
@@ -139,8 +187,8 @@ const InputDescTextWrapper = styled.div`
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
   margin: 30px auto 0 auto;
   transition: 0.4s;
-  border-radius: 20px;
-  border: 1px solid green;
+  border-radius: 10px;
+  border: 1px solid lightgray;
 
   &:hover {
     transform: scale(1);
@@ -157,8 +205,8 @@ const InputFileWrapper = styled.div`
   width: 50%;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
   margin: 30px auto 0 auto;
-  border-radius: 20px;
-  border: 1px solid green;
+  border-radius: 10px;
+  border: 1px solid lightgray;
   /* transition: 0.4s;
 
   &:hover {
@@ -177,6 +225,7 @@ const InputFileTitle = styled.span`
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid gray;
+  cursor: default;
 `;
 
 const LabelFile = styled.label`
@@ -187,7 +236,7 @@ const LabelFile = styled.label`
   justify-content: center;
   border-radius: 100px;
   margin: 10px auto;
-  border: 1px solid green;
+  border: 1px solid lightgray;
   transition: 0.4s;
 
   &:hover {
@@ -202,6 +251,7 @@ const PhotoDisplay = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 100px;
+  cursor: pointer;
 `;
 
 const InputFile = styled.input`
@@ -224,11 +274,11 @@ const InputText = styled.input`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 20px;
+  border-radius: 10px;
   margin: auto 20px;
   font-size: 1.5rem;
   padding-left: 15px;
-  border: 1px solid green;
+  border: 1px solid lightgray;
 
   &:focus {
     outline: none;
@@ -245,7 +295,7 @@ const InputDesc = styled.textarea`
   margin: auto 20px;
   font-size: 1.5rem;
   padding-left: 15px;
-  border: 1px solid green;
+  /* border: 1px solid  lightgray; */
 
   &:focus {
     outline: none;
@@ -260,6 +310,7 @@ const InputDesc = styled.textarea`
 // line-height: 20px;
 
 export {
+  EditProfileBackgroundDisplay,
   EditWrapper,
   EditNavAllWrapper,
   EditNavLeftWrapper,
