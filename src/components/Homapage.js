@@ -332,12 +332,12 @@ function Homapage(props) {
   }, [pagedPins, renderPins]);
 
   // useEffect(() => {
-    // if (pagedPins.length < 1) return;
-    // makeInfiniteScrollPage();
-    // console.log("pagedPins", pagedPins);
-    // console.log("renderPins", renderPins);
+  // if (pagedPins.length < 1) return;
+  // makeInfiniteScrollPage();
+  // console.log("pagedPins", pagedPins);
+  // console.log("renderPins", renderPins);
 
-    // return () => makeInfiniteScrollPage()
+  // return () => makeInfiniteScrollPage()
   // }, []);
   // useEffect(() => {
   //   pagedPins.length > 0 && makeInfiniteScrollPage();
@@ -452,9 +452,6 @@ function Homapage(props) {
                 </PinTagIntroduction>
               </PinWrapper>
             )}
-
-            {/* ================= */}
-
             {renderPins.length > 0 &&
               renderPins.map((pin, index) => (
                 <PinWrapper
@@ -500,99 +497,6 @@ function Homapage(props) {
                   )}
                 </PinWrapper>
               ))}
-
-            {/* {filteredPins.length > 0
-              ? filteredPins.map((pin, index) => (
-                  <PinWrapper
-                    key={index}
-                    onMouseEnter={() => setIsShowLike(index)}
-                    onMouseLeave={() => setIsShowLike(-1)}>
-                    <PinImage
-                      src={pin.pinImage}
-                      onClick={() => {
-                        redirect(`/pin-detail/${pin.pinId}`);
-                      }}
-                    />
-                    <SaveButton
-                      $like={isShowLike === index}
-                      onClick={() => {
-                        handleAddPinShow(index);
-                      }}>
-                      <Heart></Heart>
-                    </SaveButton>
-
-                    <LinkButton
-                      $link={isShowLike === index}
-                      onClick={() => {
-                        window.location.assign(pin.pinLink);
-                      }}></LinkButton>
-
-                    <HoverPinName $name={isShowLike === index}>
-                      {pin.pinName}
-                    </HoverPinName>
-                    {pin.isShow && (
-                      <AddPin
-                        handleClosePinShow={handleClosePinShow}
-                        indexxx={index}
-                        key={pin.pinName}
-                        isShowAddPin={isShowAddPin}
-                        setIsShowAddPin={setIsShowAddPin}
-                        // eslint-disable-next-line react/prop-types
-                        db={props.db}
-                        uid={props.uid}
-                        pin={pin}
-                        pins={pins}
-                      />
-                    )}
-                  </PinWrapper>
-                ))
-              : pins.length > 0 &&
-                pins.map((pin, index) => (
-                  <PinWrapper
-                    key={index}
-                    onMouseEnter={() => setIsShowLike(index)}
-                    onMouseLeave={() => setIsShowLike(-1)}>
-                    <PinImage
-                      src={pin.pinImage}
-                      onClick={() => {
-                        redirect(`/pin-detail/${pin.pinId}`);
-                      }}
-                    />
-                    <SaveButton
-                      $like={isShowLike === index}
-                      onClick={() => {
-                        handleAddPinShow(index);
-                      }}>
-                      <Heart></Heart>
-                    </SaveButton>
-
-                    <LinkButton
-                      $link={isShowLike === index}
-                      onClick={() => {
-                        window.location.assign(pin.pinLink);
-                      }}></LinkButton>
-
-                    <HoverPinName $name={isShowLike === index}>
-                      {pin.pinName}
-                    </HoverPinName>
-                    {pin.isShow && (
-                      <AddPin
-                        handleClosePinShow={handleClosePinShow}
-                        indexxx={index}
-                        key={pin.pinName}
-                        isShowAddPin={isShowAddPin}
-                        setIsShowAddPin={setIsShowAddPin}
-                        // eslint-disable-next-line react/prop-types
-                        db={props.db}
-                        uid={props.uid}
-                        pin={pin}
-                        pins={pins}
-                      />
-                    )}
-                  </PinWrapper>
-                ))} */}
-
-            {/* ================= */}
           </Masonry>
         </AllPinsWrapper>
       </MainWrapper>

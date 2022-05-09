@@ -32,6 +32,7 @@ const PorfileWrapper = styled.div`
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
   backdrop-filter: blur(8px);
+  position: relative;
 `;
 
 const UserImage = styled.img`

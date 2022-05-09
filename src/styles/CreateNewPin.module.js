@@ -38,14 +38,23 @@ const DarkBackgroundDisplay = styled.div`
 
 const CreateNewPinWrapper = styled.div`
   width: 1250px;
-  min-height: 900px;
+  min-height: 1000px;
   margin: 0 auto;
   display: flex;
   justify-content: center;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
-  /* backdrop-filter: blur(8px) brightness(50%); */
   backdrop-filter: blur(8px) invert(85%);
+
+  @-moz-document url-prefix() {
+    div {
+      background-color: white;
+      color: black;
+    }
+    label {
+      color: black;
+    }
+  }
 `;
 
 const PinDataUploadWrapper = styled.div`
@@ -59,6 +68,11 @@ const PinDataUploadWrapper = styled.div`
   justify-content: flex-start;
   align-items: center;
   /* padding-top: 50px; */
+  @-moz-document url-prefix() {
+    div {
+      border-radius: 0 20px 20px 0;
+    }
+  }
 `;
 
 const PinImageUploadWrapper = styled.div`

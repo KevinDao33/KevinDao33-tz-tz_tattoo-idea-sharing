@@ -213,6 +213,7 @@ function CreateNewPin(props) {
       uploadBytes(storageRef, result).then((snapshot) => {
         console.log("Uploaded image to firebase storage!");
         getPinImageUrl(uploadedImageName);
+        alert("picture all set!")
       });
     } catch (error) {
       console.error(error);

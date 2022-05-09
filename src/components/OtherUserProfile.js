@@ -82,8 +82,10 @@ function OtherUserProfile(props) {
   useEffect(() => {
     if (otherUserUid && props.uid && otherUserUid !== props.uid) {
       return;
+    } else if (otherUserUid && props.uid && otherUserUid === props.uid) {
+      setIsSelf(true);
+      return;
     }
-    setIsSelf(true);
   }, [otherUserUid, props.uid]);
 
   const getOtherUserData = async (otherId) => {

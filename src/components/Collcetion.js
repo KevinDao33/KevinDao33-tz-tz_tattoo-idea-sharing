@@ -49,6 +49,8 @@ function Collection(props) {
       );
       const pinsInCollec = querySnapshot.data();
       setPinsInCollection(pinsInCollec);
+      // console.log('pinsInCollec', pinsInCollec);
+      
     };
     getPinsInCollection(props.uid);
   };
@@ -170,7 +172,8 @@ function Collection(props) {
               </AllPinsWrapper>
             </>
           ) : (
-            <ShowEmptyMessage>The Collection is Empty :(</ShowEmptyMessage>
+            //remove message for demo
+            <ShowEmptyMessage></ShowEmptyMessage>
           )}
         </CollectionHeader>
       )}

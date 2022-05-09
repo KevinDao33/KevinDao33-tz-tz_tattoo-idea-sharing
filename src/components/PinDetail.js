@@ -53,6 +53,7 @@ import {
   ViewMoreIconWrapper,
   Link2CommentatorProfile,
 } from "../styles/PinDetail.module";
+import Loader from "./Loader";
 // import {BackgroundDisplay} from "../styles/Homepage.module"
 
 function PinDetail(props) {
@@ -313,8 +314,7 @@ function PinDetail(props) {
               </PinCommentTitle>
               <AllPinCommentWrapper>
                 <OtherPinCommentWrapper>
-                  {pinCommentData &&
-                    pinCommentator.length > 0 ?
+                  {pinCommentData && pinCommentator.length > 0 ? (
                     pinCommentData.map((data, index) => (
                       <PinCommentWrapper key={uuid()}>
                         {pinCommentator[index] && (
@@ -327,7 +327,12 @@ function PinDetail(props) {
                         )}
                         <PinComment>{data.commentMessage}</PinComment>
                       </PinCommentWrapper>
-                    )):<NoCommentMessage>Be the first to leave a comment!</NoCommentMessage>}
+                    ))
+                  ) : (
+                    <NoCommentMessage>
+                      Be the first to leave a comment!
+                    </NoCommentMessage>
+                  )}
                 </OtherPinCommentWrapper>
               </AllPinCommentWrapper>
               <MyPinCommentWrapper>
@@ -370,18 +375,7 @@ function PinDetail(props) {
           </SimiliarPinsWrapper>
         </DarkBackgroundDisplay>
       ) : (
-        <div
-          style={{
-            backgroundColor: "#39393a",
-            color: "snow",
-            height: "100vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "20rem",
-          }}>
-          Loading...
-        </div>
+        <Loader />
       )}
     </>
   );

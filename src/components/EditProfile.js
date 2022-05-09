@@ -35,6 +35,7 @@ import {
   InputFile,
   InputDesc,
 } from "../styles/EditProfile.module";
+import Loader from "./Loader";
 
 function EditProfile(props) {
   const [userData, setUserData] = useState(null);
@@ -188,7 +189,6 @@ function EditProfile(props) {
       }
     }
   };
-  // =======================================
 
   return userData ? (
     <EditProfileBackgroundDisplay>
@@ -243,7 +243,7 @@ function EditProfile(props) {
       </EditWrapper>
     </EditProfileBackgroundDisplay>
   ) : (
-    <div>Loading</div>
+    <Loader />
   );
 }
 
