@@ -8,15 +8,20 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import {getFirestore, doc, setDoc, onSnapshot, getDoc} from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  addDoc,
+  onSnapshot,
+  getDoc,
+} from "firebase/firestore";
 
 import {Button} from "../styles/Profile.module";
 import {LoginWrapper} from "../styles/Login.module";
 import * as myConstClass from "../const";
 
-
 function Login(props) {
-  
   const [showSignWhat, setshowSignWhat] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
@@ -24,7 +29,7 @@ function Login(props) {
   const [userPhoto, setUserPhoto] = useState("");
   const [userRole, setUserRole] = useState("");
   const [userLink, setUserLink] = useState("");
-  
+
   // const auth = getAuth(props.app);
   const redirect = useNavigate();
 
@@ -43,7 +48,11 @@ function Login(props) {
     createUserWithEmailAndPassword(props.auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
-        writeUserData(user.uid);
+        console.log("user", userCredential.user);
+
+        user && writeUserData(user.uid);
+        console.log("user.uid", user.uid);
+
         getUserData(user.uid);
       })
       .catch((error) => {
@@ -69,10 +78,8 @@ function Login(props) {
   };
 
   const signIn = () => {
-    
     signInWithEmailAndPassword(props.auth, userEmail, userPassword)
       .then((userCredential) => {
-        
         const user = userCredential.user;
         user && getUserData(user.uid);
       })
@@ -89,15 +96,21 @@ function Login(props) {
           case "auth/user-not-found":
             alert("帳號不存在喔");
             break;
-            // need to be fixed
+          // need to be fixed
           // default:
           //   alert("登入失敗QQ");
         }
       });
   };
 
-  const writeUserData = (userId) => {
-    setDoc(doc(props.db, `user/${userId}`), {
+  const writeUserData = async (userId) => {
+    console.log("writeUserData");
+    console.log("108 userId", userId);
+    console.log("props.db", props.db);
+
+    const docRef = doc(props.db, "user", userId);
+
+    const UserdocRef = await setDoc(docRef, {
       email: userEmail,
       password: userPassword,
       name: userName,
@@ -107,38 +120,43 @@ function Login(props) {
       following: [],
       pic: userPhoto,
       role: userRole,
+      desc: "",
     });
     console.log("data written to database");
   };
 
-  const getUserData = (userId) => {
-    const handleUserData = getDoc(doc(props.db, `user/${userId}`), (doc) => {
-      localStorage.setItem(
-        "userInfo",
-        JSON.stringify({
-          name: doc.data().name,
-          email: doc.data().email,
-          role: doc.data().role,
-          following: doc.data().following,
-          follower: doc.data().follower,
-          pic: doc.data().pic,
-          id: doc.data().uid,
-          link: doc.data().link,
-          desc: doc.data().desc,
-        })
-      );
-      // props.setUserData({
-      //   name: doc.data().name,
-      //   email: doc.data().email,
-      //   role: doc.data().role,
-      //   following: doc.data().following,
-      //   follower: doc.data().follower,
-      //   pic: doc.data().pic,
-      //   id: doc.data().uid,
-      //   link: doc.data().link,
-      //   desc: doc.data().desc,
-      // });
-    });
+  const getUserData = async (userId) => {
+    console.log("getUserData 127");
+
+    const userData = await getDoc(doc(props.db, "user", userId));
+
+    console.log("userData.data()", userData.data());
+
+    localStorage.setItem(
+      "userInfo",
+      JSON.stringify({
+        name: userData.data().name,
+        email: userData.data().email,
+        role: userData.data().role,
+        following: userData.data().following,
+        follower: userData.data().follower,
+        pic: userData.data().pic,
+        id: userData.data().uid,
+        link: userData.data().link,
+        desc: userData.data().desc,
+      })
+    );
+    // props.setUserData({
+    //   name: doc.data().name,
+    //   email: doc.data().email,
+    //   role: doc.data().role,
+    //   following: doc.data().following,
+    //   follower: doc.data().follower,
+    //   pic: doc.data().pic,
+    //   id: doc.data().uid,
+    //   link: doc.data().link,
+    //   desc: doc.data().desc,
+    // });
   };
 
   async function handleSignIn() {

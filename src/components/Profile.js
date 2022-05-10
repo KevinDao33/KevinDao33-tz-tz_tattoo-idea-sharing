@@ -428,6 +428,7 @@ function Profile(props) {
         )
       ) : (
         <Login
+          db={props.db}
           userData={userData}
           setUserData={setUserData}
           firebaseConfig={props.firebaseConfig}
