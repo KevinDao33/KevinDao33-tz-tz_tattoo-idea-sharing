@@ -17,34 +17,59 @@ import {
   getDoc,
 } from "firebase/firestore";
 
+// import {
+//   CreateButton as SignButton,
+//   CreateButtonSpan as SignButtonSpan,
+// } from "../styles/Profile.module";
+
 import {Button} from "../styles/Profile.module";
-import {LoginWrapper} from "../styles/Login.module";
+import {
+  DarkBackgroundDisplay,
+  AllSignWrapper,
+  SignupWrapper,
+  SigninWrapper,
+  SigninTitle,
+  SignupTitle,
+  SignInput,
+  SignUpRoleTypeWrapper,
+  SignUpRoleTypeLabel,
+  SignUpRoleTypeInput,
+  SignButtonWrapper,
+  SignButton,
+  SignButtonSpan,
+} from "../styles/Login.module";
 import * as myConstClass from "../const";
 
 function Login(props) {
-  const [showSignWhat, setshowSignWhat] = useState("");
+  const [isShowSignIn, setIsShowSignIn] = useState(true);
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userName, setUserName] = useState("");
-  const [userPhoto, setUserPhoto] = useState("");
+  // const [userPhoto, setUserPhoto] = useState("");
   const [userRole, setUserRole] = useState("");
   const [userLink, setUserLink] = useState("");
 
-  // const auth = getAuth(props.app);
   const redirect = useNavigate();
 
-  // const app = initializeApp(props.firebaseConfig);
-  // const db = getFirestore(app);
-
-  const showSignIn = () => {
-    setshowSignWhat(myConstClass.SIGN_IN);
+  const handleIsShowSignIn = () => {
+    setIsShowSignIn((prev) => !prev);
   };
 
-  const showSignUp = () => {
-    setshowSignWhat(myConstClass.SIGN_UP);
+  const handleIsShowSignUp = () => {
+    setIsShowSignIn((prev) => !prev);
   };
 
   const signUp = () => {
+    if (
+      !userEmail ||
+      !userPassword ||
+      userPassword.length < 6 ||
+      !userName ||
+      !userRole
+    ) {
+      alert("Please check if all blanks are filled");
+      return;
+    }
     createUserWithEmailAndPassword(props.auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -118,7 +143,7 @@ function Login(props) {
       uid: userId,
       follower: [],
       following: [],
-      pic: userPhoto,
+      pic: "https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/profileImages%2Fgarlic8bit?alt=media&token=81a03b93-25a5-4926-82c7-08a034d473cb",
       role: userRole,
       desc: "",
     });
@@ -146,17 +171,6 @@ function Login(props) {
         desc: userData.data().desc,
       })
     );
-    // props.setUserData({
-    //   name: doc.data().name,
-    //   email: doc.data().email,
-    //   role: doc.data().role,
-    //   following: doc.data().following,
-    //   follower: doc.data().follower,
-    //   pic: doc.data().pic,
-    //   id: doc.data().uid,
-    //   link: doc.data().link,
-    //   desc: doc.data().desc,
-    // });
   };
 
   async function handleSignIn() {
@@ -169,56 +183,84 @@ function Login(props) {
   }
 
   return (
-    <LoginWrapper>
-      <Button onClick={showSignIn}>Sign In</Button>
-      <Button onClick={showSignUp}>Sign Up</Button>
-      {/* elements below will be written in styled components */}
-      {showSignWhat === myConstClass.SIGN_IN && (
-        <>
-          <label>email</label>
-          <input
-            value={userEmail}
-            onChange={(e) => setUserEmail(e.target.value)}></input>
-
-          <label>password</label>
-          <input
-            value={userPassword}
-            onChange={(e) => setUserPassword(e.target.value)}></input>
-
-          <button onClick={handleSignIn}>Sign In</button>
-        </>
-      )}
-      {showSignWhat === myConstClass.SIGN_UP && (
-        <>
-          <label>name</label>
-          <input
+    <>
+      <AllSignWrapper>
+        <SignupWrapper>
+          <SignupTitle onClick={handleIsShowSignIn}>Sign up</SignupTitle>
+          <SignInput
+            placeholder='Name'
             value={userName}
-            onChange={(e) => setUserName(e.target.value)}></input>
-
-          <label>email</label>
-          <input
+            onChange={(e) => setUserName(e.target.value)}></SignInput>
+          <SignInput
+            placeholder='Email'
             value={userEmail}
-            onChange={(e) => setUserEmail(e.target.value)}></input>
-
-          <label>password</label>
-          <input
+            onChange={(e) => setUserEmail(e.target.value)}></SignInput>
+          <SignInput
+            type='password'
+            placeholder='Password (at least 6 characters)'
             value={userPassword}
-            onChange={(e) => setUserPassword(e.target.value)}></input>
-
-          <label>role</label>
-          <input
-            value={userRole}
-            onChange={(e) => setUserRole(e.target.value)}></input>
-
-          <label>link</label>
-          <input
+            onChange={(e) => setUserPassword(e.target.value)}></SignInput>
+          <SignInput
+            placeholder='Instagram Link (Optional)'
             value={userLink}
-            onChange={(e) => setUserLink(e.target.value)}></input>
+            onChange={(e) => setUserLink(e.target.value)}></SignInput>
+          <SignUpRoleTypeWrapper>
+            <SignUpRoleTypeLabel htmlFor='user'>
+              <SignUpRoleTypeInput
+                type='radio'
+                name='type'
+                value='user'
+                id='user'
+                defaultChecked={true}
+                onClick={() => {
+                  setUserRole("user");
+                }}
+              />
+              User
+            </SignUpRoleTypeLabel>
+            <SignUpRoleTypeLabel htmlFor='artist'>
+              <SignUpRoleTypeInput
+                type='radio'
+                name='type'
+                value='artist'
+                id='artist'
+                defaultChecked={false}
+                onClick={() => {
+                  setUserRole("artist");
+                }}
+              />
+              Artist
+            </SignUpRoleTypeLabel>
+          </SignUpRoleTypeWrapper>
+          <SignButtonWrapper>
+            <SignButton onClick={handleSignUp}>
+              <SignButtonSpan>Sign up</SignButtonSpan>
+            </SignButton>
+          </SignButtonWrapper>
+        </SignupWrapper>
 
-          <button onClick={handleSignUp}>Sign Up</button>
-        </>
-      )}
-    </LoginWrapper>
+        <SigninWrapper $isSignIn={isShowSignIn}>
+          <SigninTitle onClick={handleIsShowSignIn} $isSignIn={isShowSignIn}>
+            Sign in
+          </SigninTitle>
+          <SignInput
+            type='text'
+            placeholder='Email'
+            value={userEmail}
+            onChange={(e) => setUserEmail(e.target.value)}></SignInput>
+          <SignInput
+            type='password'
+            placeholder='password'
+            value={userPassword}
+            onChange={(e) => setUserPassword(e.target.value)}></SignInput>
+          <SignButtonWrapper>
+            <SignButton onClick={handleSignIn}>
+              <SignButtonSpan>Sign in</SignButtonSpan>
+            </SignButton>
+          </SignButtonWrapper>
+        </SigninWrapper>
+      </AllSignWrapper>
+    </>
   );
 }
 
