@@ -16,7 +16,6 @@ import {
   NavbarWrapper,
   LogoWrapper,
   NavRightWrapper,
-  Searchbar,
   Notify,
   MemberPictureWrapper,
   AllNotificationWrapper,
@@ -91,7 +90,6 @@ function Navbar(props) {
         </NavLink>
 
         <NavRightWrapper>
-          <Searchbar placeholder='Search' />
           <Notify onClick={handleIsShowNotification} $isUnRead={isUnRead} />
           <NavLink to='/profile'>
             <MemberPictureWrapper />

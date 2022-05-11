@@ -15,13 +15,15 @@ const NavbarWrapper = styled.div`
   height: 90px;
   position: absolute;
   top: 0;
-  /* background-color: rgb(39, 39, 39, 0.9); */
   background-color: snow;
+  /* background-color: rgb(39, 39, 39, 0.9); */
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.1);
   justify-content: space-between;
+  position: fixed;
+  z-index: 5000;
 `;
 
 const LogoWrapper = styled.div`
