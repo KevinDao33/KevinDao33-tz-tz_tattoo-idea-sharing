@@ -19,6 +19,7 @@ import {
   Notify,
   MemberPictureWrapper,
   AllNotificationWrapper,
+  NotificationTitle,
   NotificationWrapper,
   AuthorImageWrapper,
   NotificationMessageWrapper,
@@ -51,7 +52,7 @@ function Navbar(props) {
           allNotifications.push(doc.data());
         });
 
-        setNotificationData(allNotifications);
+        setNotificationData(allNotifications.reverse());
       }
     );
   };
@@ -96,26 +97,32 @@ function Navbar(props) {
           </NavLink>
 
           <AllNotificationWrapper $showNoti={isShowNotification}>
-            {/* ==================== */}
+            <NotificationTitle>Notifications</NotificationTitle>
+            {notificationData.length > 0 ? (
+              notificationData.map((noti) => (
+                <NotificationWrapper
+                  id='NotificationWrapper'
+                  key={noti.pinId}
+                  onClick={async () => {
+                    !noti.isRead &&
+                      (await upDateNotificationIsRead(noti.notificationId));
 
-            {notificationData.length > 0
-              ? notificationData.map((noti) => (
-                  <NotificationWrapper
-                    key={noti.pinId}
-                    onClick={async () => {
-                      !noti.isRead &&
-                        (await upDateNotificationIsRead(noti.notificationId));
-
-                      redirect(`/pin-detail/${noti.pinId}`);
-                    }}>
-                    <AuthorImageWrapper src={noti.authorPic} />
-                    <NotificationMessageWrapper>
-                      {`${noti.authorName} just created a new pin`}
-                    </NotificationMessageWrapper>
-                    {noti.isRead ? <></> : <NotificationIsReadMark />}
-                  </NotificationWrapper>
-                ))
-              : console.log("no notificationData yet")}
+                    redirect(`/pin-detail/${noti.pinId}`);
+                  }}>
+                  <AuthorImageWrapper src={noti.authorPic} />
+                  <NotificationMessageWrapper>
+                    {`${noti.authorName} just created a new pin`}
+                  </NotificationMessageWrapper>
+                  {noti.isRead ? <></> : <NotificationIsReadMark />}
+                </NotificationWrapper>
+              ))
+            ) : (
+              <NotificationWrapper>
+                <NotificationMessageWrapper>
+                  No Notification :)
+                </NotificationMessageWrapper>
+              </NotificationWrapper>
+            )}
 
             {/* ==================== */}
           </AllNotificationWrapper>

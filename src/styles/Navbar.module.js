@@ -116,13 +116,13 @@ const MemberPictureWrapper = styled.div`
 const AllNotificationWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  flex-wrap: nowrap;
+  overflow: ${(props) => (props.$showNoti ? "scroll" : "hidden")};
   transition: 0.4s;
   width: 400px;
   max-height: 550px;
   height: ${(props) => (props.$showNoti ? "auto" : "0px")};
+  padding: 0;
 
   background-color: white;
   position: absolute;
@@ -133,18 +133,33 @@ const AllNotificationWrapper = styled.div`
   border: ${(props) => (props.$showNoti ? "1px solid gray" : "none")};
 `;
 
+const NotificationTitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 23px 0;
+  background-color: lightgray;
+  cursor: default;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-bottom: 1px solid lightgray;
+`;
+
 const NotificationWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
-  height: 100px;
+  padding: 20px 0;
   position: relative;
   cursor: pointer;
   border-bottom: 1px solid lightgray;
+  transition: 0.4s;
 
   &:hover {
-    background-color: snow;
+    background-color: #fffcf9;
   }
 `;
 
@@ -185,6 +200,7 @@ export {
   Notify,
   MemberPictureWrapper,
   AllNotificationWrapper,
+  NotificationTitle,
   NotificationWrapper,
   AuthorImageWrapper,
   NotificationMessageWrapper,

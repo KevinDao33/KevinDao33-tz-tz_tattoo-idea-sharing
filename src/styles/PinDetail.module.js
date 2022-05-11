@@ -138,14 +138,16 @@ const PinName = styled.h2`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin: 100px auto 20px 30px;
+  margin: calc(16%) auto calc(1%) 30px;
 `;
 
 const PinDescriptionWrapper = styled.div`
   display: block;
-  margin: 10px 30px;
+  margin: calc(1.5%) 30px;
   text-align: justify;
   line-height: 2rem;
+  max-height: calc(23%);
+  overflow: scroll;
 `;
 
 const PinDescription = styled.p`
@@ -203,7 +205,7 @@ const PinCommentTitle = styled.h4`
   margin: 30px auto 15px 30px;
   color: #39393a;
   position: absolute;
-  bottom: 375px;
+  bottom: calc(25% + 100px);
   /* border: 1px solid red; */
 `;
 
@@ -213,7 +215,7 @@ const AllPinCommentWrapper = styled.div`
   background-color: rgba(230, 230, 230, 0.8);
   width: 90%;
   /* max-height: 380px; */
-  height: 280px;
+  height: calc(25%);
   overflow: scroll;
   display: flex;
   flex-direction: column;
@@ -226,7 +228,7 @@ const AllPinCommentWrapper = styled.div`
 
 const OtherPinCommentWrapper = styled.div`
   width: 100%;
-  height: auto;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   transition: 0.3s;
@@ -249,7 +251,8 @@ const NoCommentMessage = styled.h4`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 150px;
+  /* margin-top: 150px; */
+  margin: auto;
   font-size: 1.15rem;
   color: gray;
   font-weight: normal;

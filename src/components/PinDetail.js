@@ -307,6 +307,7 @@ function PinDetail(props) {
                 <PinAuthorName>- {authorData.name}</PinAuthorName>
                 <PinAuthorPhoto src={authorData.pic}></PinAuthorPhoto>
               </PinAuthorWrapper>
+
               <PinCommentTitle>
                 {pinCommentator.length > 0
                   ? `comment (${pinCommentator.length})`
@@ -335,6 +336,7 @@ function PinDetail(props) {
                   )}
                 </OtherPinCommentWrapper>
               </AllPinCommentWrapper>
+              
               <MyPinCommentWrapper>
                 {userData && <MyPhoto src={userData.pic}></MyPhoto>}
                 <PinCommentInput

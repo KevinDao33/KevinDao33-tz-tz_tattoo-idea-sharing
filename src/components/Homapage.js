@@ -36,6 +36,7 @@ import {
   PinTagIntroductionContext,
   FooterBlank,
 } from "../styles/Homepage.module";
+import Loader from "./Loader";
 import {
   items,
   placements,
@@ -313,7 +314,7 @@ function Homapage(props) {
 
   return !isShowVideo ? (
     <LandingPage setIsShowVideo={setIsShowVideo}></LandingPage>
-  ) : (
+  ) : pins.length > 0 ? (
     <BackgroundDisplay>
       <FilterWrapper>
         <MainTitle>Explore Tattoos | </MainTitle>
@@ -456,6 +457,8 @@ function Homapage(props) {
       </MainWrapper>
       <FooterBlank id='footerBlank' />
     </BackgroundDisplay>
+  ) : (
+    <Loader></Loader>
   );
 }
 
