@@ -1,4 +1,6 @@
 import styled, {keyframes} from "styled-components";
+import viewMore from "../icon/more.png";
+import viewMoreMove from "../icon/more-gif.gif";
 
 const scroll = keyframes`
  100%{
@@ -19,6 +21,7 @@ const CollectionBackgroundDisplay = styled.div`
 
 // ======================header section==================================
 const CollectionHeader = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 1350px;
@@ -240,22 +243,35 @@ const ArrangeNavWrapper = styled.div`
 `;
 
 const BackButton = styled.div`
-  width: 50px;
-  height: 50px;
+  position: absolute;
+  top: 40px;
+  left: 35px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  border: 1px solid lightgray;
+  /* border: 1px solid lightgray; */
   border-radius: 50px;
   margin: auto 20px auto 0;
   cursor: pointer;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
   transition: 0.4s;
+  transform: rotate(90deg);
+
+  background: url(${viewMore});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 50%;
 
   &:hover {
-    transform: scale(0.97);
-    box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1) rotate(90deg);
+    background: url(${viewMoreMove});
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50%;
+  }
   }
 `;
 

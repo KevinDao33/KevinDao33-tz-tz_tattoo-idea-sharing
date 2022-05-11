@@ -160,7 +160,7 @@ const SignButton = styled.button`
   margin: auto;
   cursor: pointer;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 10px 18px;
   font-size: 1.1rem;
   position: relative;
@@ -230,7 +230,7 @@ const NoAccount = styled.div`
     0 0 40px #ffa500, 0 0 60px #ff0000, 0 0 10px #ff8d00, 0 0 98px #ff0000;
   color: #fff6a9;
   text-align: center;
-  animation: ${blink} 12s infinite;
+  animation: ${blink} 10s infinite;
 `;
 
 export {

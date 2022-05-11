@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
 import {updateDoc, doc, getDoc, arrayRemove} from "firebase/firestore";
-// import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
+import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import {v4 as uuid} from "uuid";
 import "../styles/style.css";
@@ -28,7 +28,7 @@ import {
   RemoveButton,
   ShowEmptyMessage,
   PinImageDelete,
-  // DragPinWrapper,
+  BackButton,
 } from "../styles/Collection.module";
 import ArrangeCollection from "./ArrangeCollection";
 
@@ -36,6 +36,8 @@ function Collection(props) {
   const [pinsInCollection, setPinsInCollection] = useState([]);
   const [collectionName, setCollectionName] = useState("");
   const [handlePin, setHandlePin] = useState(SHOW_PINS);
+
+  const redirect = useNavigate();
 
   const getCollectionName = () => {
     const url = window.location.href;
@@ -50,7 +52,6 @@ function Collection(props) {
       const pinsInCollec = querySnapshot.data();
       setPinsInCollection(pinsInCollec);
       // console.log('pinsInCollec', pinsInCollec);
-      
     };
     getPinsInCollection(props.uid);
   };
@@ -59,7 +60,7 @@ function Collection(props) {
     getCollectionName();
   }, [props.uid]);
 
-  const removePinFromCollection = async(collecName, pin, index) => {
+  const removePinFromCollection = async (collecName, pin, index) => {
     const collectionRef = doc(
       props.db,
       "user",
@@ -101,7 +102,7 @@ function Collection(props) {
   };
 
   return (
-    <CollectionBackgroundDisplay id="CollectionBackgroundDisplay">
+    <CollectionBackgroundDisplay id='CollectionBackgroundDisplay'>
       {handlePin === ARRANGE_PINS ? (
         <ArrangeCollection
           uid={props.uid}
@@ -109,7 +110,11 @@ function Collection(props) {
           switch2Show={switch2Show}
         />
       ) : (
-        <CollectionHeader id="CollectionHeader">
+        <CollectionHeader id='CollectionHeader'>
+          <BackButton
+            onClick={() => {
+              redirect("/profile");
+            }}></BackButton>
           {/* <UserPhoto src={photo}></UserPhoto> */}
           <CollectionName onClick={switch2Show}>
             {collectionName}

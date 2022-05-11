@@ -94,8 +94,8 @@ function ArrangeCollection(props) {
   }, [pinsInCollection]);
 
   const onDragEnd = (result, columns, setColumns) => {
-    if (!result.destination) return;
     const {source, destination} = result;
+    if (!result.destination) return;
 
     if (source.droppableId !== destination.droppableId) {
       const sourceColumn = columns[source.droppableId];
@@ -103,6 +103,7 @@ function ArrangeCollection(props) {
       const sourceItems = [...sourceColumn.items];
       const destItems = [...destColumn.items];
       const [removed] = sourceItems.splice(source.index, 1);
+
       destItems.splice(destination.index, 0, removed);
       setColumns({
         ...columns,
@@ -143,15 +144,27 @@ function ArrangeCollection(props) {
       columns.column2C.items,
       columns.column3D.items,
     ];
+    console.log("all columns", unprocessedColumns);
     let combinedColumn = [];
-    for (let i = 0; i < unprocessedColumns[0].length; i++) {
+    const aLength = columns.column0A.items.length;
+    const bLength = columns.column1B.items.length;
+    const cLength = columns.column1B.items.length;
+    const dLength = columns.column1B.items.length;
+
+    for (let i = 0; i < Math.max(aLength, bLength, cLength, dLength); i++) {
       for (let j = 0; j < unprocessedColumns.length; j++) {
         if (!unprocessedColumns[j][i]) {
-          break;
+          combinedColumn.push(0);
+        } else {
+          combinedColumn.push(unprocessedColumns[j][i]);
         }
-        combinedColumn.push(unprocessedColumns[j][i]);
       }
     }
+
+    const filteredCombinedColumn = combinedColumn.filter((e) => {
+      return typeof e !== "number";
+    });
+    console.log("filteredCombinedColumn", filteredCombinedColumn);
 
     const collectionRef = doc(
       props.db,
@@ -162,7 +175,7 @@ function ArrangeCollection(props) {
     );
 
     await updateDoc(collectionRef, {
-      pins: combinedColumn,
+      pins: filteredCombinedColumn,
     });
     alert("changes saved");
     window.location.reload();
@@ -215,8 +228,7 @@ function ArrangeCollection(props) {
                   alignItems: "center",
                 }}
                 key={columnId}>
-                <div
-                  style={{margin: 8, width: "330px"}}>
+                <div style={{margin: 8, width: "330px"}}>
                   <Droppable droppableId={columnId} key={columnId}>
                     {(provided) => {
                       return (
