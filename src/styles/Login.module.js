@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 
 // ===================================
 const AllSignWrapper = styled.div`
@@ -25,8 +25,7 @@ const SignupWrapper = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
 
-  backdrop-filter: blur(8px) invert(85%);
-
+  backdrop-filter: blur(8px) invert(0%);
 `;
 
 const SigninWrapper = styled.div`
@@ -35,7 +34,9 @@ const SigninWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  background: #eee;
+  /* background: #eee; */
+  background: #232323;
+
   border-radius: 60% / 10%;
   transform: ${(props) =>
     props.$isSignIn ? "translateY(-80px)" : "translateY(-600px)"};
@@ -51,7 +52,7 @@ const SigninTitle = styled.div`
   transition: 0.4s;
   font-weight: bold;
   cursor: pointer;
-  color: black;
+  color: snow;
 `;
 
 const SignupTitle = styled.div`
@@ -62,7 +63,7 @@ const SignupTitle = styled.div`
   transition: 0.4s;
   font-weight: bold;
   cursor: pointer;
-  color: snow;
+  color: black;
 `;
 
 const SignInput = styled.input`
@@ -95,7 +96,7 @@ const SignUpRoleTypeLabel = styled.label`
   display: flex;
   /* margin: 20px auto; */
   transition: 0.4s;
-  color: snow;
+  color: #232323;
   /* grid-template-columns: 1em auto;
   gap: 0.5em; */
 
@@ -115,7 +116,7 @@ const SignUpRoleTypeInput = styled.input`
   background-color: #fff;
   margin: auto 15px;
   font: inherit;
-  color: currentColor;
+  color: lightgray;
   width: 1.15em;
   height: 1.15em;
   border: 0.15em solid currentColor;
@@ -173,7 +174,8 @@ const SignButton = styled.button`
     width: 21%;
     /* opacity:0.8; */
     height: 103%;
-    background: black;
+    /* background: #232323; */
+    background: #272727;
     position: absolute;
     top: 0;
     left: 0;
@@ -191,6 +193,46 @@ const SignButtonSpan = styled.span`
   mix-blend-mode: difference;
 `;
 
+const blink = keyframes`
+
+  20%,
+  24%,
+  55% {
+    color: #111;
+    text-shadow: none;
+  }
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+  text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500;
+    color: #fff6a9;
+  }
+
+`;
+
+const NoAccount = styled.div`
+  width: 60%;
+  height: auto;
+  margin: auto 20px 70px auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.4s;
+
+  text-shadow: 0 0 5px #ffa500, 0 0 15px #ffa500, 0 0 20px #ffa500,
+    0 0 40px #ffa500, 0 0 60px #ff0000, 0 0 10px #ff8d00, 0 0 98px #ff0000;
+  color: #fff6a9;
+  text-align: center;
+  animation: ${blink} 12s infinite;
+`;
+
 export {
   AllSignWrapper,
   SignupWrapper,
@@ -204,4 +246,5 @@ export {
   SignButtonWrapper,
   SignButton,
   SignButtonSpan,
+  NoAccount,
 };

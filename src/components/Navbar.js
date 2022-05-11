@@ -24,6 +24,7 @@ import {
   AuthorImageWrapper,
   NotificationMessageWrapper,
   NotificationIsReadMark,
+  NoNotification,
 } from "../styles/Navbar.module";
 import {async} from "@firebase/util";
 
@@ -118,9 +119,7 @@ function Navbar(props) {
               ))
             ) : (
               <NotificationWrapper>
-                <NotificationMessageWrapper>
-                  No Notification :)
-                </NotificationMessageWrapper>
+                <NoNotification>No Notification :(</NoNotification>
               </NotificationWrapper>
             )}
 

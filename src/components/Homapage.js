@@ -47,13 +47,12 @@ import {
 function Homapage(props) {
   // check user visit is not done pageYOffset, so to prevent replay video everytime entering homepage, set isShowVideo' init to false
   const [isShowVideo, setIsShowVideo] = useState(false);
+  // const [isShowVideo, setIsShowVideo] = useState(true);
   const [isShowAddPin, setIsShowAddPin] = useState(false);
   const [pins, setPins] = useState([]);
   const [filteredPins, setFilteredPins] = useState([]);
-  // ===========================================
   const [pagedPins, setPagedPins] = useState([]);
   const [renderPins, setRenderPins] = useState([]);
-  // ===========================================
   const [filterByPlacement, setFilterByPlacement] = useState("");
   const [filterByTag, setFilterByTag] = useState("");
   const [isShowFilter, setIsShowFilter] = useState(false);
@@ -262,12 +261,16 @@ function Homapage(props) {
     rootMargin: "5px",
     threshold: 1,
   };
-  const footerBlank = document.getElementById("footerBlank");
 
   useEffect(() => {
+    console.log(" observer useEffect working");
+
+    const footerBlank = document.getElementById("footerBlank");
     // if (pagedPins.length > 0) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
+        console.log("observer working");
+
         if (entry.isIntersecting) {
           if (!pagedPins[pageNow.current]) {
             console.log("there is no more pin", pagedPins[pageNow.current]);
@@ -285,11 +288,11 @@ function Homapage(props) {
         }
       });
     }, options);
-    if (pins.length > 0 && pins) {
+    if (pins.length > 0 && pins && isShowVideo) {
       observer.observe(footerBlank);
     }
     return () => observer.disconnect();
-  }, [pagedPins, renderPins]);
+  }, [pagedPins, renderPins, isShowVideo]);
 
   // useEffect(() => {
   // if (pagedPins.length < 1) return;
@@ -423,6 +426,11 @@ function Homapage(props) {
                   <SaveButton
                     $like={isShowLike === index}
                     onClick={() => {
+                      if (!props.uid) {
+                        alert("Please sign-in bofore adding pins :)");
+                        redirect("profile");
+                        return;
+                      }
                       handleAddPinShow(index);
                     }}>
                     <Heart></Heart>
@@ -458,7 +466,10 @@ function Homapage(props) {
       <FooterBlank id='footerBlank' />
     </BackgroundDisplay>
   ) : (
-    <Loader></Loader>
+    <>
+      <Loader></Loader>
+      <FooterBlank id='footerBlank' />
+    </>
   );
 }
 

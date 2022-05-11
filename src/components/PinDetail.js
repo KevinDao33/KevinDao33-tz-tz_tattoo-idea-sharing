@@ -52,6 +52,7 @@ import {
   SimiliarPin,
   ViewMoreIconWrapper,
   Link2CommentatorProfile,
+  LoginReminder,
 } from "../styles/PinDetail.module";
 import Loader from "./Loader";
 // import {BackgroundDisplay} from "../styles/Homepage.module"
@@ -285,7 +286,27 @@ function PinDetail(props) {
             <PinDetailDataWrapper>
               <PinName>{pinData.pinName}</PinName>
               <PinDetailSubNav>
-                <CollectionSelector
+                {props.uid ? (
+                  <>
+                    <CollectionSelector
+                      value={selectedCollection}
+                      onChange={handleCollectionSelector}>
+                      <CollectionName>Choose</CollectionName>
+                      {userCollection.map((collection, index) => (
+                        <CollectionName
+                          key={index}
+                          value={collection.collectionName}>
+                          {collection.collectionName}
+                        </CollectionName>
+                      ))}
+                    </CollectionSelector>
+                    <SaveButton onClick={addPinToCollection}>save</SaveButton>
+                  </>
+                ) : (
+                  <></>
+                )}
+
+                {/* <CollectionSelector
                   value={selectedCollection}
                   onChange={handleCollectionSelector}>
                   <CollectionName>Choose</CollectionName>
@@ -297,7 +318,7 @@ function PinDetail(props) {
                     </CollectionName>
                   ))}
                 </CollectionSelector>
-                <SaveButton onClick={addPinToCollection}>save</SaveButton>
+                <SaveButton onClick={addPinToCollection}>save</SaveButton> */}
               </PinDetailSubNav>
               {/* <PinName>{pinData.pinName}</PinName> */}
               <PinDescriptionWrapper>
@@ -336,9 +357,28 @@ function PinDetail(props) {
                   )}
                 </OtherPinCommentWrapper>
               </AllPinCommentWrapper>
-              
-              <MyPinCommentWrapper>
-                {userData && <MyPhoto src={userData.pic}></MyPhoto>}
+
+              {props.uid && userData ? (
+                <MyPinCommentWrapper>
+                  <MyPhoto src={userData.pic}></MyPhoto>
+                  <PinCommentInput
+                    id='commentInputField'
+                    vaule={newComment}
+                    onChange={(e) => {
+                      setNewComment(e.target.value);
+                    }}></PinCommentInput>
+                  <SubmitButton onClick={sendNewComment}>Send</SubmitButton>
+                </MyPinCommentWrapper>
+              ) : (
+                <MyPinCommentWrapper>
+                  <LoginReminder onClick={() => redirect("/profile")}>
+                    Login to leave a comment :)
+                  </LoginReminder>
+                </MyPinCommentWrapper>
+              )}
+
+              {/* <MyPinCommentWrapper>
+                <MyPhoto src={userData.pic}></MyPhoto>
                 <PinCommentInput
                   id='commentInputField'
                   vaule={newComment}
@@ -346,7 +386,7 @@ function PinDetail(props) {
                     setNewComment(e.target.value);
                   }}></PinCommentInput>
                 <SubmitButton onClick={sendNewComment}>Send</SubmitButton>
-              </MyPinCommentWrapper>
+              </MyPinCommentWrapper> */}
             </PinDetailDataWrapper>
           </PinDetailWrapper>
           <RelatedPinsTitle>Similiar Pins</RelatedPinsTitle>

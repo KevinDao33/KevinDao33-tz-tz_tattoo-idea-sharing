@@ -37,11 +37,12 @@ import {
   SignButtonWrapper,
   SignButton,
   SignButtonSpan,
+  NoAccount,
 } from "../styles/Login.module";
 import * as myConstClass from "../const";
 
 function Login(props) {
-  const [isShowSignIn, setIsShowSignIn] = useState(true);
+  const [isShowSignIn, setIsShowSignIn] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userName, setUserName] = useState("");
@@ -258,6 +259,9 @@ function Login(props) {
               <SignButtonSpan>Sign in</SignButtonSpan>
             </SignButton>
           </SignButtonWrapper>
+          <NoAccount onClick={handleIsShowSignIn}>
+            Do not have an account ?
+          </NoAccount>
         </SigninWrapper>
       </AllSignWrapper>
     </>

@@ -191,6 +191,16 @@ const NotificationIsReadMark = styled.div`
   top: 10px;
 `;
 
+const NoNotification = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: auto auto auto 20px;
+
+  /* border: 1px solid blueviolet; */
+  color: black;
+`;
+
 export {
   NavbarBlank,
   NavbarWrapper,
@@ -205,4 +215,5 @@ export {
   AuthorImageWrapper,
   NotificationMessageWrapper,
   NotificationIsReadMark,
+  NoNotification
 };

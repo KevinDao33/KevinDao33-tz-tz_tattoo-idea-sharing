@@ -415,6 +415,17 @@ const SimiliarPin = styled.img`
   }
 `;
 
+const LoginReminder = styled.div`
+  margin: auto 30px auto auto;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.4s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
 export {
   DarkBackgroundDisplay,
   PinDetailWrapper,
@@ -448,4 +459,5 @@ export {
   SimiliarPin,
   ViewMoreIconWrapper,
   Link2CommentatorProfile,
+  LoginReminder,
 };

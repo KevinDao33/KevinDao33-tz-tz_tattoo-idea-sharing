@@ -30,18 +30,14 @@ function AddPin(props) {
   const [newCollectionName, setNewCollectionName] = useState("");
 
   const getCollections = async (id) => {
-    console.log('this is the start of getCollections');
     
     const querySnapshot = await getDocs(co(props.db, "user", id, "collection"));
-
-    console.log('this is the end of getCollections');
     
     let myCollections = [];
     querySnapshot.forEach((doc) => {
       myCollections.push({...doc.data()});
       // myCollections.collectionName = doc.id;
     });
-    console.log("myCollections", myCollections);
     setCollections(myCollections);
   };
 

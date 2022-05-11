@@ -6,8 +6,6 @@ import {v4 as uuid} from "uuid";
 import Masonry from "react-masonry-css";
 import {
   doc,
-  // addDoc,
-  //   onSnapshot,
   getDoc,
   collection,
   getDocs,
@@ -85,6 +83,9 @@ function OtherUserProfile(props) {
     } else if (otherUserUid && props.uid && otherUserUid === props.uid) {
       setIsSelf(true);
       return;
+    } else if (otherUserUid && !props.uid) {
+      setIsSelf(true);
+      return;
     }
   }, [otherUserUid, props.uid]);
 
@@ -140,6 +141,11 @@ function OtherUserProfile(props) {
   };
 
   const handleUnfollow = async () => {
+    if (!props.uid) {
+      console.log("not login");
+
+      return;
+    }
     console.log("Unfollow !!");
 
     const myFollowingRef = doc(props.db, "user", props.uid);
@@ -167,7 +173,7 @@ function OtherUserProfile(props) {
 
   return (
     <DarkBackgroundDisplay>
-      {otherUserData && props.uid && (
+      {otherUserData && (
         <PorfileWrapper>
           <UserImage src={otherUserData.pic}></UserImage>
           <UserName>{otherUserData.name}</UserName>
