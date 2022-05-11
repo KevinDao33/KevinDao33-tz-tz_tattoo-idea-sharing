@@ -295,7 +295,7 @@ const InputDesc = styled.textarea`
   margin: auto 20px;
   font-size: 1.5rem;
   padding-left: 15px;
-  /* border: 1px solid  lightgray; */
+  resize: none;
 
   &:focus {
     outline: none;

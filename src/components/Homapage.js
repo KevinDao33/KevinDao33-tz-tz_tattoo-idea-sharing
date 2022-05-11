@@ -262,57 +262,17 @@ function Homapage(props) {
     threshold: 1,
   };
   const footerBlank = document.getElementById("footerBlank");
-  // const makeInfiniteScrollPage = useCallback(() => {
-  //   // console.log(pins)
-  //   console.log("pagedPins", pagedPins);
-  //   console.log("renderPins", renderPins);
-  //   // if ( ) return
-
-  //       const callback = (entries) => {
-  //         entries.forEach((entry) => {
-  //           console.log("pageNow.current", pageNow.current);
-
-  //           if (entry.isIntersecting) {
-  //             // =========================
-  //             if (!pagedPins[pageNow.current]) {
-  //               console.log("there is no more pin", pagedPins[pageNow.current]);
-
-  //               return;
-  //             } else if (!pagedPins[pageNow.current - 1]) {
-  //               console.log(pagedPins)
-  //               setRenderPins(pagedPins[pageNow.current]);
-  //               pageNow.current++;
-  //             } else {
-  //               setRenderPins((prev) =>
-  //                 [...prev].concat(pagedPins[pageNow.current])
-  //               );
-  //               pageNow.current++;
-  //             }
-  //             // =========================
-  //           }
-  //         });
-  //       };
-
-  //       // const observer = new IntersectionObserver(callback, options);
-  //       observer.observe(footerBlank);
-  // },[pins, pagedPins,renderPins])
 
   useEffect(() => {
     // if (pagedPins.length > 0) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        // console.log("pageNow.current", pageNow.current);
-        // console.log("pagedPins", pagedPins);
-        // console.log("renderPins", renderPins);
-
         if (entry.isIntersecting) {
-          // =========================
           if (!pagedPins[pageNow.current]) {
-            // console.log("there is no more pin", pagedPins[pageNow.current]);
+            console.log("there is no more pin", pagedPins[pageNow.current]);
 
             return;
           } else if (!pagedPins[pageNow.current - 1]) {
-            // console.log(pagedPins);
             setRenderPins(pagedPins[pageNow.current]);
             pageNow.current++;
           } else {
@@ -321,7 +281,6 @@ function Homapage(props) {
             );
             pageNow.current++;
           }
-          // =========================
         }
       });
     }, options);
@@ -356,22 +315,18 @@ function Homapage(props) {
     <LandingPage setIsShowVideo={setIsShowVideo}></LandingPage>
   ) : (
     <BackgroundDisplay>
-      {/* <MainTitle>Explore Tattoos</MainTitle> */}
       <FilterWrapper>
         <MainTitle>Explore Tattoos | </MainTitle>
-
         <ShowFilterKeyWrapper>
           <ShowFilterKey>{`${
             filterByPlacement && filterByPlacement
           } `}</ShowFilterKey>
           <ShowFilterKey>{`${filterByTag && filterByTag}`}</ShowFilterKey>
         </ShowFilterKeyWrapper>
-
         <FilterButton onClick={handleIsShowFilter}>
           <FilterButtonSpan>Filters</FilterButtonSpan>
         </FilterButton>
       </FilterWrapper>
-
       <MainFilterWrapper $filter={isShowFilter}>
         <FilterWrapper>
           <FilterTitle>Placement : </FilterTitle>
@@ -477,7 +432,6 @@ function Homapage(props) {
                     onClick={() => {
                       window.location.assign(pin.pinLink);
                     }}></LinkButton>
-
                   <HoverPinName $name={isShowLike === index}>
                     {pin.pinName}
                   </HoverPinName>
