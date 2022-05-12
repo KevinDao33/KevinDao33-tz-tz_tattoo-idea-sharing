@@ -142,6 +142,8 @@ const AllPinsWrapper = styled.div`
   justify-content: center;
   height: auto;
 
+  border: 1px solid red;
+
   //seem useless since its parent's width is fit-content
   width: 100%;
   // to prevent
@@ -380,7 +382,7 @@ const FilterTitle = styled.div`
   color: black;
   font-size: 1.5rem;
   font-weight: bolder;
-  margin: 20px 30px 10px 20px;
+  margin: 15px 10px;
   transition: 0.4s;
 
   @media (max-width: 525px) {
@@ -453,7 +455,7 @@ const ClearFitlerTagWrapper = styled.div`
   /* align-items: center; */
   height: 1.25rem;
   justify-content: center;
-  margin: 10px 10px 10px 0;
+  margin: 15px 10px;
   padding: 8px 10px;
   border-radius: 10px;
   /* border: 1px solid white; */

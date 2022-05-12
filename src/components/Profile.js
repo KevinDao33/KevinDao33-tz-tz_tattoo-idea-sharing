@@ -16,6 +16,7 @@ import {
   Button,
   UserStuffWrapper,
   SelectSection,
+  MainAllCollectionWrapper,
   AllCollectionsWrapper,
   CollectionWarpper,
   CollectionImage,
@@ -58,12 +59,22 @@ function Profile(props) {
 
   const [followingUserData, setFollowingUserData] = useState([]);
   const [followerUserData, setFollowerUserData] = useState([]);
+  const [windowWidth, setWindowWidth] = useState(0);
 
+  // const breakpointColumnsObj = {
+  //   default: 4,
+  //   1100: 3,
+  //   700: 2,
+  //   500: 1,
+  // };
   const breakpointColumnsObj = {
-    default: 4,
-    1100: 3,
-    700: 2,
-    500: 1,
+    default: 7,
+    2580: 6,
+    2205: 5,
+    1825: 4,
+    1455: 3,
+    1077: 2,
+    715: 1,
   };
   const auth = getAuth(props.app);
 
@@ -122,32 +133,27 @@ function Profile(props) {
       );
     } else if (showSection === MY_COLLECTION) {
       return (
-        <AllCollectionsWrapper>
-          {collections.length > 0 &&
-            collections.map((collection) => (
-              <CollectionWarpper
-                key={collection.collectionName}
-                onClick={() => {
-                  // eslint-disable-next-line no-unused-vars
-                  redirect(`/collection/${collection.collectionName}`);
-                }}>
-                <CollectionImage
-                  $pinImg={
-                    collection.pins.length > 0
-                      ? collection.pins[0].pinImage
-                      : null
-                  }></CollectionImage>
-                <CollectionName>{`${collection.collectionName}`}</CollectionName>
-              </CollectionWarpper>
-            ))}
-
-          {/* <CreateButton
-            onClick={() => {
-              setShowCreateCollection(true);
-            }}>
-            <CreateButtonSpan>+ New Collection</CreateButtonSpan>
-          </CreateButton> */}
-        </AllCollectionsWrapper>
+        <MainAllCollectionWrapper>
+          <AllCollectionsWrapper>
+            {collections.length > 0 &&
+              collections.map((collection) => (
+                <CollectionWarpper
+                  key={collection.collectionName}
+                  onClick={() => {
+                    // eslint-disable-next-line no-unused-vars
+                    redirect(`/collection/${collection.collectionName}`);
+                  }}>
+                  <CollectionImage
+                    $pinImg={
+                      collection.pins.length > 0
+                        ? collection.pins[0].pinImage
+                        : null
+                    }></CollectionImage>
+                  <CollectionName>{`${collection.collectionName}`}</CollectionName>
+                </CollectionWarpper>
+              ))}
+          </AllCollectionsWrapper>
+        </MainAllCollectionWrapper>
       );
     } else if (showSection === MY_SCHEDULE) {
       return <div>welcome to my schedule</div>;
@@ -277,7 +283,6 @@ function Profile(props) {
       const docSnap = await getDoc(docRef);
       result.push(docSnap.data());
     });
-    console.log("result", result);
     setFollowingUserData(result);
   };
 
@@ -312,7 +317,7 @@ function Profile(props) {
           key={data.uid}
           to={`/user/${data.uid}`}
           style={{color: "inherit", textDecoration: "none"}}>
-          <FollowUser>
+          <FollowUser id={"mela"}>
             <FollowUserImage src={data.pic}></FollowUserImage>
             <FollowUserName>{data.name}</FollowUserName>
           </FollowUser>
@@ -333,6 +338,13 @@ function Profile(props) {
       ));
     }
   };
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+    console.log(window.innerWidth);
+    console.log(typeof window.innerWidth);
+    console.log(window.innerWidth > 1440);
+  }, [window.innerWidth]);
 
   return (
     <ProfileBackgroundDisplay>
@@ -405,7 +417,10 @@ function Profile(props) {
                     {showSection === MY_PIN ? (
                       <NavLink to='/create-pin'>
                         <CreateButton>
-                          <CreateButtonSpan>+ New Pin</CreateButtonSpan>
+                          <CreateButtonSpan>
+                            {" "}
+                            {windowWidth > 1141 ? " + New Pin" : "+"}
+                          </CreateButtonSpan>
                         </CreateButton>
                       </NavLink>
                     ) : showSection === MY_COLLECTION ? (
@@ -413,7 +428,9 @@ function Profile(props) {
                         onClick={() => {
                           setShowCreateCollection(true);
                         }}>
-                        <CreateButtonSpan>+ New Collection</CreateButtonSpan>
+                        <CreateButtonSpan>
+                          {windowWidth > 1141 ? " + New Collection" : "+"}
+                        </CreateButtonSpan>
                       </CreateButton>
                     ) : (
                       <h2>Something went wrong</h2>

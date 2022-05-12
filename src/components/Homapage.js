@@ -378,7 +378,7 @@ function Homapage(props) {
           })}
         </FilterWrapper>
         <FilterWrapper>
-          <FilterTitle>Tags : </FilterTitle>
+          <FilterTitle id={"Tags"}>Tags : </FilterTitle>
           <ClearFitlerTagWrapper>
             <ClearFilterTagLink
               to={!filterByPlacement ? "/" : `/?placement=${filterByPlacement}`}
