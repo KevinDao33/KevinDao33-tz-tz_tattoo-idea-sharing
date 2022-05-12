@@ -8,6 +8,22 @@ import PhotoMove from "../icon/profile-gif.gif";
 const NavbarBlank = styled.div`
   width: 100vw;
   height: 90px;
+
+  @media (max-width: 1621px) {
+    height: 85px;
+  }
+  @media (max-width: 962px) {
+    height: 80px;
+  }
+  @media (max-width: 637px) {
+    height: 70px;
+  }
+  @media (max-width: 500px) {
+    height: 65px;
+  }
+  @media (max-width: 350px) {
+    height: 55px;
+  }
 `;
 
 const NavbarWrapper = styled.div`
@@ -24,6 +40,22 @@ const NavbarWrapper = styled.div`
   justify-content: space-between;
   position: fixed;
   z-index: 5000;
+
+  @media (max-width: 1621px) {
+    height: 85px;
+  }
+  @media (max-width: 962px) {
+    height: 80px;
+  }
+  @media (max-width: 637px) {
+    height: 70px;
+  }
+  @media (max-width: 500px) {
+    height: 65px;
+  }
+  @media (max-width: 350px) {
+    height: 55px;
+  }
 `;
 
 const LogoWrapper = styled.div`
@@ -39,6 +71,31 @@ const LogoWrapper = styled.div`
   transition: 0.4s;
   :hover {
     transform: scale(1.1);
+  }
+  @media (max-width: 1621px) {
+    margin: auto 15px auto 35px;
+    width: 70px;
+    height: 70px;
+  }
+  @media (max-width: 962px) {
+    margin: auto 15px auto 30px;
+    width: 65px;
+    height: 65px;
+  }
+  @media (max-width: 637px) {
+    margin: auto 15px auto 25px;
+    width: 60px;
+    height: 60px;
+  }
+  @media (max-width: 500px) {
+    margin: auto 15px auto 20px;
+    width: 55px;
+    height: 55px;
+  }
+  @media (max-width: 350px) {
+    margin: auto 15px auto 15px;
+    width: 45px;
+    height: 45px;
   }
 `;
 
@@ -91,6 +148,31 @@ const Notify = styled.div`
     background-position: center;
     background-size: 140%;
   }
+  @media (max-width: 1621px) {
+    margin: auto 10px auto 0;
+    width: 65px;
+    height: 65px;
+  }
+  @media (max-width: 962px) {
+    margin: auto 10px auto 0;
+    width: 60px;
+    height: 60px;
+  }
+  @media (max-width: 637px) {
+    margin: auto 10px auto 0;
+    width: 55px;
+    height: 55px;
+  }
+  @media (max-width: 500px) {
+    margin: auto 10px auto 0;
+    width: 50px;
+    height: 50px;
+  }
+  @media (max-width: 350px) {
+    margin: auto 10px auto 0;
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 const MemberPictureWrapper = styled.div`
@@ -110,6 +192,31 @@ const MemberPictureWrapper = styled.div`
     background-repeat: no-repeat;
     background-position: center;
     background-size: 120%;
+  }
+  @media (max-width: 1621px) {
+    margin: auto 10px auto 0;
+    width: 65px;
+    height: 65px;
+  }
+  @media (max-width: 962px) {
+    margin: auto 10px auto 0;
+    width: 60px;
+    height: 60px;
+  }
+  @media (max-width: 637px) {
+    margin: auto 10px auto 0;
+    width: 55px;
+    height: 55px;
+  }
+  @media (max-width: 500px) {
+    margin: auto 10px auto 0;
+    width: 50px;
+    height: 50px;
+  }
+  @media (max-width: 350px) {
+    margin: auto 10px auto 0;
+    width: 40px;
+    height: 40px;
   }
 `;
 
@@ -215,5 +322,5 @@ export {
   AuthorImageWrapper,
   NotificationMessageWrapper,
   NotificationIsReadMark,
-  NoNotification
+  NoNotification,
 };

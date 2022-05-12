@@ -1,17 +1,32 @@
 /* css bolow are for masonry-style, which is accoomplished with my-masonry-grid */
 
 .my-masonry-grid {
-  display: -webkit-box; /* Not needed if autoprefixing */
+  /* Not needed if autoprefixing */
+  display: -webkit-box;
   display: -ms-flexbox;
-  /*Not needed if autoprefixing  */
+
   display: flex;
   margin-left: -5px; /* gutter size offset */
   width: auto;
 }
+
 .my-masonry-grid_column {
+  flex: 1;
   padding-left: 5px; /* gutter size */
   background-clip: padding-box;
-  min-width: 330px;
+  min-width: 260px;
+}
+
+@media (max-width: 630px) {
+  .my-masonry-grid_column {
+    border: 1px solid blue;
+    min-width: 100px;
+    padding-left: 0px; /* gutter size */
+  }
+
+  .my-masonry-grid {
+    width: 100%;
+  }
 }
 
 /* Style your items */

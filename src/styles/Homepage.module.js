@@ -18,6 +18,37 @@ const MainTitle = styled.h1`
     text-shadow: -5px 5px 0px rgba(204, 104, 35, 255), -10px 10px 0px #db9565,
       -15px 15px 0px #e6b491;
   }
+
+  @media (max-width: 1730px) {
+    font-size: 3.5rem;
+  }
+  @media (max-width: 1185px) {
+    font-size: 3rem;
+    margin: 40px 10px 15px 0;
+  }
+  @media (max-width: 1030px) {
+    font-size: 2.25rem;
+    margin: auto 10px 20px 0;
+  }
+  @media (max-width: 850px) {
+    font-size: 2rem;
+    margin: auto 10px 20px 0;
+  }
+  @media (max-width: 525px) {
+    font-size: 1.75rem;
+  }
+  @media (max-width: 450px) {
+    font-size: 1.5rem;
+    margin: auto 20px 10px 0;
+  }
+  @media (max-width: 411px) {
+    font-size: 1.75rem;
+    margin: auto 10px 10px 0;
+  }
+  @media (max-width: 342px) {
+    font-size: 1.5rem;
+    margin: auto 10px 10px 0;
+  }
 `;
 
 const ShowFilterKeyWrapper = styled.div`
@@ -39,6 +70,20 @@ const ShowFilterKey = styled.h3`
   color: gray;
   font-weight: bolder;
   cursor: default;
+
+  @media (max-width: 1730px) {
+    font-size: 1.5rem;
+  }
+  @media (max-width: 1185px) {
+    font-size: 1.25rem;
+  }
+  @media (max-width: 1030px) {
+    font-size: 1rem;
+    margin: 5px auto 0px 0;
+  }
+  @media (max-width: 750px) {
+    display: none;
+  }
 `;
 
 const scroll = keyframes`
@@ -77,11 +122,15 @@ const BackgroundDisplay = styled.div`
 `;
 
 const MainWrapper = styled.div`
-  width: 1400px;
+  /* width: 1400px; */
+  /* width: fit-content; */
+  width: 90%;
   margin: 15px auto;
-  /* border: 1px solid red; */
   display: flex;
   justify-content: center;
+  overflow: scroll;
+
+  /* border: 1px solid orange; */
 `;
 
 const AllPinsWrapper = styled.div`
@@ -92,6 +141,8 @@ const AllPinsWrapper = styled.div`
   align-items: flex-start;
   justify-content: center;
   height: auto;
+
+  //seem useless since its parent's width is fit-content
   width: 100%;
   // to prevent
   /* min-height: 100vh; */
@@ -108,7 +159,7 @@ const PinWrapper = styled.div`
 `;
 
 const PinImage = styled.img`
-  width: 300px;
+  width: 260px;
   border-radius: 10px;
   cursor: pointer;
   margin: 15px;
@@ -121,11 +172,17 @@ const PinImage = styled.img`
       rgba(67, 67, 67, 0.2) 12px 12px, rgba(67, 67, 67, 0.1) 18px 18px,
       rgba(67, 67, 67, 0.05) 20px 20px;
   }
+
+  /* border: 1px solid blue; */
+  @media (max-width: 630px) {
+    width: 100%;
+    margin: 3px;
+  }
 `;
 
 const PinTagIntroduction = styled.div`
-  padding: 20px 10px;
-  width: 280px;
+  padding: 20px 5px;
+  width: 250px;
   border-radius: 10px;
   cursor: default;
   background-color: black;
@@ -133,6 +190,12 @@ const PinTagIntroduction = styled.div`
   margin: 15px;
   transition: 0.4s;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
+
+  @media (max-width: 630px) {
+    width: 97%;
+    margin: 3px;
+    padding: 10px 3px;
+  }
   /* 
   &:hover {
     transform: scale(1.1);
@@ -145,14 +208,20 @@ const PinTagIntroduction = styled.div`
 const PinTagIntroductionTitle = styled.h1`
   margin: 0px auto 20px 20px;
   color: white;
-  font-size: 2rem;
+  font-size: 1.75rem;
 `;
 
 const PinTagIntroductionContext = styled.p`
   margin: 0 20px 0 20px;
   line-height: 2rem;
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   color: white;
+
+  @media (max-width: 630px) {
+    margin: 0 10px 0 10px;
+    line-height: 1.5rem;
+    font-size: 1rem;
+  }
 `;
 
 const SaveButton = styled.button`
@@ -213,17 +282,42 @@ const LinkButton = styled.button`
   background-size: 80%;
 `;
 
-const FilterWrapper = styled.div`
+const FilterTitleWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  width: 1400px;
+  //RWD width should be %
+  /* width: 1400px; */
+  width: 90%;
   margin: 15px auto;
-  /* border: 1px solid red; */
   justify-content: flex-start;
   align-items: flex-end;
   flex-wrap: wrap;
   min-height: 30px;
   transition: 0.4s;
+  height: fit-content;
+
+  /* border: 1px solid red; */
+
+  @media (max-width: 450px) {
+    min-height: 10px;
+  }
+`;
+
+const FilterWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  //RWD width should be %
+  /* width: 1400px; */
+  width: 98%;
+  margin: auto;
+  justify-content: flex-start;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  min-height: 30px;
+  transition: 0.4s;
+  height: fit-content;
+
+  /* border: 1px solid coral; */
 `;
 
 const FilterButton = styled.button`
@@ -236,6 +330,7 @@ const FilterButton = styled.button`
   position: relative;
   box-shadow: 0px 1px 0px #b2a98f, 0px 8px 6px rgba(0, 0, 0, 0.15),
     0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1);
+  transition: all 0.65s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
   &:before {
     transition: all 0.65s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -253,6 +348,27 @@ const FilterButton = styled.button`
       width: 100%;
     }
   }
+
+  @media (max-width: 1730px) {
+    padding: 8px 23px;
+    font-size: 1.75rem;
+  }
+
+  @media (max-width: 1185px) {
+    padding: 6px 20px;
+    font-size: 1.55rem;
+  }
+
+  @media (max-width: 525px) {
+    padding: 3px 15px;
+    font-size: 1.25rem;
+  }
+
+  @media (max-width: 450px) {
+    padding: 3px 15px;
+    font-size: 1.25rem;
+    margin: auto 10px 10px 10px;
+  }
 `;
 
 const FilterButtonSpan = styled.span`
@@ -265,6 +381,11 @@ const FilterTitle = styled.div`
   font-size: 1.5rem;
   font-weight: bolder;
   margin: 20px 30px 10px 20px;
+  transition: 0.4s;
+
+  @media (max-width: 525px) {
+    font-size: 1.25rem;
+  }
 `;
 
 const FitlerTagWrapper = styled.div`
@@ -272,7 +393,7 @@ const FitlerTagWrapper = styled.div`
   /* align-items: center; */
   height: 1.25rem;
   justify-content: center;
-  margin: 10px;
+  margin: 15px 10px;
   padding: 8px 10px;
   border-radius: 10px;
   border: 1px solid gray;
@@ -291,6 +412,18 @@ const FitlerTagWrapper = styled.div`
     box-shadow: 0px 1px 0px #b2a98f, 0px 8px 6px rgba(0, 0, 0, 0.15),
       0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1);
   }
+
+  @media (max-width: 1730px) {
+    margin: 12px 7px;
+  }
+  @media (max-width: 1185px) {
+    margin: 10px 7px;
+    padding: 6px 8px;
+  }
+  @media (max-width: 1008px) {
+    padding: 4px 6px;
+    margin: 8px 7px;
+  }
 `;
 
 const FilterTagLink = styled(NavLink)`
@@ -305,6 +438,13 @@ const FilterTagLink = styled(NavLink)`
 
   &:focus-within {
     color: white;
+  }
+  @media (max-width: 1185px) {
+    font-size: 1.15rem;
+  }
+
+  @media (max-width: 1008px) {
+    font-size: 1rem;
   }
 `;
 
@@ -331,6 +471,17 @@ const ClearFitlerTagWrapper = styled.div`
     box-shadow: 0px 1px 0px #b2a98f, 0px 8px 6px rgba(0, 0, 0, 0.15),
       0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1);
   }
+  @media (max-width: 1730px) {
+    margin: 12px 7px;
+  }
+  @media (max-width: 1185px) {
+    margin: 10px 7px;
+    padding: 6px 8px;
+  }
+  @media (max-width: 1008px) {
+    padding: 4px 6px;
+    margin: 8px 7px;
+  }
 `;
 
 const ClearFilterTagLink = styled(NavLink)`
@@ -345,12 +496,20 @@ const ClearFilterTagLink = styled(NavLink)`
   &:focus-within {
     color: black;
   }
+  @media (max-width: 1185px) {
+    font-size: 1.15rem;
+  }
+
+  @media (max-width: 1008px) {
+    font-size: 1rem;
+  }
 `;
 
 const MainFilterWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 1380px;
+  /* width: 1380px; */
+  width: 88%;
   margin: 10px auto 30px auto;
   border-radius: 10px;
   background-color: white;
@@ -360,21 +519,55 @@ const MainFilterWrapper = styled.div`
   transition: height 0.3s ease-in-out;
   overflow: hidden;
   height: ${(props) => (props.$filter ? "500px" : "0px")};
+
+  @media (max-width: 1665px) {
+    height: ${(props) => (props.$filter ? "550px" : "0px")};
+  }
+  @media (max-width: 1530px) {
+    height: ${(props) => (props.$filter ? "600px" : "0px")};
+  }
+  @media (max-width: 1255px) {
+    height: ${(props) => (props.$filter ? "650px" : "0px")};
+  }
+  @media (max-width: 1185px) {
+    height: ${(props) => (props.$filter ? "700px" : "0px")};
+  }
+  @media (max-width: 1008px) {
+    height: ${(props) => (props.$filter ? "550px" : "0px")};
+  }
+  @media (max-width: 980px) {
+    height: ${(props) => (props.$filter ? "600px" : "0px")};
+  }
+  @media (max-width: 773px) {
+    height: ${(props) => (props.$filter ? "650px" : "0px")};
+  }
+  @media (max-width: 631px) {
+    height: ${(props) => (props.$filter ? "750px" : "0px")};
+  }
+  @media (max-width: 568px) {
+    height: ${(props) => (props.$filter ? "850px" : "0px")};
+  }
+  @media (max-width: 512px) {
+    height: ${(props) => (props.$filter ? "900px" : "0px")};
+  }
+  @media (max-width: 462px) {
+    height: ${(props) => (props.$filter ? "fit-content" : "0px")};
+  }
 `;
 
 const HoverPinName = styled.div`
   display: flex;
-  width: calc(300px - 30px + 2px);
+  width: calc(260px - 10px + 2px);
   height: ${(props) => (props.$name ? "40px" : "0px")};
   transform: scale(${(props) => (props.$name ? 1.1 : 1)});
   align-items: flex-end;
-  padding: ${(props) => (props.$name ? "0 0 10px 30px" : "0px")};
+  padding: ${(props) => (props.$name ? "0 0 10px 10px" : "0px")};
   color: white;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   cursor: pointer;
   position: absolute;
-  bottom: ${(props) => (props.$name ? "-1px" : "19px")};
-  left: 13px;
+  bottom: ${(props) => (props.$name ? "2px" : "21px")};
+  left: 15px;
   overflow: hidden;
   border-radius: 0 0 10px 10px;
   transition: 0.2s ease-in-out;
@@ -402,6 +595,7 @@ export {
   PinWrapper,
   PinImage,
   SaveButton,
+  FilterTitleWrapper,
   FilterWrapper,
   FilterButton,
   FilterButtonSpan,

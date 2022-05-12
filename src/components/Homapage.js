@@ -17,6 +17,7 @@ import {
   PinWrapper,
   PinImage,
   SaveButton,
+  FilterTitleWrapper,
   FilterWrapper,
   FilterButton,
   FilterButtonSpan,
@@ -95,10 +96,13 @@ function Homapage(props) {
   }, []);
 
   const breakpointColumnsObj = {
-    default: 4,
-    1100: 3,
-    700: 2,
-    500: 1,
+    default: 7,
+    2280: 6,
+    1950: 5,
+    1620: 4,
+    1300: 3,
+    960: 2,
+    300: 1,
   };
 
   const handleAddPinShow = (index) => {
@@ -333,7 +337,7 @@ function Homapage(props) {
     <LandingPage setIsShowVideo={setIsShowVideo}></LandingPage>
   ) : pins.length > 0 ? (
     <BackgroundDisplay>
-      <FilterWrapper>
+      <FilterTitleWrapper>
         <MainTitle>Explore Tattoos | </MainTitle>
         <ShowFilterKeyWrapper>
           <ShowFilterKey>{`${
@@ -344,7 +348,7 @@ function Homapage(props) {
         <FilterButton onClick={handleIsShowFilter}>
           <FilterButtonSpan>Filters</FilterButtonSpan>
         </FilterButton>
-      </FilterWrapper>
+      </FilterTitleWrapper>
       <MainFilterWrapper $filter={isShowFilter}>
         <FilterWrapper>
           <FilterTitle>Placement : </FilterTitle>
