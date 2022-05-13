@@ -9,7 +9,8 @@ import {doc, getDoc, updateDoc} from "firebase/firestore";
 import {
   PinImageArrange,
   ArrangeNavWrapper,
-  BackButton,
+  ArrangeBackButton,
+  ArrangeTitle,
   SaveButton,
 } from "../styles/Collection.module";
 
@@ -186,7 +187,7 @@ function ArrangeCollection(props) {
   return (
     <>
       <ArrangeNavWrapper>
-        <BackButton
+        <ArrangeBackButton
           onClick={() => {
             const leave = confirm(
               "changes not saved yet, do you want to leave?"
@@ -194,28 +195,21 @@ function ArrangeCollection(props) {
             if (leave) {
               props.switch2Show();
             }
-          }}>
-          {"<-"}
-        </BackButton>
-        <h2
-          style={{
-            fontSize: "2rem",
-            textAlign: "center",
-            margin: "auto",
-          }}>
-          Arranging : {collectionName}
-        </h2>
+          }}></ArrangeBackButton>
+        <ArrangeTitle>Arranging : {collectionName}</ArrangeTitle>
         <SaveButton onClick={saveNewPinOrder}>save</SaveButton>
       </ArrangeNavWrapper>
       <div
         style={{
           display: "flex",
+          justifyContent: "center",
           flexDirection: "row",
           flexWrap: "wrap",
-          width: "1400px",
+          width: "75%",
           margin: "30px auto 10px auto",
           borderRadius: "20px",
           boxShadow: "inset 0 4px 10px rgba(0, 0, 0, 0.3)",
+          // border: "5px solid blue",
         }}>
         <DragDropContext
           onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
@@ -226,9 +220,18 @@ function ArrangeCollection(props) {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
+                  width: "22%",
+                  // border: "3px solid yellow",
                 }}
                 key={columnId}>
-                <div style={{margin: 8, width: "330px"}}>
+                <div
+                  style={{
+                    margin: 8,
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    // border: "4px solid red",
+                  }}>
                   <Droppable droppableId={columnId} key={columnId}>
                     {(provided) => {
                       return (
@@ -236,10 +239,16 @@ function ArrangeCollection(props) {
                           {...provided.droppableProps}
                           ref={provided.innerRef}
                           style={{
-                            background: "white",
-                            padding: 4,
-                            width: "330px",
-                            minHeight: "100vh",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                            // background: "snow",
+                            padding: "4px",
+                            // width: "90%",
+                            minHeight: "50vh",
+                            // backdropFilter: "blur(8px)",
+                            // border: "4px solid purple",
                           }}>
                           {column.items.map((item, index) => {
                             return (
@@ -253,7 +262,21 @@ function ArrangeCollection(props) {
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
+                                      // style={{
+                                      //   ...provided.draggableProps.style,
+                                      //   top: 0,
+                                      //   left: 0,
+                                      //   zIndex: 6000,
+                                      // }}
                                       src={item.pinImage}></PinImageArrange>
+                                    // <PinImageArrange
+                                    //   ref={provided.innerRef}
+                                    //   {...provided.draggableProps}
+                                    //   {...provided.dragHandleProps}
+
+                                    //   style={{top: 0, left: 0}}
+
+                                    //   src={item.pinImage}></PinImageArrange>
                                   );
                                 }}
                               </Draggable>

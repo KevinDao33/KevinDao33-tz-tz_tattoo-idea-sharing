@@ -82,9 +82,12 @@ function Collection(props) {
 
   const breakpointColumnsObj = {
     default: 4,
-    1100: 3,
-    700: 2,
-    500: 1,
+    // 2521: 6,
+    // 2154: 5,
+    // 1789: 4,
+    // 1422: 3,
+    // 1052: 2,
+    // 688: 1,
   };
 
   const switch2Show = () => {
