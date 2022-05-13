@@ -37,7 +37,7 @@ const CollectionHeader = styled.div`
   border-radius: 20px;
   box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
 
-  border: 5px solid red;
+  /* border: 5px solid red; */
 `;
 
 const UserPhoto = styled.img`
@@ -246,7 +246,7 @@ const PinImageDelete = styled.img`
 `;
 
 const PinImageArrange = styled.img`
-  width: 95%;
+  width: 85%;
   border-radius: 10px;
   cursor: pointer;
   margin: 15px auto;

@@ -72,10 +72,13 @@ function PinDetail(props) {
 
   const redirect = useNavigate();
   const breakpointColumnsObj = {
-    default: 4,
-    1100: 3,
-    700: 2,
-    500: 1,
+    default: 7,
+    2678: 6,
+    2267: 5,
+    1879: 4,
+    1495: 3,
+    1107: 2,
+    400: 1,
   };
 
   const getPinId = () => {
@@ -320,7 +323,7 @@ function PinDetail(props) {
                 </CollectionSelector>
                 <SaveButton onClick={addPinToCollection}>save</SaveButton> */}
               </PinDetailSubNav>
-              {/* <PinName>{pinData.pinName}</PinName> */}
+ 
               <PinDescriptionWrapper>
                 <PinDescription>{pinData.pinDesc}</PinDescription>
               </PinDescriptionWrapper>

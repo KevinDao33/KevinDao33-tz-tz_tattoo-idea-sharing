@@ -13,7 +13,7 @@ function LandingPage(props) {
       localStorage.setItem("isShowVideo", true);
       // eslint-disable-next-line react/prop-types
       props.setIsShowVideo(true);
-    }, 7000);
+    }, 9000);
   };
 
   useEffect(() => {

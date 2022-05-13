@@ -72,13 +72,6 @@ function Homapage(props) {
     checkIsShowVideo();
   }, []);
 
-  useEffect(() => {
-    console.log("pins", pins);
-    console.log("pipagedPinsns", pagedPins);
-    console.log("renderPins", renderPins);
-    console.log("pageNow", pageNow);
-  }, [pins, renderPins, pagedPins, pageNow]);
-
   const getPins = async () => {
     try {
       const notesSnapshot = await getDocs(collection(props.db, "pin"));
@@ -276,26 +269,17 @@ function Homapage(props) {
   //things not working on Windows
   //trying to find bugs
   useEffect(() => {
-    console.log("observer useEffect working");
-    console.log("pins", pins);
-
     const footerBlank = document.getElementById("footerBlank");
     // if (pagedPins.length > 0) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        console.log("observer working");
-
         if (entry.isIntersecting) {
           if (!pagedPins[pageNow.current]) {
-            console.log("all pins rendered");
-
             return;
           } else if (!pagedPins[pageNow.current - 1]) {
-            console.log("i will render page 0");
             setRenderPins(pagedPins[pageNow.current]);
             pageNow.current++;
           } else {
-            console.log("i will render page 1+");
             setRenderPins((prev) =>
               [...prev].concat(pagedPins[pageNow.current])
             );
@@ -305,8 +289,6 @@ function Homapage(props) {
       });
     }, options);
     if (pins.length > 0 && pins && isShowVideo) {
-      console.log("i start observe");
-
       observer.observe(footerBlank);
     }
     return () => observer.disconnect();
