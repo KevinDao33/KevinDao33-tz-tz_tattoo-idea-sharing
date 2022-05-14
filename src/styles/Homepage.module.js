@@ -164,8 +164,8 @@ const PinImage = styled.img`
   width: 260px;
   border-radius: 10px;
   cursor: pointer;
-  margin: 15px;
   transition: 0.4s;
+  margin: 15px;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
 
   &:hover {

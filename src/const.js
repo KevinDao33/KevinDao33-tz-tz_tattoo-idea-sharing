@@ -91,7 +91,7 @@ export const tagsWithIntroduction = [
 ];
 
 export const tagIntroductions = {
-  filterByTag: 'aaaa',
+  filterByTag: "aaaa",
   "Black & Gray":
     "Shading is key when it comes to black and grey tattoos. Pieces in this aesthetic may include Realism, dotwork, linework, and more, but the use of grey shades of ink is essential. Here you’ll find inspiration from some of the best black and grey tattoo artists around the world.",
 
@@ -143,3 +143,73 @@ export const tagIntroductions = {
   Watercolor:
     "Painterly colorful pieces are created within the style of Watercolor tattoo. Usually used to depict flowers and fauna, watercolor tattoo artists are inspired by nature. Often they look exactly as if watercolor paint has been applied to the skin!",
 };
+
+// Start tattoo plan
+
+export const placementsOptions = [
+  {value: "Any", label: "Any"},
+  {value: "Ankle", label: "Ankle"},
+  {value: "Back-full", label: "Back-full"},
+  {value: "Back-lower", label: "Back-lower"},
+  {value: "Back-upper", label: "Back-upper"},
+  {value: "Behind Ear", label: "Behind Ear"},
+  {value: "Caf", label: "Caf"},
+  {value: "Chest", label: "Chest"},
+  {value: "Elbow", label: "Elbow"},
+  {value: "Foot", label: "Foot"},
+  {value: "Forearm-inner", label: "Forearm-inner"},
+  {value: "Forearm-outer", label: "Forearm-outer"},
+  {value: "Full Sleeve", label: "Full Sleeve"},
+  {value: "Half Sleeve", label: "Half Sleeve"},
+  {value: "Hand", label: "Hand"},
+  {value: "Hip", label: "Hip"},
+  {value: "Knee", label: "Knee"},
+  {value: "Neck", label: "Neck"},
+  {value: "Ribs", label: "Ribs"},
+  {value: "Shin", label: "Shin"},
+  {value: "Shoulder Blade", label: "Shoulder Blade"},
+  {value: "Sternum", label: "Sternum"},
+  {value: "Stomach", label: "Stomach"},
+  {value: "Thigh-back", label: "Thigh-back"},
+  {value: "Thigh-front", label: "Thigh-front"},
+  {value: "Throat", label: "Throat"},
+  {value: "Upper Arm-inner", label: "Upper Arm-inner"},
+  {value: "Upper Arm-outer", label: "Upper Arm-outer"},
+  {value: "Wrist", label: "Wrist"},
+  {value: "Other", label: "Other"},
+];
+
+export const sizeOptions = [
+  {value: 'S - (2" x 2")', label: 'S - (2" x 2") Size of a credit card'},
+  {value: 'M - (4" x 4")', label: 'M - (4" x 4") Palm-sized'},
+  {value: 'L - (6" x 6")', label: 'L - (6" x 6") Hand-sized'},
+  {value: 'XL - (8" x 8")', label: 'XL - (8" x 8") Half-sleeve or larger'},
+  {value: "Don’t know", label: "Don’t know"},
+];
+
+export const budgetOption = [
+  {value: "$2,000 - $10,000", label: "$2,000 - $10,000"},
+  {value: "$10,000 - $25,000", label: "$10,000 - $25,000"},
+  {value: "$25,000+", label: "$25,000+"},
+];
+
+export const cities = [
+  {value: "Taipei", label: "Taipei"},
+  {value: "New Taipei", label: "New Taipei"},
+  {value: "Taoyuan", label: "Taoyuan"},
+  {value: "Keelung", label: "Keelung"},
+  {value: "Hsinchu", label: "Hsinchu"},
+  {value: "Taichung", label: "Taichung"},
+  {value: "Chiayi", label: "Chiayi"},
+  {value: "Tainan", label: "Tainan"},
+  {value: "Kaohsiung", label: "Kaohsiung"},
+  {value: "Changhua", label: "Changhua"},
+  {value: "Miaoli", label: "Miaoli"},
+  {value: "Douliu", label: "Douliu"},
+  {value: "Hualien", label: "Hualien"},
+  {value: "Nantou", label: "Nantou"},
+  {value: "Pingtung", label: "Pingtung"},
+  {value: "Yilan", label: "Yilan"},
+  {value: "Taitung", label: "Taitung"},
+  {value: "Penghu", label: "Penghu"},
+];

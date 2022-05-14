@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
+import "react-calendar/dist/Calendar.css";
+import "./styles/style.css"
 
 // document.body.style.zoom = 0.7;
 // document.body.style.transform = "scale(0.7)";  

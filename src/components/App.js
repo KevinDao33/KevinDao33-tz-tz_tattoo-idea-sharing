@@ -16,6 +16,7 @@ import Login from "./Login";
 import PinDetail from "./PinDetail";
 import EditProfile from "./EditProfile";
 import OtherUserProfile from "./OtherUserProfile";
+import StartTattooPlan from "./StartTattooPlan"
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -110,6 +111,7 @@ function App() {
           }
         />
         <Route path='pin-detail' element={<PinDetail />} />
+        <Route path='/start-tattoo-plan' element={<StartTattooPlan uid={uid} db={db} />} />
       </Routes>
     </BrowserRouter>
   );
