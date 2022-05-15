@@ -6,7 +6,14 @@ import Masonry from "react-masonry-css";
 import Select from "react-select";
 import Calendar from "react-calendar";
 import {placementsOptions, sizeOptions, budgetOption, cities} from "../const";
-import {collection, getDocs, getDoc, doc, addDoc} from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  addDoc,
+  setDoc,
+} from "firebase/firestore";
 
 import {
   StartTattooPlanWrapper,
@@ -92,7 +99,6 @@ function StartTattooPlan(props) {
       !planDate ||
       !planBudget ||
       !planDescription ||
-      !isColor ||
       !selectedSize ||
       !selectedPlacement ||
       !selectedCity
@@ -103,10 +109,17 @@ function StartTattooPlan(props) {
     }
     console.log("we good to upload");
 
-    const newPlanRef = collection(props.db, "user", props.uid, "plan");
     const allNewPlanRef = collection(props.db, "plan");
+    const newPlanRef = doc(allNewPlanRef);
+    const userNewPlanRef = doc(
+      props.db,
+      "user",
+      props.uid,
+      "plan",
+      newPlanRef.id
+    );
 
-    await addDoc(newPlanRef, {
+    await setDoc(newPlanRef, {
       reference: selectedReference,
       date: planDate,
       budget: planBudget.value,
@@ -115,9 +128,10 @@ function StartTattooPlan(props) {
       size: selectedSize.value,
       placement: selectedPlacement.value,
       city: selectedCity.value,
+      planId: newPlanRef.id,
     });
 
-    await addDoc(allNewPlanRef, {
+    await setDoc(userNewPlanRef, {
       reference: selectedReference,
       date: planDate,
       budget: planBudget.value,
@@ -126,13 +140,37 @@ function StartTattooPlan(props) {
       size: selectedSize.value,
       placement: selectedPlacement.value,
       city: selectedCity.value,
+      planId: newPlanRef.id,
     });
+
     alert(`Plan created!`);
     redirect("/profile");
   };
 
-  useEffect(()=>{console.log('selectedCity', selectedCity.value);
-  },[selectedCity])
+  useEffect(() => {
+    console.log("selectedCity", selectedCity.value);
+  }, [selectedCity]);
+
+  useEffect(() => {
+    console.log(
+      "selectedReference",
+      selectedReference,
+      "planDate",
+      planDate,
+      "planBudget",
+      planBudget,
+      "planDescription",
+      planDescription,
+      "isColor",
+      isColor,
+      "selectedSize",
+      selectedSize,
+      "selectedPlacement",
+      selectedPlacement,
+      "selectedCity",
+      selectedCity
+    );
+  }, [planDate]);
 
   return (
     <>
@@ -225,28 +263,35 @@ function StartTattooPlan(props) {
                       Do you want color?
                     </TattooPlanColorTypeTitle>
                     <TattooPlanColorTypeWrapper>
-                      <TattooPlanColorTypeLabel htmlFor='color'>
+                      <TattooPlanColorTypeLabel
+                        htmlFor='color'
+                        $isColor={isColor === true}>
                         <TattooPlanColorTypeInput
+                          $isColor={isColor === true}
                           type='radio'
                           name='type'
                           value='color'
                           id='color'
                           defaultChecked={true}
                           onClick={() => {
-                            setIsColor(true);
+                            setIsColor((prev) => true);
                           }}
                         />
                         Color
                       </TattooPlanColorTypeLabel>
-                      <TattooPlanColorTypeLabel htmlFor='no-color'>
+
+                      <TattooPlanColorTypeLabel
+                        htmlFor='no-color'
+                        $isColor={isColor === false}>
                         <TattooPlanColorTypeInput
+                          $isColor={isColor === false}
                           type='radio'
                           name='type'
                           value='no-color'
                           id='no-color'
                           defaultChecked={false}
                           onClick={() => {
-                            setIsColor(false);
+                            setIsColor((prev) => false);
                           }}
                         />
                         No Color

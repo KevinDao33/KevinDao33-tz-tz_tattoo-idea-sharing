@@ -212,7 +212,8 @@ const TattooPlanColorTypeLabel = styled.label`
   display: flex;
   /* margin: 20px auto; */
   transition: 0.4s;
-  color: #232323;
+  /* color: #232323; */
+  color: ${(props) => (props.$isColor ? " #f68535" : "#232323")};
 
   &:hover {
     color: #f68535;
@@ -234,22 +235,14 @@ const TattooPlanColorTypeInput = styled.input`
   transform: translateY(-0.075em);
   display: grid;
   place-content: center;
+  transition: 0.2s;
 
-  ::before {
-    content: "";
-    width: 0.6em;
-    height: 0.6em;
-    border-radius: 50%;
-    transform: scale(0);
-    transition: 0.2s transform ease-in-out;
-    box-shadow: inset 1em 1em #f68535;
-  }
-
-  :checked::before {
-    transform: scale(1);
+  :checked {
+    background-color: #f68535;
   }
 
   :focus {
+    transform: scale(0.9);
     outline: max(1px, 0.15em) solid #f68535;
     outline-offset: max(1px, 0.15em);
   }
@@ -332,18 +325,18 @@ const TattooPlanTimeSectionSelectorLable = styled.label`
 `;
 
 const StartPlanButtonWrapper = styled.div`
-  /* width: 100%; */
+  width: fit-content;
   /* height: auto; */
   display: flex;
   /* justify-content: flex-end; */
   /* margin: */
   position: absolute;
-  right: 33%;
-  bottom: 3px;
+  right: calc((100% - 340px) / 2);
+  bottom: 50px;
 `;
 
 const StartPlanButton = styled.button`
-  width: 130px;
+  width: 340px;
   height: 40px;
   margin: 0 auto;
   cursor: pointer;
@@ -359,8 +352,8 @@ const StartPlanButton = styled.button`
     transition: all 0.55s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     border-radius: 5px;
     content: "";
-    width: 8%;
-    height: 30%;
+    width: 10%;
+    height: 102%;
     background: black;
     position: absolute;
     top: 0;
