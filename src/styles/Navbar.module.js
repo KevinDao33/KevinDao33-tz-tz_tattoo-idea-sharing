@@ -104,6 +104,11 @@ const NavRightWrapper = styled.div`
   justify-content: flex-end;
 `;
 
+const NavLefttWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
 const Searchbar = styled.input`
   width: 400px;
   height: 50px;
@@ -308,10 +313,34 @@ const NoNotification = styled.div`
   color: black;
 `;
 
+const NavTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 29px;
+  font-weight: 550;
+  /* color: darkslategray; */
+  color: ${(props) => (props.$isPageNow ? "#dc762e" : "darkslategray")};
+  margin: 0 15px;
+  padding: 20px 5px 2px 5px;
+  /* border-bottom: 3px solid darkslategray; */
+  border-bottom: ${(props) =>
+    props.$isPageNow ? "3px solid #dc762e" : "3px solid darkslategray"};
+  transition: 0.4s;
+
+  &:hover {
+    transform: scale(1.1);
+    color: #dc762e;
+    border-bottom: 3px solid #dc762e;
+    text-shadow: 4px 3px 0px #fff, 9px 8px 0px rgba(0, 0, 0, 0.15);
+  }
+`;
+
 export {
   NavbarBlank,
   NavbarWrapper,
   LogoWrapper,
+  NavLefttWrapper,
   NavRightWrapper,
   Searchbar,
   Notify,
@@ -323,4 +352,5 @@ export {
   NotificationMessageWrapper,
   NotificationIsReadMark,
   NoNotification,
+  NavTitle,
 };

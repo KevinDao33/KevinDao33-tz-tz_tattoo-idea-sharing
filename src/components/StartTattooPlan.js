@@ -54,6 +54,7 @@ import {
   SelectReferencePinWrapper,
   PinImage,
 } from "../styles/StartTattooPlan.module";
+import Profile from "./Profile";
 
 function StartTattooPlan(props) {
   const [selectedPlacement, setSelectedPlacement] = useState("");
@@ -421,8 +422,8 @@ function StartTattooPlan(props) {
           {/* ====================================================== */}
         </StartTattooPlanWrapper>
       ) : (
-        // redirect("/profile")
-        console.log("please login")
+        //nee to be fixed
+        <Profile></Profile>
       )}
     </>
   );

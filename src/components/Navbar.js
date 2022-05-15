@@ -15,6 +15,7 @@ import {
   NavbarBlank,
   NavbarWrapper,
   LogoWrapper,
+  NavLefttWrapper,
   NavRightWrapper,
   Notify,
   MemberPictureWrapper,
@@ -25,6 +26,7 @@ import {
   NotificationMessageWrapper,
   NotificationIsReadMark,
   NoNotification,
+  NavTitle,
 } from "../styles/Navbar.module";
 import {async} from "@firebase/util";
 
@@ -32,6 +34,7 @@ function Navbar(props) {
   const [isShowNotification, setIsShowNotofication] = useState(false);
   const [notificationData, setNotificationData] = useState([]);
   const [isUnRead, setIsUnRead] = useState(false);
+  const [pageNow, setPageNow] = useState("");
 
   const redirect = useNavigate();
 
@@ -83,13 +86,38 @@ function Navbar(props) {
       });
   }, [notificationData]);
 
+  const getPageNow = () => {
+    const url = window.location.href;
+    const decodeUrl = decodeURI(url);
+    const lastSegment = decodeUrl.split("/").pop();
+    setPageNow(lastSegment);
+  };
+
+  useEffect(() => {
+    getPageNow();
+  }, [window.location.href]);
+
   return (
     <>
       <NavbarBlank />
       <NavbarWrapper>
-        <NavLink to='/'>
-          <LogoWrapper />
-        </NavLink>
+        <NavLefttWrapper>
+          <NavLink to='/'>
+            <LogoWrapper />
+          </NavLink>
+
+          <NavLink to='/' style={{textDecoration: "none", color: "inherit"}}>
+            <NavTitle $isPageNow={pageNow == ""}>Explore</NavTitle>
+          </NavLink>
+
+          <NavLink
+            to='/start-tattoo-plan'
+            style={{textDecoration: "none", color: "inherit"}}>
+            <NavTitle $isPageNow={pageNow == "start-tattoo-plan"}>
+              Plan
+            </NavTitle>
+          </NavLink>
+        </NavLefttWrapper>
 
         <NavRightWrapper>
           <Notify onClick={handleIsShowNotification} $isUnRead={isUnRead} />
@@ -122,8 +150,6 @@ function Navbar(props) {
                 <NoNotification>No Notification :(</NoNotification>
               </NotificationWrapper>
             )}
-
-            {/* ==================== */}
           </AllNotificationWrapper>
         </NavRightWrapper>
       </NavbarWrapper>
