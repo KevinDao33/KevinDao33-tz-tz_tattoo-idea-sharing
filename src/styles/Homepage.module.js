@@ -142,7 +142,7 @@ const AllPinsWrapper = styled.div`
   justify-content: center;
   height: auto;
 
-  border: 1px solid red;
+  /* border: 1px solid red; */
 
   //seem useless since its parent's width is fit-content
   width: 100%;

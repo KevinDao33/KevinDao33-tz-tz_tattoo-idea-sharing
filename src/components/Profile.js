@@ -38,18 +38,35 @@ import {
   FollowUserImage,
   FollowUserName,
   CloseButton,
+  MyPlanWrapper,
+  FullTattooPlanCardWrapper,
+  TattooPlanCardWrapper,
+  TattooPlanCardImg,
+  TattooPlanCardDetailDataMainWrapper,
+  TattooPlanCardDetailDataTitle,
+  TattooPlanCardDetailData,
+  TattooPlanCardArtistMainWrapper,
+  TattooPlanCardArtistWrapper,
+  TattooPlanCardArtistPic,
+  TattooPlanCardArtistInfoWrapper,
+  TattooPlanCardArtistName,
+  TattooPlanCardArtistMail,
+  TattooPlanCardDetailDataDescription,
+  ArtistLink,
 } from "../styles/Profile.module";
 import Login from "./Login";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
+// import {placementsOptions} from "../const";
 
 function Profile(props) {
-  // myPin/ myCollection/ mySchedule(artist only)
+  // myPin/ myCollection/ myPlan(artist only)
   const MY_PIN = "myPin";
   const MY_COLLECTION = "myCollection";
-  const MY_SCHEDULE = "mySchedule";
+  const MY_PLAN = "myPlan";
 
   const [showSection, setShowSection] = useState("");
   const [pins, setPins] = useState([]);
+  const [plans, setPlans] = useState([]);
   const [userData, setUserData] = useState(null);
   const [collections, setCollections] = useState([]);
   const [showCreateCollection, setShowCreateCollection] = useState(false);
@@ -59,14 +76,9 @@ function Profile(props) {
 
   const [followingUserData, setFollowingUserData] = useState([]);
   const [followerUserData, setFollowerUserData] = useState([]);
+  const [artistData, setArtistData] = useState([]);
   const [windowWidth, setWindowWidth] = useState(0);
 
-  // const breakpointColumnsObj = {
-  //   default: 4,
-  //   1100: 3,
-  //   700: 2,
-  //   500: 1,
-  // };
   const breakpointColumnsObj = {
     default: 7,
     2580: 6,
@@ -89,8 +101,8 @@ function Profile(props) {
     setShowSection(MY_COLLECTION);
   };
   // eslint-disable-next-line no-unused-vars
-  const showMySchedule = () => {
-    setShowSection(MY_SCHEDULE);
+  const showMyPlan = () => {
+    setShowSection(MY_PLAN);
   };
 
   function logOut() {
@@ -155,14 +167,105 @@ function Profile(props) {
           </AllCollectionsWrapper>
         </MainAllCollectionWrapper>
       );
-    } else if (showSection === MY_SCHEDULE) {
-      return <div>welcome to my schedule</div>;
+      // ============================================================
+    } else if (showSection === MY_PLAN) {
+      return (
+        <>
+          {plans.length > 0 &&
+            plans.map((plan, index) => (
+              <MyPlanWrapper key={plan.planId}>
+                <FullTattooPlanCardWrapper>
+                  <TattooPlanCardWrapper>
+                    <TattooPlanCardImg
+                      src={plan.reference.pinImage}></TattooPlanCardImg>
+                  </TattooPlanCardWrapper>
+
+                  <TattooPlanCardDetailDataMainWrapper>
+                    <TattooPlanCardDetailDataTitle>
+                      Plan Details
+                    </TattooPlanCardDetailDataTitle>
+                    <TattooPlanCardDetailData>{`・${plan.city}`}</TattooPlanCardDetailData>
+                    <TattooPlanCardDetailData>{`・${plan.budget}`}</TattooPlanCardDetailData>
+                    <TattooPlanCardDetailData>{`・${plan.size}`}</TattooPlanCardDetailData>
+                    <TattooPlanCardDetailData>{`・${plan.placement}`}</TattooPlanCardDetailData>
+
+                    <TattooPlanCardDetailData>
+                      {plan.date.length === 2
+                        ? `・${new Date(
+                            plan.date[0] * 1000
+                          ).getMonth()}/${new Date(
+                            plan.date[0] * 1000
+                          ).getDate()} - ${new Date(
+                            plan.date[1] * 1000
+                          ).getMonth()}/${new Date(
+                            plan.date[1] * 1000
+                          ).getDate()}`
+                        : new Date(plan.date[0]) === new Date(-2209017600000)
+                        ? "Anytime"
+                        : `・${new Date(
+                            plan.date[0] * 1000
+                          ).getMonth()}/${new Date(
+                            plan.date[0] * 1000
+                          ).getDate()}`}
+                    </TattooPlanCardDetailData>
+
+                    <TattooPlanCardDetailDataDescription>{`${plan.description}`}</TattooPlanCardDetailDataDescription>
+                  </TattooPlanCardDetailDataMainWrapper>
+                  <TattooPlanCardArtistMainWrapper>
+                    <TattooPlanCardDetailDataTitle>
+                      Artists
+                    </TattooPlanCardDetailDataTitle>
+
+                    {artistData[index].length > 0 ? (
+                      artistData[index].map((artist) => (
+                        <TattooPlanCardArtistWrapper key={artist.uid}>
+                          <TattooPlanCardArtistPic src={artist.pic} />
+                          <TattooPlanCardArtistInfoWrapper>
+                            <TattooPlanCardArtistName>
+                              {artist.name}
+                            </TattooPlanCardArtistName>
+                            <TattooPlanCardArtistMail>
+                              {artist.email}
+                            </TattooPlanCardArtistMail>
+                            <ArtistLink href={artist.link}>
+                              <TattooPlanCardArtistMail>
+                                {/* {artist.link} */}
+                                Click to view my work
+                              </TattooPlanCardArtistMail>
+                            </ArtistLink>
+                          </TattooPlanCardArtistInfoWrapper>
+                        </TattooPlanCardArtistWrapper>
+                      ))
+                    ) : (
+                      <div>No artists sign up yet</div>
+                    )}
+
+                    {/* <TattooPlanCardArtistWrapper>
+                      <TattooPlanCardArtistPic />
+                      <TattooPlanCardArtistInfoWrapper>
+                        <TattooPlanCardArtistName>
+                          Kevin
+                        </TattooPlanCardArtistName>
+                        <TattooPlanCardArtistMail>
+                          test06@gmail.com
+                        </TattooPlanCardArtistMail>
+                        <TattooPlanCardArtistMail>
+                          http://hihihi.com
+                        </TattooPlanCardArtistMail>
+                      </TattooPlanCardArtistInfoWrapper>
+                    </TattooPlanCardArtistWrapper> */}
+                  </TattooPlanCardArtistMainWrapper>
+                </FullTattooPlanCardWrapper>
+              </MyPlanWrapper>
+            ))}
+        </>
+      );
     }
   };
 
-  const getPins = async (id) => {
+  const getPins = async () => {
     const querySnapshot = await getDocs(
-      collection(props.db, `user/${id}`, "pin")
+      collection(props.db, "user", props.uid, "pin")
     );
     let myPins = [];
     querySnapshot.forEach((doc) => {
@@ -172,8 +275,11 @@ function Profile(props) {
   };
 
   const getCollections = async (id) => {
+    // const querySnapshot = await getDocs(
+    //   collection(props.db, `user/${id}`, "collection")
+    // );
     const querySnapshot = await getDocs(
-      collection(props.db, `user/${id}`, "collection")
+      collection(props.db, "user", id, "collection")
     );
 
     let myCollections = [];
@@ -190,7 +296,8 @@ function Profile(props) {
     if (!props.uid) {
       return;
     }
-    const docRef = doc(props.db, `user/${userId}`);
+    // const docRef = doc(props.db, `user/${userId}`);
+    const docRef = doc(props.db, "user", userId);
     const docSnap = await getDoc(docRef);
     setUserData({
       name: docSnap.data().name,
@@ -205,9 +312,25 @@ function Profile(props) {
     });
   };
 
+  const getPlans = async () => {
+    if (!props.uid) {
+      return;
+    }
+
+    const querySnapshot = await getDocs(
+      collection(props.db, "user", props.uid, "plan")
+    );
+    let myPlans = [];
+    querySnapshot.forEach((doc) => {
+      myPlans.push({...doc.data()});
+    });
+    setPlans(myPlans);
+  };
+
   async function getUserInfoAndPinsAndCollection() {
     getUserData(props.uid);
-    await getPins(props.uid);
+    getPlans();
+    await getPins();
     await getCollections(props.uid);
   }
 
@@ -307,6 +430,35 @@ function Profile(props) {
     getFollowerUserData();
   }, [userData]);
 
+  const getArtistData = async () => {
+    if (!plans.length > 0) {
+      console.log("no plan");
+
+      return;
+    }
+
+    let allArtist = [];
+
+    plans.map((plan) => {
+      const clonedArtist = [...plan.artists];
+
+      let result = [];
+      clonedArtist.map(async (artist) => {
+        const docRef = doc(props.db, "user", artist);
+        const docSnap = await getDoc(docRef);
+        result.push(docSnap.data());
+      });
+      allArtist.push(result);
+    });
+
+    setArtistData(allArtist);
+    console.log("allArtist", allArtist);
+  };
+
+  useEffect(() => {
+    plans.length > 0 && getArtistData();
+  }, [plans]);
+
   const renderFollow = () => {
     if (!isShowFollowing && !isShowFollower) {
       return;
@@ -341,10 +493,11 @@ function Profile(props) {
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
-    console.log(window.innerWidth);
-    console.log(typeof window.innerWidth);
-    console.log(window.innerWidth > 1440);
-  }, [window.innerWidth]);
+  }, []);
+
+  useEffect(() => {
+    console.log("plans", plans);
+  }, [plans]);
 
   return (
     <ProfileBackgroundDisplay>
@@ -413,6 +566,11 @@ function Profile(props) {
                     onClick={showMyCollection}>
                     my collection
                   </SelectSection>
+                  <SelectSection
+                    $section={showSection === MY_PLAN}
+                    onClick={showMyPlan}>
+                    my plan
+                  </SelectSection>
                   <CreateButtonWrapper>
                     {showSection === MY_PIN ? (
                       <NavLink to='/create-pin'>
@@ -430,6 +588,16 @@ function Profile(props) {
                         }}>
                         <CreateButtonSpan>
                           {windowWidth > 1141 ? " + New Collection" : "+"}
+                        </CreateButtonSpan>
+                      </CreateButton>
+                    ) : showSection === MY_PLAN ? (
+                      <CreateButton
+                        onClick={() => {
+                          // setShowCreateCollection(true);
+                          redirect("/start-tattoo-plan");
+                        }}>
+                        <CreateButtonSpan>
+                          {windowWidth > 1141 ? " + New Plan" : "+"}
                         </CreateButtonSpan>
                       </CreateButton>
                     ) : (

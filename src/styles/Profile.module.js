@@ -612,6 +612,205 @@ const CloseButton = styled.div`
   cursor: pointer;
 `;
 
+const MyPlanWrapper = styled.div`
+  width: calc(100% - 16px - 16px);
+  height: fit-content;
+  min-height: 30vh;
+  padding: 28px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+
+  /* border: 5px solid red; */
+`;
+
+const FullTattooPlanCardWrapper = styled.div`
+  background-color: #f7f7f7;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 15%), 0 0 1px 0 rgb(0 0 0 / 5%);
+  display: flex;
+  flex-direction: row;
+  transition: 0.3s;
+  /* width: ${(props) => (props.$showAll ? "550px" : "300px")}; */
+  width: fit-content;
+  height: 340px;
+  padding: 0;
+  overflow: hidden;
+  cursor: default;
+  /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+
+  border: 3px solid lightgray;
+`;
+
+const TattooPlanCardWrapper = styled.div`
+  background-color: #fff;
+  border-radius: 16px 0 0 16px;
+  /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 15%), 0 0 1px 0 rgb(0 0 0 / 5%); */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 300px;
+  height: 340px;
+  padding: 0;
+  cursor: pointer;
+
+  /* border: 3px solid green; */
+
+  /* position: relative; */
+`;
+
+const TattooPlanCardImg = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 16px 0 0 16px;
+  object-fit: cover;
+
+  /* border: 5px solid red; */
+`;
+
+const TattooPlanCardDetailDataMainWrapper = styled.div`
+  position: relative;
+  background-color: #f7f7f7;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: scroll;
+  transition: 0.4s;
+  width: 200px;
+  height: calc(100% - 32px);
+  border-right: 1px solid lightgray;
+`;
+
+const TattooPlanCardDetailDataTitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  /* opacity: 0.8; */
+  width: fit-content;
+  font-size: 21px;
+  font-weight: 550;
+  margin: 0 auto 7px auto;
+  border-bottom: 2px dashed gray;
+  padding: 0 16px;
+`;
+
+const TattooPlanCardDetailData = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  opacity: 0.8;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0 auto 0 5px;
+`;
+
+const TattooPlanCardArtistMainWrapper = styled.div`
+  position: relative;
+  background-color: #f7f7f7;
+  padding: 16px;
+  /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 15%), 0 0 1px 0 rgb(0 0 0 / 5%); */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: scroll;
+  transition: 0.4s;
+  /* position: relative; */
+  /* transition: box-shadow 0.2s cubic-bezier(0.2, 0, 0.4, 1); */
+  /* width: 250px; */
+  width: 230px;
+  height: calc(100% - 32px);
+  border-radius: 0 16px 16px 0;
+
+  /* border: 3px solid yellow; */
+  /* border: ${(props) =>
+    props.$showAll ? "3px solid yellow" : "0px solid yellow"}; */
+`;
+
+const TattooPlanCardArtistWrapper = styled.div`
+  /* background-color: #fff; */
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  height: 50px;
+  padding: 10px 2px;
+  border-bottom: 1px dashed lightgray;
+  /* height:fit-content; */
+`;
+
+const TattooPlanCardArtistPic = styled.img`
+  width: 45px;
+  height: 45px;
+  border-radius: 100px;
+  border: 0.5px solid lightgray;
+`;
+
+const TattooPlanCardArtistInfoWrapper = styled.div`
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
+
+const TattooPlanCardArtistName = styled.div`
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  height: 1.18em;
+  line-height: 1.18em;
+  overflow: hidden;
+  margin: auto auto 2px 12px;
+`;
+
+const TattooPlanCardArtistMail = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  height: 1.3em;
+  line-height: 1.3;
+  margin: 0 auto 0 12px;
+  opacity: 0.6;
+`;
+
+const TattooPlanCardDetailDataDescription = styled.div`
+  opacity: 0.85;
+  margin: 0 auto 0 0px;
+  appearance: none;
+  background-color: #fff;
+  border: 1px solid rgba(32, 33, 37, 0.12);
+  border-radius: 8px;
+  color: #202125;
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  font-weight: 500;
+  line-height: 1.5;
+  height: 90px;
+  padding: 8px 18px;
+  resize: none;
+  overflow: scroll;
+  cursor: text;
+  width: calc(100% - 16px - 16px - 5px);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+`;
+
+const ArtistLink = styled.a`
+  text-decoration: none;
+  color: #ff6900;
+  font-weight: 550;
+  transition: 0.3s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
 export {
   ProfileBackgroundDisplay,
   PorfileWrapper,
@@ -644,4 +843,19 @@ export {
   FollowUserImage,
   FollowUserName,
   CloseButton,
+  MyPlanWrapper,
+  FullTattooPlanCardWrapper,
+  TattooPlanCardWrapper,
+  TattooPlanCardImg,
+  TattooPlanCardDetailDataMainWrapper,
+  TattooPlanCardDetailDataTitle,
+  TattooPlanCardDetailData,
+  TattooPlanCardArtistMainWrapper,
+  TattooPlanCardArtistWrapper,
+  TattooPlanCardArtistPic,
+  TattooPlanCardArtistInfoWrapper,
+  TattooPlanCardArtistName,
+  TattooPlanCardArtistMail,
+  TattooPlanCardDetailDataDescription,
+  ArtistLink,
 };

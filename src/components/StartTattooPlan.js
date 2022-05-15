@@ -67,12 +67,27 @@ function StartTattooPlan(props) {
   const [collectionPins, setCollectionPins] = useState([]);
   const [selectedReference, setSelectedReference] = useState(null);
   const [selectedCity, setSelectedCity] = useState("");
+  const [userData, setUserData] = useState([]);
 
   const redirect = useNavigate();
 
   const breakpointColumnsObj = {
     default: 3,
   };
+
+  const getuserData = async () => {
+    if (!props.uid) {
+      return;
+    }
+    const userSnapshot = await getDoc(doc(props.db, "user", props.uid));
+    setUserData(userSnapshot.data());
+
+    return;
+  };
+
+  useEffect(() => {
+    getuserData();
+  }, [props.uid]);
 
   const getCollectionPins = async (id) => {
     const querySnapshot = await getDocs(
@@ -129,6 +144,12 @@ function StartTattooPlan(props) {
       placement: selectedPlacement.value,
       city: selectedCity.value,
       planId: newPlanRef.id,
+      planOwner: {
+        ownerId: userData.uid,
+        ownerName: userData.name,
+        ownerPic: userData.pic,
+        ownerMail: userData.email,
+      },
     });
 
     await setDoc(userNewPlanRef, {
@@ -146,31 +167,6 @@ function StartTattooPlan(props) {
     alert(`Plan created!`);
     redirect("/profile");
   };
-
-  useEffect(() => {
-    console.log("selectedCity", selectedCity.value);
-  }, [selectedCity]);
-
-  useEffect(() => {
-    console.log(
-      "selectedReference",
-      selectedReference,
-      "planDate",
-      planDate,
-      "planBudget",
-      planBudget,
-      "planDescription",
-      planDescription,
-      "isColor",
-      isColor,
-      "selectedSize",
-      selectedSize,
-      "selectedPlacement",
-      selectedPlacement,
-      "selectedCity",
-      selectedCity
-    );
-  }, [planDate]);
 
   return (
     <>
@@ -223,7 +219,11 @@ function StartTattooPlan(props) {
             </StartTattooPlanTitleWrapper>
             {/* ====================================================== */}
             <StartTattooPlanMainDataSelectorWrapper>
-              <BackButton />
+              <BackButton
+                onClick={() => {
+                  redirect("/");
+                }}
+              />
               <StartTattooPlanMainDataForm>
                 <StartTattooPlanMainDataSectionWrapper>
                   <StartTattooPlanMainDataSectionTitle>
