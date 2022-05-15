@@ -7,6 +7,7 @@ const TattooPlanWrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding-bottom: 120px;
+  position: relative;
 
   /* border: 5px solid yellow; */
 `;
@@ -349,6 +350,58 @@ const CloseButton = styled.div`
   opacity: 0.8;
 `;
 
+
+const StartPlanButtonWrapper = styled.div`
+  width: 120px;
+
+  /* height: auto; */
+  display: flex;
+  /* justify-content: flex-end; */
+  /* margin: */
+  position: absolute;
+  /* right: calc((100% - 16px) / 2); */
+  right: calc(21%);
+  top: 65px;
+`;
+
+const StartPlanButton = styled.button`
+  width: 100%;
+  height: 40px;
+  margin: 0 auto;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  /* padding: 10px 18px; */
+  font-size: 18px;
+  position: relative;
+  /* box-shadow: 0px 1px 0px #b2a98f, 0px 8px 6px rgba(0, 0, 0, 0.15),
+    0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1); */
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  &:before {
+    transition: all 0.55s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border-radius: 5px;
+    content: "";
+    width: 10%;
+    height: 102%;
+    background: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  &:hover {
+    &::before {
+      width: 100%;
+      height: 100%;
+    }
+  }
+`;
+
+const StartPlanButtonSpan = styled.span`
+  color: white;
+  mix-blend-mode: difference;
+`;
+
+
 export {
   TattooPlanWrapper,
   TattooPlanTitle,
@@ -376,4 +429,7 @@ export {
   SignUpPlanButton,
   SignUpPlanButtonSpan,
   CloseButton,
+  StartPlanButtonWrapper,
+  StartPlanButton,
+  StartPlanButtonSpan
 };

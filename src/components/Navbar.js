@@ -107,15 +107,13 @@ function Navbar(props) {
           </NavLink>
 
           <NavLink to='/' style={{textDecoration: "none", color: "inherit"}}>
-            <NavTitle $isPageNow={pageNow == ""}>Explore</NavTitle>
+            <NavTitle $isPageNow={pageNow == ""}>Tattoos</NavTitle>
           </NavLink>
 
           <NavLink
-            to='/start-tattoo-plan'
+            to='/tattoo-plan'
             style={{textDecoration: "none", color: "inherit"}}>
-            <NavTitle $isPageNow={pageNow == "start-tattoo-plan"}>
-              Plan
-            </NavTitle>
+            <NavTitle $isPageNow={pageNow == "tattoo-plan"}>Plans</NavTitle>
           </NavLink>
         </NavLefttWrapper>
 

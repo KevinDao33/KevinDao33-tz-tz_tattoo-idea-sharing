@@ -10,6 +10,7 @@ import {
   setDoc,
   addDoc,
 } from "firebase/firestore";
+import {useNavigate} from "react-router-dom";
 
 import {
   TattooPlanWrapper,
@@ -38,12 +39,17 @@ import {
   SignUpPlanButton,
   SignUpPlanButtonSpan,
   CloseButton,
+  StartPlanButtonWrapper,
+  StartPlanButton,
+  StartPlanButtonSpan,
 } from "../styles/TattooPlan.module";
 
 function TattooPlan(props) {
   const [plans, setPlans] = useState([]);
   const [userData, setUserData] = useState([]);
   const [isShowFull, setIsShowFull] = useState(-1);
+
+  const redirect = useNavigate();
 
   const getuserData = async () => {
     if (!props.uid) {
@@ -100,6 +106,15 @@ function TattooPlan(props) {
   return (
     <TattooPlanWrapper>
       <TattooPlanTitle>- Tattoo Plans -</TattooPlanTitle>
+      <StartPlanButtonWrapper>
+        <StartPlanButton
+          onClick={() => {
+            props.uid ? redirect("/start-tattoo-plan") : redirect("/profile");
+          }}>
+          <StartPlanButtonSpan>Start a plan</StartPlanButtonSpan>
+        </StartPlanButton>
+      </StartPlanButtonWrapper>
+
       <AllTattooPlanCardWrapper>
         {/* ======================================= */}
 
