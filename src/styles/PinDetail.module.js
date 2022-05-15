@@ -15,13 +15,6 @@ const DarkBackgroundDisplay = styled.div`
   z-index: -100;
   animation: ${scroll} 120s linear infinite;
   padding: 100px 0 0 0;
-
-  /* background-color: #f9f9f9;
-  opacity: 1;
-  background-image: radial-gradient(#515151 1.1px, transparent 1.1px),
-    radial-gradient(#515151 1.1px, #f9f9f9 1.1px);
-  background-size: 44px 44px;
-  background-position: 0 0, 22px 22px; */
   background-color: #f9f9f9;
   opacity: 1;
   background-image: radial-gradient(#cdcdcd 2px, transparent 2px),
