@@ -17,6 +17,7 @@ import imageCompression from "browser-image-compression";
 import "../styles/style.css";
 import {placements} from "../const";
 import {v4 as uuid} from "uuid";
+import Swal from "sweetalert2";
 
 import {
   DarkBackgroundDisplay,
@@ -110,31 +111,51 @@ function CreateNewPin(props) {
     return blob;
   };
 
-  const successfullyCreatePin = (pinImageInLocal) => {
+  const successfullyCreatePin = async (pinImageInLocal) => {
     dataUrl2Blob(pinImageInLocal);
-    alert("pin successfully created!");
+    await Swal.fire(
+      "pin successfully created!",
+      "You just made tz-tz a better place :)",
+      "success"
+    );
     redirect("/profile");
   };
 
-  const submitPinData = () => {
+  const submitPinData = async () => {
     if (!pinName || !pinDescription || !pinLink || !pinTags || !pinPlacement) {
-      alert("please check if all fields are filled");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "please check if all fields are filled",
+      });
 
       return;
     } else if (!pinImage) {
-      alert("please upload and check the image for your pin");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "please upload and check the image for your pin",
+      });
 
       return;
     }
     const pinImageInLocal = localStorage.getItem("uploadedImage");
     pinImageInLocal
       ? successfullyCreatePin(pinImageInLocal)
-      : alert("something went wrong, please try again :(");
+      : Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "something went wrong, please try again :(",
+        });
   };
 
   const writeUserData = () => {
     if (!pinImage) {
-      alert("please check image before creating a pin");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "please check image before creating a pin",
+      });
 
       return;
     }
@@ -213,7 +234,12 @@ function CreateNewPin(props) {
       uploadBytes(storageRef, result).then((snapshot) => {
         console.log("Uploaded image to firebase storage!");
         getPinImageUrl(uploadedImageName);
-        alert("picture all set!")
+        // alert("picture all set!");
+        Swal.fire(
+          "Picture all set!",
+          "good job! you're the best",
+          'success'
+        )
       });
     } catch (error) {
       console.error(error);

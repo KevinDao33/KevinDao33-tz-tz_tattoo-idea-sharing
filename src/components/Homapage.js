@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import "../styles/style.css";
 // import {v4 as uuid} from "uuid";
+import Swal from "sweetalert2";
 
 import LandingPage from "./LandingPageVideo";
 import AddPin from "./AddPin";
@@ -425,9 +426,15 @@ function Homapage(props) {
                   />
                   <SaveButton
                     $like={isShowLike === index}
-                    onClick={() => {
+                    onClick={async() => {
                       if (!props.uid) {
-                        alert("Please sign-in bofore adding pins :)");
+                        // alert("Please sign-in bofore adding pins :)");
+                        await Swal.fire({
+                          icon: 'error',
+                          title: 'Oops...',
+                          text: "Please sign-in bofore adding pins :o",
+                          // footer: '<a href="">Why do I have this issue?</a>'
+                        })
                         redirect("profile");
                         return;
                       }

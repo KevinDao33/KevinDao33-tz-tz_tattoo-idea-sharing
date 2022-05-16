@@ -12,6 +12,7 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
+import Swal from "sweetalert2";
 // import {useNavigate} from "react-router-dom";
 
 import {
@@ -116,7 +117,13 @@ function EditProfile(props) {
 
   const cancelDataChange = () => {
     if (!userData) {
-      alert("something went wrong, please try again later");
+      // alert("something went wrong, please try again later");
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: "Something went wrong, please try again later",
+        // footer: '<a href="">Why do I have this issue?</a>'
+      })
 
       return;
     }
@@ -147,8 +154,13 @@ function EditProfile(props) {
           pic: url,
         });
       })
-      .then(() => {
-        alert("profile updated!");
+      .then(async() => {
+        // alert("profile updated!");
+        await Swal.fire(
+          "profile updated!",
+          'Looking fresh',
+          'success'
+        )
         redirect("/profile");
       });
   };
@@ -167,7 +179,12 @@ function EditProfile(props) {
 
   const submitNewUserData = async () => {
     if (!newName && !newDescription && !newLink && !selectedFile) {
-      alert("if not updating, press the leave-button on the left");
+      // alert("if not updating, press the leave-button on the left");
+      Swal.fire(
+        'Nothing changed',
+        "if not updating, press the leave-button on the left",
+        'question'
+      )
 
       return;
     } else if (newName || newDescription || newLink || selectedFile) {
@@ -178,7 +195,13 @@ function EditProfile(props) {
       } else if ((newName || newDescription || newLink) && !selectedFile) {
         // no new photo but other updates
         await updateUserData();
-        alert("changes saved");
+        // alert("changes saved");
+        await Swal.fire(
+          "Changes saved",
+          'Looking fresh :)',
+          'success'
+        )
+        
         redirect("/profile");
       } else if ((newName || newDescription || newLink) && selectedFile) {
         // new photo and other updates

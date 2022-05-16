@@ -5,6 +5,7 @@ import {NavLink, useNavigate} from "react-router-dom";
 import {getAuth, signOut} from "firebase/auth";
 import Masonry from "react-masonry-css";
 import {collection, getDocs, getDoc, doc, setDoc} from "firebase/firestore";
+import Swal from "sweetalert2";
 
 import {
   ProfileBackgroundDisplay,
@@ -354,14 +355,25 @@ function Profile(props) {
       },
       {merge: true}
     );
-    alert(`collection ${newCollectionName} created!`);
+    // alert(`collection ${newCollectionName} created!`);
+    await Swal.fire(
+      `Collection ${newCollectionName} created!`,
+      'What a great collection!',
+      'success'
+    )
     window.location.reload();
   };
 
   const createNewCollection = () => {
     newCollectionName
       ? setCollection2Firestore(props.uid)
-      : alert("please enter a name for the new collection");
+      // : alert("please enter a name for the new collection");
+      :Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please enter a name for the new collection :(",
+        // footer: '<a href="">Why do I have this issue?</a>'
+      });
   };
 
   const showCreateCollectionSection = () => {

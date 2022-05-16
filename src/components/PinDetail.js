@@ -17,6 +17,7 @@ import {
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import {v4 as uuid} from "uuid";
+import Swal from "sweetalert2";
 
 import "../styles/style.css";
 import {
@@ -169,7 +170,14 @@ function PinDetail(props) {
 
   const addPinToCollection = () => {
     if (selectedCollection === "Choose") {
-      alert("Please select a collection~");
+      // alert("Please select a collection~");
+
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please select a collection~",
+        // footer: '<a href="">Why do I have this issue?</a>'
+      });
 
       return;
     }
@@ -191,7 +199,13 @@ function PinDetail(props) {
       },
       {merge: true}
     );
-    alert(`pin added to ${selectedCollection}`);
+    // alert(`pin added to ${selectedCollection}`);
+    Swal.fire(
+      `Pin added to ${selectedCollection}`,
+      'Good choice ~~',
+      'success'
+    )
+
   };
 
   const getRelatedPins = async () => {
@@ -220,7 +234,13 @@ function PinDetail(props) {
 
   const sendNewComment = async () => {
     if (!newComment) {
-      alert("type a comment before sending");
+      // alert("type a comment before sending");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please type a comment before sending",
+        // footer: '<a href="">Why do I have this issue?</a>'
+      });
       return;
     }
     await addDoc(collection(props.db, "pin", pinId, "comment"), {
@@ -323,7 +343,7 @@ function PinDetail(props) {
                 </CollectionSelector>
                 <SaveButton onClick={addPinToCollection}>save</SaveButton> */}
               </PinDetailSubNav>
- 
+
               <PinDescriptionWrapper>
                 <PinDescription>{pinData.pinDesc}</PinDescription>
               </PinDescriptionWrapper>

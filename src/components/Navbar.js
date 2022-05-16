@@ -106,6 +106,7 @@ function Navbar(props) {
             <LogoWrapper />
           </NavLink>
 
+          {/* put navLink to styled component and remove its refault style */}
           <NavLink to='/' style={{textDecoration: "none", color: "inherit"}}>
             <NavTitle $isPageNow={pageNow == ""}>Tattoos</NavTitle>
           </NavLink>

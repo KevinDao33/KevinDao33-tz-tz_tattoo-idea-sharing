@@ -11,6 +11,7 @@ import removeIcon from "../icon/remove.png";
 import {SHOW_PINS} from "../const";
 import {ARRANGE_PINS} from "../const";
 import {DELETE_PINS} from "../const";
+import Swal from 'sweetalert2'
 
 import {
   CollectionBackgroundDisplay,
@@ -76,7 +77,13 @@ function Collection(props) {
       }),
     });
     setPinsInCollection((prev) => prev.pins.splice(index, 1));
-    alert(`pin removed from ${collectionName}`);
+    // alert(`pin removed from ${collectionName}`);
+    await Swal.fire(
+      `pin removed from ${collectionName}`,
+      'bye bye',
+      'success'
+    )
+
     window.location.reload();
   };
 

@@ -16,6 +16,7 @@ import {
   onSnapshot,
   getDoc,
 } from "firebase/firestore";
+import Swal from "sweetalert2";
 
 // import {
 //   CreateButton as SignButton,
@@ -68,7 +69,13 @@ function Login(props) {
       !userName ||
       !userRole
     ) {
-      alert("Please check if all blanks are filled");
+      // alert("Please check if all blanks are filled");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please check if all blanks are filled",
+        // footer: '<a href="">Why do I have this issue?</a>'
+      });
       return;
     }
     createUserWithEmailAndPassword(props.auth, userEmail, userPassword)
@@ -89,16 +96,40 @@ function Login(props) {
 
         switch (errorCode) {
           case "auth/wrong-password":
-            alert(myConstClass.AUTH_WRONG_PASSWORD);
+            // alert(myConstClass.AUTH_WRONG_PASSWORD);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: myConstClass.AUTH_WRONG_PASSWORD,
+              // footer: '<a href="">Why do I have this issue?</a>'
+            });
             break;
           case "auth/user-not-found":
-            alert(myConstClass.AUTH_USER_NOT_FOUND);
+            // alert(myConstClass.AUTH_USER_NOT_FOUND);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: myConstClass.AUTH_USER_NOT_FOUND,
+              // footer: '<a href="">Why do I have this issue?</a>'
+            });
             break;
           case "auth/weak-password":
-            alert(myConstClass.AUTH_WEAK_PASSWORD);
+            // alert(myConstClass.AUTH_WEAK_PASSWORD);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: myConstClass.AUTH_WEAK_PASSWORD,
+              // footer: '<a href="">Why do I have this issue?</a>'
+            });
             break;
           default:
-            alert(myConstClass.AUTH_LOGIN_FAIL);
+            // alert(myConstClass.AUTH_LOGIN_FAIL);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: myConstClass.AUTH_LOGIN_FAIL,
+              // footer: '<a href="">Why do I have this issue?</a>'
+            });
         }
       });
   };
@@ -117,10 +148,23 @@ function Login(props) {
 
         switch (errorCode) {
           case "auth/wrong-password":
-            alert("密碼錯誤喔");
+            // alert("密碼錯誤喔");
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "密碼錯誤喔",
+              // footer: '<a href="">Why do I have this issue?</a>'
+            });
+
             break;
           case "auth/user-not-found":
-            alert("帳號不存在喔");
+            // alert("帳號不存在喔");
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "帳號不存在喔",
+              // footer: '<a href="">Why do I have this issue?</a>'
+            });
             break;
           // need to be fixed
           // default:

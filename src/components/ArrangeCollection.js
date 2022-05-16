@@ -5,6 +5,7 @@ import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import "../styles/style.css";
 import {doc, getDoc, updateDoc} from "firebase/firestore";
 // import {useNavigate} from "react-router-dom";
+import Swal from 'sweetalert2'
 
 import {
   PinImageArrange,
@@ -178,7 +179,12 @@ function ArrangeCollection(props) {
     await updateDoc(collectionRef, {
       pins: filteredCombinedColumn,
     });
-    alert("changes saved");
+    // alert("changes saved");
+    await Swal.fire(
+      'Changes saved',
+      '',
+      'success'
+    )
     window.location.reload();
 
     return;

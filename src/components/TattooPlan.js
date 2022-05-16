@@ -11,6 +11,7 @@ import {
   addDoc,
 } from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
+import Swal from "sweetalert2";
 
 import {
   TattooPlanWrapper,
@@ -99,7 +100,12 @@ function TattooPlan(props) {
       artists: [props.uid],
     });
 
-    alert("Sign up successfully!");
+    // alert("Sign up successfully!");
+    Swal.fire(
+      "Sign up successfully!",
+      "You're the tattoo master!",
+      'success'
+    )
     setIsShowFull(-1);
   };
 

@@ -9,6 +9,7 @@ import {
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
+import Swal from "sweetalert2";
 
 import {
   Overlay,
@@ -30,9 +31,8 @@ function AddPin(props) {
   const [newCollectionName, setNewCollectionName] = useState("");
 
   const getCollections = async (id) => {
-    
     const querySnapshot = await getDocs(co(props.db, "user", id, "collection"));
-    
+
     let myCollections = [];
     querySnapshot.forEach((doc) => {
       myCollections.push({...doc.data()});
@@ -64,8 +64,11 @@ function AddPin(props) {
       },
       {merge: true}
     );
-    alert(`pin added to ${collection.collectionName}`);
-
+    Swal.fire(
+      "success",
+      `pin added to ${collection.collectionName}`,
+      "success"
+    );
   };
 
   const setCollection2Firestore = (uid) => {
@@ -90,14 +93,25 @@ function AddPin(props) {
       },
       {merge: true}
     );
-    alert(`pin added to new collection ${newCollectionName}!`);
+    // alert(`pin added to new collection ${newCollectionName}!`);
+    Swal.fire(
+      "success",
+      `pin added to new collection ${newCollectionName}!`,
+      "success"
+    );
   };
 
   const createNewCollection = () => {
     console.log("do u want to create a new collection?");
     newCollectionName.length > 0
       ? setCollection2Firestore(props.uid)
-      : alert("please enter a name for the new collection");
+      : // : alert("please enter a name for the new collection");
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Please enter a name for the new collection",
+          // footer: '<a href="">Why do I have this issue?</a>',
+        });
   };
 
   return (
@@ -112,7 +126,7 @@ function AddPin(props) {
         <PinName>{props.pin.pinName}</PinName>
         <PinImage src={props.pin.pinImage} />
 
-        {collections.length>0 &&
+        {collections.length > 0 &&
           collections.map((collection, index) => (
             <AddToCollection key={index}>
               {/* <CollectionName>{Object.keys(collection)}</CollectionName> */}

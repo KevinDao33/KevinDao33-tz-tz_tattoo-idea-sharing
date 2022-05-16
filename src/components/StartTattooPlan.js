@@ -14,6 +14,7 @@ import {
   addDoc,
   setDoc,
 } from "firebase/firestore";
+import Swal from "sweetalert2";
 
 import {
   StartTattooPlanWrapper,
@@ -119,7 +120,14 @@ function StartTattooPlan(props) {
       !selectedPlacement ||
       !selectedCity
     ) {
-      alert("Please make sure all fields are filled");
+      // alert("Please make sure all fields are filled");
+
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please make sure all fields are filled :(",
+        // footer: '<a href="">Why do I have this issue?</a>'
+      });
 
       return;
     }
@@ -165,7 +173,12 @@ function StartTattooPlan(props) {
       planId: newPlanRef.id,
     });
 
-    alert(`Plan created!`);
+    // alert(`Plan created!`);
+    await Swal.fire(
+      `Plan created!`,
+      'sooooooo~ excited about your new tattoo',
+      'success'
+    )
     redirect("/profile");
   };
 
