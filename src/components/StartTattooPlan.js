@@ -144,6 +144,7 @@ function StartTattooPlan(props) {
     );
 
     await setDoc(newPlanRef, {
+      artists: [],
       reference: selectedReference,
       date: planDate,
       budget: planBudget.value,
@@ -171,14 +172,15 @@ function StartTattooPlan(props) {
       placement: selectedPlacement.value,
       city: selectedCity.value,
       planId: newPlanRef.id,
+      artists: [],
     });
 
     // alert(`Plan created!`);
     await Swal.fire(
       `Plan created!`,
-      'sooooooo~ excited about your new tattoo',
-      'success'
-    )
+      "sooooooo~ excited about your new tattoo",
+      "success"
+    );
     redirect("/profile");
   };
 

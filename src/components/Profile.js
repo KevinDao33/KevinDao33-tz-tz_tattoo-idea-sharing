@@ -111,7 +111,7 @@ function Profile(props) {
       .then(() => {
         props.setIsLogin(false);
 
-        // for the planned functions now, the localStorage would be better be clear out when user logout (including user data and pin image url), so that the next user wouldn't be affect at all.
+        // for the planned functions now, the localStorage would be better be clear out when user logout (including user data and pin image url), so that the next user wouldn't be affected at all.
         localStorage.clear();
       })
       .catch((error) => {
@@ -217,7 +217,7 @@ function Profile(props) {
                       Artists
                     </TattooPlanCardDetailDataTitle>
 
-                    {artistData[index].length > 0 ? (
+                    {artistData[index] && artistData[index].length > 0 ? (
                       artistData[index].map((artist) => (
                         <TattooPlanCardArtistWrapper key={artist.uid}>
                           <TattooPlanCardArtistPic src={artist.pic} />
@@ -276,9 +276,6 @@ function Profile(props) {
   };
 
   const getCollections = async (id) => {
-    // const querySnapshot = await getDocs(
-    //   collection(props.db, `user/${id}`, "collection")
-    // );
     const querySnapshot = await getDocs(
       collection(props.db, "user", id, "collection")
     );
@@ -358,22 +355,22 @@ function Profile(props) {
     // alert(`collection ${newCollectionName} created!`);
     await Swal.fire(
       `Collection ${newCollectionName} created!`,
-      'What a great collection!',
-      'success'
-    )
+      "What a great collection!",
+      "success"
+    );
     window.location.reload();
   };
 
   const createNewCollection = () => {
     newCollectionName
       ? setCollection2Firestore(props.uid)
-      // : alert("please enter a name for the new collection");
-      :Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Please enter a name for the new collection :(",
-        // footer: '<a href="">Why do I have this issue?</a>'
-      });
+      : // : alert("please enter a name for the new collection");
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Please enter a name for the new collection :(",
+          // footer: '<a href="">Why do I have this issue?</a>'
+        });
   };
 
   const showCreateCollectionSection = () => {
@@ -405,7 +402,6 @@ function Profile(props) {
 
   const getFollowingUserData = async () => {
     if (!userData) {
-      console.log("No Following");
       return;
     }
 
@@ -444,8 +440,6 @@ function Profile(props) {
 
   const getArtistData = async () => {
     if (!plans.length > 0) {
-      console.log("no plan");
-
       return;
     }
 
@@ -464,7 +458,6 @@ function Profile(props) {
     });
 
     setArtistData(allArtist);
-    console.log("allArtist", allArtist);
   };
 
   useEffect(() => {
@@ -507,10 +500,6 @@ function Profile(props) {
     setWindowWidth(window.innerWidth);
   }, []);
 
-  useEffect(() => {
-    console.log("plans", plans);
-  }, [plans]);
-
   return (
     <ProfileBackgroundDisplay>
       {props.isLogin ? (
@@ -547,10 +536,7 @@ function Profile(props) {
               {/* ======================= */}
               <FollowInfoWrapper
                 $showFollow={isShowFollower || isShowFollowing}>
-                <FollowTitle
-                  onClick={() =>
-                    console.log("userData.following", userData.following)
-                  }>
+                <FollowTitle>
                   {isShowFollower
                     ? "My Follower"
                     : isShowFollowing && "My Following"}

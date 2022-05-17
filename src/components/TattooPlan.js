@@ -9,6 +9,7 @@ import {
   updateDoc,
   setDoc,
   addDoc,
+  arrayUnion,
 } from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import Swal from "sweetalert2";
@@ -94,18 +95,16 @@ function TattooPlan(props) {
       plan.planId
     );
     await updateDoc(allPlanRef, {
-      artists: [props.uid],
+      // artists: [props.uid],
+      artists: arrayUnion(props.uid),
     });
     await updateDoc(ownerPlanRef, {
-      artists: [props.uid],
+      // artists: [props.uid],
+      artists: arrayUnion(props.uid),
     });
 
     // alert("Sign up successfully!");
-    Swal.fire(
-      "Sign up successfully!",
-      "You're the tattoo master!",
-      'success'
-    )
+    Swal.fire("Sign up successfully!", "You're the tattoo master!", "success");
     setIsShowFull(-1);
   };
 
