@@ -18,6 +18,7 @@ import EditProfile from "./EditProfile";
 import OtherUserProfile from "./OtherUserProfile";
 import StartTattooPlan from "./StartTattooPlan";
 import TattooPlan from "./TattooPlan";
+import PageNotFound from "./PageNotFound";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -117,6 +118,7 @@ function App() {
           element={<StartTattooPlan uid={uid} db={db} />}
         />
         <Route path='/tattoo-plan' element={<TattooPlan uid={uid} db={db} />} />
+        <Route path='*' element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   );
