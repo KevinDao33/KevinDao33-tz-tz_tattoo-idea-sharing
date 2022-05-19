@@ -1,31 +1,14 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  addDoc,
-  onSnapshot,
-  getDoc,
-} from "firebase/firestore";
+import {doc, setDoc, getDoc} from "firebase/firestore";
 import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
-// import {
-//   CreateButton as SignButton,
-//   CreateButtonSpan as SignButtonSpan,
-// } from "../styles/Profile.module";
-
-import {Button} from "../styles/Profile.module";
 import {
-  DarkBackgroundDisplay,
   AllSignWrapper,
   SignupWrapper,
   SigninWrapper,
@@ -42,7 +25,7 @@ import {
 } from "../styles/Login.module";
 import * as myConstClass from "../const";
 
-function Login(props) {
+function Login({auth, db, isLogin}) {
   const [isShowSignIn, setIsShowSignIn] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
@@ -57,10 +40,6 @@ function Login(props) {
     setIsShowSignIn((prev) => !prev);
   };
 
-  const handleIsShowSignUp = () => {
-    setIsShowSignIn((prev) => !prev);
-  };
-
   const signUp = () => {
     if (
       !userEmail ||
@@ -69,22 +48,18 @@ function Login(props) {
       !userName ||
       !userRole
     ) {
-      // alert("Please check if all blanks are filled");
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Please check if all blanks are filled",
-        // footer: '<a href="">Why do I have this issue?</a>'
       });
       return;
     }
-    createUserWithEmailAndPassword(props.auth, userEmail, userPassword)
+    createUserWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log("user", userCredential.user);
 
         user && writeUserData(user.uid);
-        console.log("user.uid", user.uid);
 
         getUserData(user.uid);
       })
@@ -96,46 +71,38 @@ function Login(props) {
 
         switch (errorCode) {
           case "auth/wrong-password":
-            // alert(myConstClass.AUTH_WRONG_PASSWORD);
             Swal.fire({
               icon: "error",
               title: "Oops...",
               text: myConstClass.AUTH_WRONG_PASSWORD,
-              // footer: '<a href="">Why do I have this issue?</a>'
             });
             break;
           case "auth/user-not-found":
-            // alert(myConstClass.AUTH_USER_NOT_FOUND);
             Swal.fire({
               icon: "error",
               title: "Oops...",
               text: myConstClass.AUTH_USER_NOT_FOUND,
-              // footer: '<a href="">Why do I have this issue?</a>'
             });
             break;
           case "auth/weak-password":
-            // alert(myConstClass.AUTH_WEAK_PASSWORD);
             Swal.fire({
               icon: "error",
               title: "Oops...",
               text: myConstClass.AUTH_WEAK_PASSWORD,
-              // footer: '<a href="">Why do I have this issue?</a>'
             });
             break;
           default:
-            // alert(myConstClass.AUTH_LOGIN_FAIL);
             Swal.fire({
               icon: "error",
               title: "Oops...",
               text: myConstClass.AUTH_LOGIN_FAIL,
-              // footer: '<a href="">Why do I have this issue?</a>'
             });
         }
       });
   };
 
   const signIn = () => {
-    signInWithEmailAndPassword(props.auth, userEmail, userPassword)
+    signInWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
         user && getUserData(user.uid);
@@ -148,39 +115,28 @@ function Login(props) {
 
         switch (errorCode) {
           case "auth/wrong-password":
-            // alert("密碼錯誤喔");
             Swal.fire({
               icon: "error",
               title: "Oops...",
               text: "密碼錯誤喔",
-              // footer: '<a href="">Why do I have this issue?</a>'
             });
 
             break;
           case "auth/user-not-found":
-            // alert("帳號不存在喔");
             Swal.fire({
               icon: "error",
               title: "Oops...",
               text: "帳號不存在喔",
-              // footer: '<a href="">Why do I have this issue?</a>'
             });
             break;
-          // need to be fixed
-          // default:
-          //   alert("登入失敗QQ");
         }
       });
   };
 
   const writeUserData = async (userId) => {
-    console.log("writeUserData");
-    console.log("108 userId", userId);
-    console.log("props.db", props.db);
+    const docRef = doc(db, "user", userId);
 
-    const docRef = doc(props.db, "user", userId);
-
-    const UserdocRef = await setDoc(docRef, {
+    await setDoc(docRef, {
       email: userEmail,
       password: userPassword,
       name: userName,
@@ -192,15 +148,10 @@ function Login(props) {
       role: userRole,
       desc: "",
     });
-    console.log("data written to database");
   };
 
   const getUserData = async (userId) => {
-    console.log("getUserData 127");
-
-    const userData = await getDoc(doc(props.db, "user", userId));
-
-    console.log("userData.data()", userData.data());
+    const userData = await getDoc(doc(db, "user", userId));
 
     localStorage.setItem(
       "userInfo",
@@ -220,11 +171,11 @@ function Login(props) {
 
   async function handleSignIn() {
     signIn();
-    props.isLogin && redirect("/profile");
+    isLogin && redirect("/profile");
   }
   async function handleSignUp() {
     signUp();
-    props.isLogin && redirect("/profile");
+    isLogin && redirect("/profile");
   }
 
   return (
@@ -311,5 +262,11 @@ function Login(props) {
     </>
   );
 }
+
+Login.propTypes = {
+  auth: PropTypes.object,
+  db: PropTypes.object,
+  isLogin: PropTypes.bool,
+};
 
 export default Login;

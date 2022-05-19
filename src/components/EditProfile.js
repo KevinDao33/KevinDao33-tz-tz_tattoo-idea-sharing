@@ -1,19 +1,13 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-/* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
-import {initializeApp} from "firebase/app";
 import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {
-  getFirestore,
-  onSnapshot,
   getDoc,
   doc,
   updateDoc,
 } from "firebase/firestore";
 import Swal from "sweetalert2";
-// import {useNavigate} from "react-router-dom";
+import PropTypes from "prop-types";
 
 import {
   EditProfileBackgroundDisplay,
@@ -38,7 +32,7 @@ import {
 } from "../styles/EditProfile.module";
 import Loader from "./Loader";
 
-function EditProfile(props) {
+function EditProfile({app, db, uid}) {
   const [userData, setUserData] = useState(null);
   const [displayPhoto, setDisplayPhoto] = useState("");
   const [selectedFile, setSelectedFile] = useState("");
@@ -47,13 +41,12 @@ function EditProfile(props) {
   const [newLink, setNewLink] = useState("");
   const [newUserPhotoName, setNewUserPhotoName] = useState("");
 
-  const storage = getStorage(props.app);
+  const storage = getStorage(app);
   const redirect = useNavigate();
 
   const getUserData = async () => {
-    const userquery = await getDoc(doc(props.db, "user", props.uid));
+    const userquery = await getDoc(doc(db, "user", uid));
     const userAAA = userquery.data();
-    // console.log("userAAA", userAAA);
 
     setUserData({
       name: userAAA.name,
@@ -73,8 +66,8 @@ function EditProfile(props) {
   };
 
   useEffect(() => {
-    props.uid && !userData && getUserData();
-  }, [props.uid]);
+    uid && !userData && getUserData();
+  }, [uid]);
 
   const handleImageUpload = async (e) => {
     if (!e.target.files || e.target.files.length === 0) {
@@ -117,12 +110,10 @@ function EditProfile(props) {
 
   const cancelDataChange = () => {
     if (!userData) {
-      // alert("something went wrong, please try again later");
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: "Something went wrong, please try again later",
-        // footer: '<a href="">Why do I have this issue?</a>'
       })
 
       return;
@@ -136,9 +127,9 @@ function EditProfile(props) {
       setNewDescription(userData.desc);
     }
   };
-  // =======================================
+
   const updateUserData = async () => {
-    const userRef = doc(props.db, "user", props.uid);
+    const userRef = doc(db, "user", uid);
     updateDoc(userRef, {
       name: newName,
       link: newLink,
@@ -149,13 +140,12 @@ function EditProfile(props) {
   const getUserImageUrl = async (name) => {
     getDownloadURL(ref(storage, `profileImages/${name}`))
       .then((url) => {
-        const userRef = doc(props.db, "user", props.uid);
+        const userRef = doc(db, "user", uid);
         updateDoc(userRef, {
           pic: url,
         });
       })
       .then(async() => {
-        // alert("profile updated!");
         await Swal.fire(
           "profile updated!",
           'Looking fresh',
@@ -179,7 +169,6 @@ function EditProfile(props) {
 
   const submitNewUserData = async () => {
     if (!newName && !newDescription && !newLink && !selectedFile) {
-      // alert("if not updating, press the leave-button on the left");
       Swal.fire(
         'Nothing changed',
         "if not updating, press the leave-button on the left",
@@ -188,14 +177,10 @@ function EditProfile(props) {
 
       return;
     } else if (newName || newDescription || newLink || selectedFile) {
-      // console.log("there are changes");
       if (selectedFile && !newName && !newDescription && !newLink) {
-        // only new photo
         await uploadNewUserPhotoImage();
       } else if ((newName || newDescription || newLink) && !selectedFile) {
-        // no new photo but other updates
         await updateUserData();
-        // alert("changes saved");
         await Swal.fire(
           "Changes saved",
           'Looking fresh :)',
@@ -204,10 +189,7 @@ function EditProfile(props) {
         
         redirect("/profile");
       } else if ((newName || newDescription || newLink) && selectedFile) {
-        // new photo and other updates
-        //first upload new data to firestore
         await updateUserData();
-        //then upload image and redirect to profile
         await uploadNewUserPhotoImage();
       }
     }
@@ -269,5 +251,11 @@ function EditProfile(props) {
     <Loader />
   );
 }
+
+EditProfile.propTypes = {
+  app: PropTypes.object,
+  db: PropTypes.object,
+  uid: PropTypes.string,
+};
 
 export default EditProfile;

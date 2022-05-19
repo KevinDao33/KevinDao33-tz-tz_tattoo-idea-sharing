@@ -1,18 +1,14 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import React, {useState, useEffect} from "react";
 import {
   collection,
   getDocs,
-  getDoc,
   doc,
   updateDoc,
-  setDoc,
-  addDoc,
   arrayUnion,
 } from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
 import {
   TattooPlanWrapper,
@@ -46,30 +42,16 @@ import {
   StartPlanButtonSpan,
 } from "../styles/TattooPlan.module";
 
-function TattooPlan(props) {
+function TattooPlan({db, uid}) {
   const [plans, setPlans] = useState([]);
-  const [userData, setUserData] = useState([]);
+  // const [userData, setUserData] = useState([]);
   const [isShowFull, setIsShowFull] = useState(-1);
 
   const redirect = useNavigate();
 
-  const getuserData = async () => {
-    if (!props.uid) {
-      return;
-    }
-    const userSnapshot = await getDoc(doc(props.db, "user", props.uid));
-    setUserData(userSnapshot.data());
-
-    return;
-  };
-
-  useEffect(() => {
-    props.uid && getuserData();
-  }, [props.uid]);
-
   const getPlans = async () => {
     try {
-      const notesSnapshot = await getDocs(collection(props.db, "plan"));
+      const notesSnapshot = await getDocs(collection(db, "plan"));
       const plans = notesSnapshot.docs.map((doc) => doc.data());
       setPlans(plans);
 
@@ -84,26 +66,21 @@ function TattooPlan(props) {
   }, []);
 
   const handleSignUp = async (plan) => {
-    console.log(plan);
-
-    const allPlanRef = doc(props.db, "plan", plan.planId);
+    const allPlanRef = doc(db, "plan", plan.planId);
     const ownerPlanRef = doc(
-      props.db,
+      db,
       "user",
       plan.planOwner.ownerId,
       "plan",
       plan.planId
     );
     await updateDoc(allPlanRef, {
-      // artists: [props.uid],
-      artists: arrayUnion(props.uid),
+      artists: arrayUnion(uid),
     });
     await updateDoc(ownerPlanRef, {
-      // artists: [props.uid],
-      artists: arrayUnion(props.uid),
+      artists: arrayUnion(uid),
     });
 
-    // alert("Sign up successfully!");
     Swal.fire("Sign up successfully!", "You're the tattoo master!", "success");
     setIsShowFull(-1);
   };
@@ -114,15 +91,13 @@ function TattooPlan(props) {
       <StartPlanButtonWrapper>
         <StartPlanButton
           onClick={() => {
-            props.uid ? redirect("/start-tattoo-plan") : redirect("/profile");
+            uid ? redirect("/start-tattoo-plan") : redirect("/profile");
           }}>
           <StartPlanButtonSpan>Start a plan</StartPlanButtonSpan>
         </StartPlanButton>
       </StartPlanButtonWrapper>
 
       <AllTattooPlanCardWrapper>
-        {/* ======================================= */}
-
         {plans.length > 0 &&
           plans.map((plan, index) => {
             return (
@@ -155,13 +130,12 @@ function TattooPlan(props) {
                     </TattooPlanCardBriefDataWrapper>
                   </TattooPlanCardBriefDataMainWrapper>
                 </TattooPlanCardWrapper>
-                {/* ===================================== */}
 
                 <TattooPlanCardDetailDataMainWrapper
                   $showAll={isShowFull === index}>
                   <CloseButton
                     onClick={() => {
-                      setIsShowFull((prev) => -1);
+                      setIsShowFull(() => -1);
                     }}>
                     x
                   </CloseButton>
@@ -169,7 +143,6 @@ function TattooPlan(props) {
                     Plan Detail
                   </TattooPlanCardDetailDataTitle>
                   <TattooPlanCardDetailDataPlacement>
-                    {/* ・Back-lower */}
                     {`・${plan.placement}`}
                   </TattooPlanCardDetailDataPlacement>
                   <TattooPlanCardDetailDataSize>
@@ -216,5 +189,10 @@ function TattooPlan(props) {
     </TattooPlanWrapper>
   );
 }
+
+TattooPlan.propTypes = {
+  db: PropTypes.object,
+  uid: PropTypes.string,
+};
 
 export default TattooPlan;

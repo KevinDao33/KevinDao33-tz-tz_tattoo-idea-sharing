@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
 import {updateDoc, doc, getDoc, arrayRemove} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
@@ -11,18 +9,17 @@ import removeIcon from "../icon/remove.png";
 import {SHOW_PINS} from "../const";
 import {ARRANGE_PINS} from "../const";
 import {DELETE_PINS} from "../const";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
 import {
   CollectionBackgroundDisplay,
   CollectionHeader,
-  // UserPhoto,
   CollectionName,
   AllButtonWrapper,
   ButtonWrapper,
   Button,
   ButtonName,
-  // SaveOrderButton,
   AllPinsWrapper,
   PinWrapper,
   PinImage,
@@ -33,7 +30,7 @@ import {
 } from "../styles/Collection.module";
 import ArrangeCollection from "./ArrangeCollection";
 
-function Collection(props) {
+function Collection({db, uid}) {
   const [pinsInCollection, setPinsInCollection] = useState([]);
   const [collectionName, setCollectionName] = useState("");
   const [handlePin, setHandlePin] = useState(SHOW_PINS);
@@ -48,24 +45,23 @@ function Collection(props) {
 
     const getPinsInCollection = async (id) => {
       const querySnapshot = await getDoc(
-        doc(props.db, "user", id, "collection", lastSegment)
+        doc(db, "user", id, "collection", lastSegment)
       );
       const pinsInCollec = querySnapshot.data();
       setPinsInCollection(pinsInCollec);
-      // console.log('pinsInCollec', pinsInCollec);
     };
-    getPinsInCollection(props.uid);
+    getPinsInCollection(uid);
   };
 
   useEffect(() => {
     getCollectionName();
-  }, [props.uid]);
+  }, [uid]);
 
   const removePinFromCollection = async (collecName, pin, index) => {
     const collectionRef = doc(
-      props.db,
+      db,
       "user",
-      props.uid,
+      uid,
       "collection",
       collecName
     );
@@ -77,24 +73,13 @@ function Collection(props) {
       }),
     });
     setPinsInCollection((prev) => prev.pins.splice(index, 1));
-    // alert(`pin removed from ${collectionName}`);
-    await Swal.fire(
-      `pin removed from ${collectionName}`,
-      'bye bye',
-      'success'
-    )
+    await Swal.fire(`pin removed from ${collectionName}`, "bye bye", "success");
 
     window.location.reload();
   };
 
   const breakpointColumnsObj = {
     default: 4,
-    // 2521: 6,
-    // 2154: 5,
-    // 1789: 4,
-    // 1422: 3,
-    // 1052: 2,
-    // 688: 1,
   };
 
   const switch2Show = () => {
@@ -115,8 +100,8 @@ function Collection(props) {
     <CollectionBackgroundDisplay id='CollectionBackgroundDisplay'>
       {handlePin === ARRANGE_PINS ? (
         <ArrangeCollection
-          uid={props.uid}
-          db={props.db}
+          uid={uid}
+          db={db}
           switch2Show={switch2Show}
         />
       ) : (
@@ -125,7 +110,6 @@ function Collection(props) {
             onClick={() => {
               redirect("/profile");
             }}></BackButton>
-          {/* <UserPhoto src={photo}></UserPhoto> */}
           <CollectionName onClick={switch2Show}>
             {collectionName}
           </CollectionName>
@@ -174,20 +158,12 @@ function Collection(props) {
                     : pinsInCollection.pins.map((pin) => (
                         <PinWrapper key={uuid()}>
                           <PinImage src={pin.pinImage} />
-
-                          {/* <RemoveButton
-                          onClick={() => {
-                            removePinFromCollection(collectionName, pin, index);
-                          }}>
-                          -
-                        </RemoveButton> */}
                         </PinWrapper>
                       ))}
                 </Masonry>
               </AllPinsWrapper>
             </>
           ) : (
-            //remove message for demo
             <ShowEmptyMessage></ShowEmptyMessage>
           )}
         </CollectionHeader>
@@ -195,5 +171,10 @@ function Collection(props) {
     </CollectionBackgroundDisplay>
   );
 }
+
+Collection.propTypes = {
+  db: PropTypes.object,
+  uid: PropTypes.string,
+};
 
 export default Collection;

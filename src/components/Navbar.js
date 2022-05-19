@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import React, {useEffect, useState} from "react";
 import {NavLink, useNavigate} from "react-router-dom";
 import {
@@ -10,6 +8,7 @@ import {
   updateDoc,
   doc,
 } from "firebase/firestore";
+import PropTypes from "prop-types";
 
 import {
   NavbarBlank,
@@ -28,9 +27,8 @@ import {
   NoNotification,
   NavTitle,
 } from "../styles/Navbar.module";
-import {async} from "@firebase/util";
 
-function Navbar(props) {
+function Navbar({db, uid}) {
   const [isShowNotification, setIsShowNotofication] = useState(false);
   const [notificationData, setNotificationData] = useState([]);
   const [isUnRead, setIsUnRead] = useState(false);
@@ -44,35 +42,26 @@ function Navbar(props) {
 
   const listen2NewNotification = async () => {
     const allNotificationDataRef = query(
-      collection(props.db, "user", props.uid, "notification"),
+      collection(db, "user", uid, "notification"),
       orderBy("timeStamp")
     );
 
-    const allNotificationData = onSnapshot(
-      allNotificationDataRef,
-      (querySnapshot) => {
-        let allNotifications = [];
-        querySnapshot.forEach((doc) => {
-          allNotifications.push(doc.data());
-        });
+    onSnapshot(allNotificationDataRef, (querySnapshot) => {
+      let allNotifications = [];
+      querySnapshot.forEach((doc) => {
+        allNotifications.push(doc.data());
+      });
 
-        setNotificationData(allNotifications.reverse());
-      }
-    );
+      setNotificationData(allNotifications.reverse());
+    });
   };
 
   useEffect(() => {
-    props.uid && listen2NewNotification();
-  }, [props.uid]);
+    uid && listen2NewNotification();
+  }, [uid]);
 
   const upDateNotificationIsRead = async (notiId) => {
-    const allNotificationDataRef = doc(
-      props.db,
-      "user",
-      props.uid,
-      "notification",
-      notiId
-    );
+    const allNotificationDataRef = doc(db, "user", uid, "notification", notiId);
     await updateDoc(allNotificationDataRef, {
       isRead: true,
     });
@@ -106,7 +95,6 @@ function Navbar(props) {
             <LogoWrapper />
           </NavLink>
 
-          {/* put navLink to styled component and remove its refault style */}
           <NavLink to='/' style={{textDecoration: "none", color: "inherit"}}>
             <NavTitle $isPageNow={pageNow == ""}>Tattoos</NavTitle>
           </NavLink>
@@ -155,5 +143,10 @@ function Navbar(props) {
     </>
   );
 }
+
+Navbar.propTypes = {
+  db: PropTypes.object,
+  uid: PropTypes.string,
+};
 
 export default Navbar;

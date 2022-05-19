@@ -1,6 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
@@ -18,6 +15,7 @@ import "../styles/style.css";
 import {placements} from "../const";
 import {v4 as uuid} from "uuid";
 import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
 import {
   DarkBackgroundDisplay,
@@ -37,7 +35,7 @@ import {
 } from "../styles/CreateNewPin.module";
 import MultipleCombobox from "./MultipleCombobox";
 
-function CreateNewPin(props) {
+function CreateNewPin({app, db, uid}) {
   const [pinName, setPinName] = useState("");
   const [pinDescription, setPinDescription] = useState("");
   const [pinLink, setPinLink] = useState("");
@@ -45,18 +43,14 @@ function CreateNewPin(props) {
   const [pinType, setPinType] = useState("tattoo");
   const [pinImage, setPinImage] = useState("");
   const [pinPlacement, setPinPlacement] = useState("");
-  const [pinId, setPinId] = useState("");
-  const [isGetPinImage, setIsGetPinImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState("");
   const [preview, setPreview] = useState("");
-  const [isPinCreated, setIsPinCreated] = useState(false);
   const [userData, setUserData] = useState(null);
 
   const redirect = useNavigate();
-  const storage = getStorage(props.app);
+  const storage = getStorage(app);
 
   async function handleImageUpload(e) {
-    // show image preview
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
 
@@ -66,8 +60,6 @@ function CreateNewPin(props) {
     const imageFile = e.target.files[0];
     setSelectedFile(imageFile);
 
-    // compress image
-    console.log(`original size ${imageFile.size / 1024 / 1024} MB`);
     const imageName = imageFile.name.split(".");
     localStorage.setItem("uploadedImageName", imageName[0]);
 
@@ -78,17 +70,14 @@ function CreateNewPin(props) {
     };
     try {
       const compressedFile = await imageCompression(imageFile, options);
-      console.log(`compressed size ${compressedFile.size / 1024 / 1024} MB`);
 
-      // convert pinImage from Blob to string and store in localStorage
       const reader = new FileReader();
       reader.onload = (event) => {
         localStorage.setItem("uploadedImage", event.target.result);
       };
       reader.readAsDataURL(compressedFile);
-      setIsGetPinImage(true);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -106,7 +95,6 @@ function CreateNewPin(props) {
 
     let dataView = new DataView(arrayBuffer);
     let blob = new Blob([dataView], {type: mimeString});
-    console.log(`uploading size ${blob.size / 1024 / 1024} MB`);
 
     return blob;
   };
@@ -126,7 +114,7 @@ function CreateNewPin(props) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "please check if all fields are filled",
+        text: "Please check if all fields are filled",
       });
 
       return;
@@ -134,7 +122,7 @@ function CreateNewPin(props) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "please upload and check the image for your pin",
+        text: "Please upload and check the image for your pin",
       });
 
       return;
@@ -145,7 +133,7 @@ function CreateNewPin(props) {
       : Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "something went wrong, please try again :(",
+          text: "Something went wrong, please try again :(",
         });
   };
 
@@ -154,27 +142,25 @@ function CreateNewPin(props) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "please check image before creating a pin",
+        text: "Please check image before creating a pin",
       });
 
       return;
     }
 
-    const collectionRefPin = collection(props.db, "pin");
+    const collectionRefPin = collection(db, "pin");
     const docRefCollectionRefPin = doc(collectionRefPin);
 
     const collectionRefUser = doc(
-      props.db,
+      db,
       "user",
-      props.uid,
+      uid,
       "pin",
       docRefCollectionRefPin.id
     );
 
     setDoc(collectionRefUser, {
-      pinAutor: {uid: props.uid},
-      // email: userInfo.email,
-      // name: userInfo.name,
+      pinAutor: {uid: uid},
       pinId: docRefCollectionRefPin.id,
       pinDesc: pinDescription,
       pinName: pinName,
@@ -185,8 +171,7 @@ function CreateNewPin(props) {
       pinType: pinType,
     });
     setDoc(docRefCollectionRefPin, {
-      // change pinAuthor to contain only author uid
-      pinAutor: {uid: props.uid},
+      pinAutor: {uid: uid},
       pinId: docRefCollectionRefPin.id,
       pinDesc: pinDescription,
       pinName: pinName,
@@ -196,15 +181,11 @@ function CreateNewPin(props) {
       pinPlacement: pinPlacement,
       pinType: pinType,
     });
-    // setPinId(docRefCollectionRefPin.id);
-    // console.log('pinId', docRefCollectionRefPin.id);
 
-    setIsPinCreated(true);
     return docRefCollectionRefPin.id;
   };
 
   const getPinImageUrl = (name) => {
-    // const app = initializeApp(props.firebaseConfig);
     getDownloadURL(ref(storage, `pinImages/${name}`)).then((url) => {
       setPinImage(url);
     });
@@ -220,7 +201,6 @@ function CreateNewPin(props) {
     const objectUrl = URL.createObjectURL(selectedFile);
     setPreview(objectUrl);
 
-    // prevent memory leak
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
@@ -231,55 +211,42 @@ function CreateNewPin(props) {
     const storageRef = ref(storage, `pinImages/${uploadedImageName}`);
 
     try {
-      uploadBytes(storageRef, result).then((snapshot) => {
-        console.log("Uploaded image to firebase storage!");
+      uploadBytes(storageRef, result).then(() => {
         getPinImageUrl(uploadedImageName);
-        // alert("picture all set!");
-        Swal.fire(
-          "Picture all set!",
-          "good job! you're the best",
-          'success'
-        )
+        Swal.fire("Picture all set!", "good job! you're the best", "success");
       });
     } catch (error) {
       console.error(error);
     }
   }
 
-  //get user follower list
   const getUserData = async () => {
-    const userquery = await getDoc(doc(props.db, "user", props.uid));
+    const userquery = await getDoc(doc(db, "user", uid));
     const userAAA = userquery.data();
-    // console.log("userAAA", userAAA);
     setUserData(userAAA);
   };
   useEffect(() => {
     getUserData();
-  }, [props.uid]);
+  }, [uid]);
 
   const sendNotification2Follower = (pinIddd) => {
     if (!userData) {
-      console.log("no user data");
       return;
     }
 
     userData.follower.map(async (user) => {
-      const docRef = collection(props.db, "user", user, "notification");
+      const docRef = collection(db, "user", user, "notification");
       const notificationDocRef = await addDoc(docRef, {
         isRead: false,
-        authorUid: props.uid,
+        authorUid: uid,
         authorName: userData.name,
         authorPic: userData.pic,
         timeStamp: serverTimestamp(),
         pinId: pinIddd,
-        // notificationId: docRef.id,
       });
-      updateDoc(
-        doc(props.db, "user", user, "notification", notificationDocRef.id),
-        {
-          notificationId: notificationDocRef.id,
-        }
-      );
+      updateDoc(doc(db, "user", user, "notification", notificationDocRef.id), {
+        notificationId: notificationDocRef.id,
+      });
     });
   };
 
@@ -287,9 +254,7 @@ function CreateNewPin(props) {
     try {
       submitPinData(dataUrl2Blob);
       const pinIddd = writeUserData();
-      //send alert to followers
       sendNotification2Follower(pinIddd);
-      // isPinCreated && redirect("/profile");
     } catch (error) {
       console.error(error);
     }
@@ -298,7 +263,6 @@ function CreateNewPin(props) {
   return (
     <DarkBackgroundDisplay>
       <CreateNewPinWrapper>
-        {/* Pin Image */}
         <PinImageUploadWrapper>
           <UploadNewPinImageLabel>
             Upload Pin Image
@@ -315,19 +279,16 @@ function CreateNewPin(props) {
           </CreatePinButton>
         </PinImageUploadWrapper>
 
-        {/* Pin Info */}
         <PinDataUploadWrapper>
           <NewPinDataWrapper>
             <PlacementTitle>Pin Name :</PlacementTitle>
             <NewPinDataInput
-              // placeholder='Enter Pin Name'
               value={pinName}
               onChange={(e) => setPinName(e.target.value)}></NewPinDataInput>
           </NewPinDataWrapper>
           <NewPinDataWrapper>
             <PlacementTitle>Description :</PlacementTitle>
             <NewPinDataInput
-              // placeholder='Enter Pin Desc'
               value={pinDescription}
               onChange={(e) =>
                 setPinDescription(e.target.value)
@@ -336,12 +297,10 @@ function CreateNewPin(props) {
           <NewPinDataWrapper>
             <PlacementTitle>Pin Link :</PlacementTitle>
             <NewPinDataInput
-              // placeholder='Enter Pin Link'
               value={pinLink}
               onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
           </NewPinDataWrapper>
 
-          {/* add flash /tattoo selector */}
           <NewPinDataWrapper>
             <PlacementTitle>Type :</PlacementTitle>
 
@@ -354,7 +313,6 @@ function CreateNewPin(props) {
                   id='tattoo'
                   defaultChecked={true}
                   onClick={() => {
-                    // document.getElementById("tattoo").checked = true;
                     setPinType("tattoo");
                   }}
                 />
@@ -367,7 +325,6 @@ function CreateNewPin(props) {
                   value='flash'
                   id='flash'
                   onClick={() => {
-                    // document.getElementById("flash").checked = true;
                     setPinType("flash");
                   }}
                 />
@@ -376,7 +333,6 @@ function CreateNewPin(props) {
             </PinTypeWrapper>
           </NewPinDataWrapper>
 
-          {/* add placement selector */}
           <NewPinDataWrapper>
             <PlacementTitle>Placement :</PlacementTitle>
             <div className='list-choice'>
@@ -417,5 +373,11 @@ function CreateNewPin(props) {
     </DarkBackgroundDisplay>
   );
 }
+
+CreateNewPin.propTypes = {
+  db: PropTypes.object,
+  uid: PropTypes.string,
+  app: PropTypes.object,
+};
 
 export default CreateNewPin;

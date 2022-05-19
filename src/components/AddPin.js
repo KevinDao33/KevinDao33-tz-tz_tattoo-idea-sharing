@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
 import {
   collection as co,
@@ -10,6 +8,7 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
 import {
   Overlay,
@@ -26,30 +25,29 @@ import {
   NameNewCollection,
 } from "../styles/AddPin.module";
 
-function AddPin(props) {
+function AddPin({db, uid, pin, handleClosePinShow, indexxx}) {
   const [collections, setCollections] = useState([]);
   const [newCollectionName, setNewCollectionName] = useState("");
 
   const getCollections = async (id) => {
-    const querySnapshot = await getDocs(co(props.db, "user", id, "collection"));
+    const querySnapshot = await getDocs(co(db, "user", id, "collection"));
 
     let myCollections = [];
     querySnapshot.forEach((doc) => {
       myCollections.push({...doc.data()});
-      // myCollections.collectionName = doc.id;
     });
     setCollections(myCollections);
   };
 
   useEffect(() => {
-    props.uid && getCollections(props.uid);
+    uid && getCollections(uid);
   }, []);
 
   const addPinToCollection = (collection, pin) => {
     const collectionRef = doc(
-      props.db,
+      db,
       "user",
-      props.uid,
+      uid,
       "collection",
       collection.collectionName
     );
@@ -73,7 +71,7 @@ function AddPin(props) {
 
   const setCollection2Firestore = (uid) => {
     const newCollectionRef = doc(
-      props.db,
+      db,
       "user",
       uid,
       "collection",
@@ -85,15 +83,14 @@ function AddPin(props) {
         collectionName: newCollectionName,
         pins: [
           {
-            pinId: props.pin.pinId,
-            pinImage: props.pin.pinImage,
-            pinName: props.pin.pinName,
+            pinId: pin.pinId,
+            pinImage: pin.pinImage,
+            pinName: pin.pinName,
           },
         ],
       },
       {merge: true}
     );
-    // alert(`pin added to new collection ${newCollectionName}!`);
     Swal.fire(
       "success",
       `pin added to new collection ${newCollectionName}!`,
@@ -102,15 +99,12 @@ function AddPin(props) {
   };
 
   const createNewCollection = () => {
-    console.log("do u want to create a new collection?");
     newCollectionName.length > 0
-      ? setCollection2Firestore(props.uid)
-      : // : alert("please enter a name for the new collection");
-        Swal.fire({
+      ? setCollection2Firestore(uid)
+      : Swal.fire({
           icon: "error",
           title: "Oops...",
           text: "Please enter a name for the new collection",
-          // footer: '<a href="">Why do I have this issue?</a>',
         });
   };
 
@@ -119,22 +113,21 @@ function AddPin(props) {
       <AddPinOptions>
         <LeaveButton
           onClick={() => {
-            props.handleClosePinShow(props.indexxx);
+            handleClosePinShow(indexxx);
           }}>
           x
         </LeaveButton>
-        <PinName>{props.pin.pinName}</PinName>
-        <PinImage src={props.pin.pinImage} />
+        <PinName>{pin.pinName}</PinName>
+        <PinImage src={pin.pinImage} />
 
         {collections.length > 0 &&
           collections.map((collection, index) => (
             <AddToCollection key={index}>
-              {/* <CollectionName>{Object.keys(collection)}</CollectionName> */}
               <CollectionName>{collection.collectionName}</CollectionName>
               <SaveButton
                 onClick={() => {
-                  addPinToCollection(collection, props.pin);
-                  props.handleClosePinShow(props.indexxx);
+                  addPinToCollection(collection, pin);
+                  handleClosePinShow(indexxx);
                 }}>
                 save
               </SaveButton>
@@ -156,5 +149,13 @@ function AddPin(props) {
     </AllAddPinWrapper>
   );
 }
+
+AddPin.propTypes = {
+  db: PropTypes.object,
+  uid: PropTypes.string,
+  pin: PropTypes.object,
+  handleClosePinShow: PropTypes.func,
+  indexxx: PropTypes.number,
+};
 
 export default AddPin;

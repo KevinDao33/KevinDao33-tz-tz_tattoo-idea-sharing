@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, {useEffect, useState} from "react";
 import {
   collection,
@@ -18,6 +17,7 @@ import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import {v4 as uuid} from "uuid";
 import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
 import "../styles/style.css";
 import {
@@ -56,9 +56,8 @@ import {
   LoginReminder,
 } from "../styles/PinDetail.module";
 import Loader from "./Loader";
-// import {BackgroundDisplay} from "../styles/Homepage.module"
 
-function PinDetail(props) {
+function PinDetail({db, uid}) {
   const [pinId, setPinid] = useState("");
   const [pinData, setPinData] = useState("");
   const [authorData, setAuthorData] = useState("");
@@ -96,7 +95,7 @@ function PinDetail(props) {
     if (!authorId) {
       return;
     }
-    const authorSnapshot = await getDoc(doc(props.db, "user", authorId));
+    const authorSnapshot = await getDoc(doc(db, "user", authorId));
     setAuthorData(authorSnapshot.data());
 
     return;
@@ -107,10 +106,10 @@ function PinDetail(props) {
   }, [pinData]);
 
   const getUserData = async (userId) => {
-    if (!props.uid) {
+    if (!uid) {
       return;
     }
-    const docRef = doc(props.db, `user/${userId}`);
+    const docRef = doc(db, `user/${userId}`);
     const docSnap = await getDoc(docRef);
     setUserData({
       name: docSnap.data().name,
@@ -126,15 +125,15 @@ function PinDetail(props) {
   };
 
   useEffect(() => {
-    getUserData(props.uid);
-  }, [props.uid]);
+    getUserData(uid);
+  }, [uid]);
 
   const getUserCollection = async (userId) => {
     if (!userId) {
       return;
     }
     const collectionSnapshot = await getDocs(
-      collection(props.db, "user", userId, "collection")
+      collection(db, "user", userId, "collection")
     );
 
     let myCollections = [];
@@ -147,14 +146,14 @@ function PinDetail(props) {
   };
 
   useEffect(() => {
-    getUserCollection(props.uid);
-  }, [props.uid]);
+    getUserCollection(uid);
+  }, [uid]);
 
   const getPin = async () => {
     if (!pinId) {
       return;
     }
-    const pinSnapshot = await getDoc(doc(props.db, "pin", pinId));
+    const pinSnapshot = await getDoc(doc(db, "pin", pinId));
     setPinData(pinSnapshot.data());
 
     return;
@@ -170,21 +169,18 @@ function PinDetail(props) {
 
   const addPinToCollection = () => {
     if (selectedCollection === "Choose") {
-      // alert("Please select a collection~");
-
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Please select a collection~",
-        // footer: '<a href="">Why do I have this issue?</a>'
       });
 
       return;
     }
     const collectionRef = doc(
-      props.db,
+      db,
       "user",
-      props.uid,
+      uid,
       "collection",
       selectedCollection
     );
@@ -199,13 +195,11 @@ function PinDetail(props) {
       },
       {merge: true}
     );
-    // alert(`pin added to ${selectedCollection}`);
     Swal.fire(
       `Pin added to ${selectedCollection}`,
-      'Good choice ~~',
-      'success'
-    )
-
+      "Good choice ~~",
+      "success"
+    );
   };
 
   const getRelatedPins = async () => {
@@ -213,7 +207,7 @@ function PinDetail(props) {
       return;
     }
 
-    const pinsRef = collection(props.db, "pin");
+    const pinsRef = collection(db, "pin");
     const q = query(
       pinsRef,
       where("pinTags", "array-contains-any", pinData.pinTags)
@@ -234,17 +228,15 @@ function PinDetail(props) {
 
   const sendNewComment = async () => {
     if (!newComment) {
-      // alert("type a comment before sending");
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Please type a comment before sending",
-        // footer: '<a href="">Why do I have this issue?</a>'
       });
       return;
     }
-    await addDoc(collection(props.db, "pin", pinId, "comment"), {
-      commentator: props.uid,
+    await addDoc(collection(db, "pin", pinId, "comment"), {
+      commentator: uid,
       commentTime: serverTimestamp(),
       commentMessage: newComment,
     });
@@ -254,7 +246,7 @@ function PinDetail(props) {
 
   const getPinCommentData = async () => {
     const allCommentsDataRef = query(
-      collection(props.db, "pin", pinId, "comment"),
+      collection(db, "pin", pinId, "comment"),
       orderBy("commentTime")
     );
     // eslint-disable-next-line no-unused-vars
@@ -273,17 +265,12 @@ function PinDetail(props) {
 
   const getPinCommentator = async () => {
     if (pinCommentData.length < 0) {
-      console.log("no comment");
-
       return;
     }
 
     let commentatorData = [];
     for (let i = 0; i < pinCommentData.length; i++) {
-      let test = await getDoc(
-        doc(props.db, "user", pinCommentData[i].commentator)
-      );
-      // console.log('test', test.data());
+      let test = await getDoc(doc(db, "user", pinCommentData[i].commentator));
       commentatorData.push(test.data());
     }
     setPinCommentator(commentatorData);
@@ -309,7 +296,7 @@ function PinDetail(props) {
             <PinDetailDataWrapper>
               <PinName>{pinData.pinName}</PinName>
               <PinDetailSubNav>
-                {props.uid ? (
+                {uid ? (
                   <>
                     <CollectionSelector
                       value={selectedCollection}
@@ -328,20 +315,6 @@ function PinDetail(props) {
                 ) : (
                   <></>
                 )}
-
-                {/* <CollectionSelector
-                  value={selectedCollection}
-                  onChange={handleCollectionSelector}>
-                  <CollectionName>Choose</CollectionName>
-                  {userCollection.map((collection, index) => (
-                    <CollectionName
-                      key={index}
-                      value={collection.collectionName}>
-                      {collection.collectionName}
-                    </CollectionName>
-                  ))}
-                </CollectionSelector>
-                <SaveButton onClick={addPinToCollection}>save</SaveButton> */}
               </PinDetailSubNav>
 
               <PinDescriptionWrapper>
@@ -381,7 +354,7 @@ function PinDetail(props) {
                 </OtherPinCommentWrapper>
               </AllPinCommentWrapper>
 
-              {props.uid && userData ? (
+              {uid && userData ? (
                 <MyPinCommentWrapper>
                   <MyPhoto src={userData.pic}></MyPhoto>
                   <PinCommentInput
@@ -399,17 +372,6 @@ function PinDetail(props) {
                   </LoginReminder>
                 </MyPinCommentWrapper>
               )}
-
-              {/* <MyPinCommentWrapper>
-                <MyPhoto src={userData.pic}></MyPhoto>
-                <PinCommentInput
-                  id='commentInputField'
-                  vaule={newComment}
-                  onChange={(e) => {
-                    setNewComment(e.target.value);
-                  }}></PinCommentInput>
-                <SubmitButton onClick={sendNewComment}>Send</SubmitButton>
-              </MyPinCommentWrapper> */}
             </PinDetailDataWrapper>
           </PinDetailWrapper>
           <RelatedPinsTitle>Similiar Pins</RelatedPinsTitle>
@@ -445,5 +407,10 @@ function PinDetail(props) {
     </>
   );
 }
+
+PinDetail.propTypes = {
+  db: PropTypes.object,
+  uid: PropTypes.string,
+};
 
 export default PinDetail;

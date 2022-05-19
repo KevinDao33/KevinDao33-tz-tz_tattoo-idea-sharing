@@ -1,6 +1,3 @@
-/* eslint-disable react/prop-types */
-// /* eslint-disable react/prop-types */
-// /* eslint-disable no-undef */
 import React, {useEffect, useState} from "react";
 import {v4 as uuid} from "uuid";
 import Masonry from "react-masonry-css";
@@ -13,6 +10,7 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
+import PropTypes from "prop-types";
 
 import {
   FollowButton,
@@ -34,7 +32,7 @@ import {
   FilterTagLink as PinLink,
 } from "../styles/Homepage.module";
 
-function OtherUserProfile(props) {
+function OtherUserProfile({db, uid}) {
   const [otherUserUid, setOtherUserUid] = useState("");
   const [otherUserData, setOtherUserData] = useState(null);
   const [otherUserPin, setOtherUserPin] = useState([]);
@@ -51,19 +49,19 @@ function OtherUserProfile(props) {
   };
 
   const getMyData = async (uid) => {
-    if (!props.uid) {
+    if (!uid) {
       return;
     }
 
-    const myDataRef = doc(props.db, "user", uid);
+    const myDataRef = doc(db, "user", uid);
     const myDataDoc = await getDoc(myDataRef);
     setMyData(myDataDoc.data());
     setMyFollowingList(myDataDoc.data().following);
   };
 
   useEffect(() => {
-    props.uid && getMyData(props.uid);
-  }, [props.uid]);
+    uid && getMyData(uid);
+  }, [uid]);
 
   const getOtherUserUid = () => {
     const url = window.location.href;
@@ -78,23 +76,23 @@ function OtherUserProfile(props) {
   }, []);
 
   useEffect(() => {
-    if (otherUserUid && props.uid && otherUserUid !== props.uid) {
+    if (otherUserUid && uid && otherUserUid !== uid) {
       return;
-    } else if (otherUserUid && props.uid && otherUserUid === props.uid) {
+    } else if (otherUserUid && uid && otherUserUid === uid) {
       setIsSelf(true);
       return;
-    } else if (otherUserUid && !props.uid) {
+    } else if (otherUserUid && !uid) {
       setIsSelf(true);
       return;
     }
-  }, [otherUserUid, props.uid]);
+  }, [otherUserUid, uid]);
 
   const getOtherUserData = async (otherId) => {
     if (!otherUserUid) {
       return;
     }
 
-    const otherUserRef = doc(props.db, "user", otherId);
+    const otherUserRef = doc(db, "user", otherId);
     const otherUserDoc = await getDoc(otherUserRef);
     setOtherUserData(otherUserDoc.data());
     setOtherUserFollowerList(otherUserDoc.data().follower);
@@ -109,7 +107,7 @@ function OtherUserProfile(props) {
       return;
     }
 
-    const otherUserPinRef = collection(props.db, "user", otherId, "pin");
+    const otherUserPinRef = collection(db, "user", otherId, "pin");
     const otherUserPinData = await getDocs(otherUserPinRef);
     let otherUserAllPins = [];
     otherUserPinData.forEach((doc) => {
@@ -124,38 +122,33 @@ function OtherUserProfile(props) {
   }, [otherUserUid]);
 
   const handleFollow = async () => {
-    console.log("Follow !!");
-
-    const myFollowingRef = doc(props.db, "user", props.uid);
+    const myFollowingRef = doc(db, "user", uid);
     await updateDoc(myFollowingRef, {
       following: arrayUnion(otherUserUid),
     });
 
-    const otherUserFollowerRef = doc(props.db, "user", otherUserUid);
+    const otherUserFollowerRef = doc(db, "user", otherUserUid);
     await updateDoc(otherUserFollowerRef, {
-      follower: arrayUnion(props.uid),
+      follower: arrayUnion(uid),
     });
 
     setMyFollowingList((prev) => [...prev, otherUserUid]);
-    setOtherUserFollowerList((prev) => [...prev, props.uid]);
+    setOtherUserFollowerList((prev) => [...prev, uid]);
   };
 
   const handleUnfollow = async () => {
-    if (!props.uid) {
-      console.log("not login");
-
+    if (!uid) {
       return;
     }
-    console.log("Unfollow !!");
 
-    const myFollowingRef = doc(props.db, "user", props.uid);
+    const myFollowingRef = doc(db, "user", uid);
     await updateDoc(myFollowingRef, {
       following: arrayRemove(otherUserUid),
     });
 
-    const otherUserFollowerRef = doc(props.db, "user", otherUserUid);
+    const otherUserFollowerRef = doc(db, "user", otherUserUid);
     await updateDoc(otherUserFollowerRef, {
-      follower: arrayRemove(props.uid),
+      follower: arrayRemove(uid),
     });
 
     let clonedMyFollowingList = [...myFollowingList];
@@ -166,7 +159,7 @@ function OtherUserProfile(props) {
 
     let clonedOtherUserFollowerList = [...otherUserFollowerList];
     const filteredOtherUserList = clonedOtherUserFollowerList.filter(
-      (user) => user !== props.uid
+      (user) => user !== uid
     );
     setOtherUserFollowerList(filteredOtherUserList);
   };
@@ -185,7 +178,6 @@ function OtherUserProfile(props) {
             myFollowingList.includes(otherUserUid) ? (
               <UnFollowButton onClick={handleUnfollow}>Unfollow</UnFollowButton>
             ) : (
-              // <FollowButton onClick={handleFollow} $self={isSelf}>
               <FollowButton
                 onClick={() => {
                   isSelf ? "" : handleFollow();
@@ -217,5 +209,10 @@ function OtherUserProfile(props) {
     </DarkBackgroundDisplay>
   );
 }
+
+OtherUserProfile.propTypes = {
+  db: PropTypes.object,
+  uid: PropTypes.string,
+};
 
 export default OtherUserProfile;

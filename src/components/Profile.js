@@ -6,6 +6,7 @@ import {getAuth, signOut} from "firebase/auth";
 import Masonry from "react-masonry-css";
 import {collection, getDocs, getDoc, doc, setDoc} from "firebase/firestore";
 import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
 import {
   ProfileBackgroundDisplay,
@@ -57,9 +58,8 @@ import {
 } from "../styles/Profile.module";
 import Login from "./Login";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
-// import {placementsOptions} from "../const";
 
-function Profile(props) {
+function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
   // myPin/ myCollection/ myPlan(artist only)
   const MY_PIN = "myPin";
   const MY_COLLECTION = "myCollection";
@@ -89,7 +89,7 @@ function Profile(props) {
     1077: 2,
     715: 1,
   };
-  const auth = getAuth(props.app);
+  const auth = getAuth(app);
 
   useEffect(() => {
     setShowSection(MY_COLLECTION);
@@ -109,7 +109,7 @@ function Profile(props) {
   function logOut() {
     signOut(auth)
       .then(() => {
-        props.setIsLogin(false);
+        setIsLogin(false);
 
         // for the planned functions now, the localStorage would be better be clear out when user logout (including user data and pin image url), so that the next user wouldn't be affected at all.
         localStorage.clear();
@@ -168,7 +168,6 @@ function Profile(props) {
           </AllCollectionsWrapper>
         </MainAllCollectionWrapper>
       );
-      // ============================================================
     } else if (showSection === MY_PLAN) {
       return (
         <>
@@ -240,21 +239,6 @@ function Profile(props) {
                     ) : (
                       <div>No artists sign up yet</div>
                     )}
-
-                    {/* <TattooPlanCardArtistWrapper>
-                      <TattooPlanCardArtistPic />
-                      <TattooPlanCardArtistInfoWrapper>
-                        <TattooPlanCardArtistName>
-                          Kevin
-                        </TattooPlanCardArtistName>
-                        <TattooPlanCardArtistMail>
-                          test06@gmail.com
-                        </TattooPlanCardArtistMail>
-                        <TattooPlanCardArtistMail>
-                          http://hihihi.com
-                        </TattooPlanCardArtistMail>
-                      </TattooPlanCardArtistInfoWrapper>
-                    </TattooPlanCardArtistWrapper> */}
                   </TattooPlanCardArtistMainWrapper>
                 </FullTattooPlanCardWrapper>
               </MyPlanWrapper>
@@ -265,9 +249,7 @@ function Profile(props) {
   };
 
   const getPins = async () => {
-    const querySnapshot = await getDocs(
-      collection(props.db, "user", props.uid, "pin")
-    );
+    const querySnapshot = await getDocs(collection(db, "user", uid, "pin"));
     let myPins = [];
     querySnapshot.forEach((doc) => {
       myPins.push({...doc.data()});
@@ -277,7 +259,7 @@ function Profile(props) {
 
   const getCollections = async (id) => {
     const querySnapshot = await getDocs(
-      collection(props.db, "user", id, "collection")
+      collection(db, "user", id, "collection")
     );
 
     let myCollections = [];
@@ -291,11 +273,11 @@ function Profile(props) {
   };
 
   const getUserData = async (userId) => {
-    if (!props.uid) {
+    if (!uid) {
       return;
     }
-    // const docRef = doc(props.db, `user/${userId}`);
-    const docRef = doc(props.db, "user", userId);
+    // const docRef = doc(db, `user/${userId}`);
+    const docRef = doc(db, "user", userId);
     const docSnap = await getDoc(docRef);
     setUserData({
       name: docSnap.data().name,
@@ -311,13 +293,11 @@ function Profile(props) {
   };
 
   const getPlans = async () => {
-    if (!props.uid) {
+    if (!uid) {
       return;
     }
 
-    const querySnapshot = await getDocs(
-      collection(props.db, "user", props.uid, "plan")
-    );
+    const querySnapshot = await getDocs(collection(db, "user", uid, "plan"));
     let myPlans = [];
     querySnapshot.forEach((doc) => {
       myPlans.push({...doc.data()});
@@ -326,19 +306,19 @@ function Profile(props) {
   };
 
   async function getUserInfoAndPinsAndCollection() {
-    getUserData(props.uid);
+    getUserData(uid);
     getPlans();
     await getPins();
-    await getCollections(props.uid);
+    await getCollections(uid);
   }
 
   useEffect(() => {
     getUserInfoAndPinsAndCollection();
-  }, [props.uid]);
+  }, [uid]);
 
   const setCollection2Firestore = async (uid) => {
     const newCollectionRef = doc(
-      props.db,
+      db,
       "user",
       uid,
       "collection",
@@ -363,7 +343,7 @@ function Profile(props) {
 
   const createNewCollection = () => {
     newCollectionName
-      ? setCollection2Firestore(props.uid)
+      ? setCollection2Firestore(uid)
       : // : alert("please enter a name for the new collection");
         Swal.fire({
           icon: "error",
@@ -409,7 +389,7 @@ function Profile(props) {
 
     let result = [];
     clonedFollowing.map(async (user) => {
-      const docRef = doc(props.db, "user", user);
+      const docRef = doc(db, "user", user);
 
       const docSnap = await getDoc(docRef);
       result.push(docSnap.data());
@@ -426,7 +406,7 @@ function Profile(props) {
 
     let result = [];
     clonedFollower.map(async (user) => {
-      const docRef = doc(props.db, "user", user);
+      const docRef = doc(db, "user", user);
       const docSnap = await getDoc(docRef);
       result.push(docSnap.data());
     });
@@ -450,7 +430,7 @@ function Profile(props) {
 
       let result = [];
       clonedArtist.map(async (artist) => {
-        const docRef = doc(props.db, "user", artist);
+        const docRef = doc(db, "user", artist);
         const docSnap = await getDoc(docRef);
         result.push(docSnap.data());
       });
@@ -502,7 +482,7 @@ function Profile(props) {
 
   return (
     <ProfileBackgroundDisplay>
-      {props.isLogin ? (
+      {isLogin ? (
         userData && (
           <>
             {/* {showCreateCollection && (
@@ -611,14 +591,24 @@ function Profile(props) {
         )
       ) : (
         <Login
-          db={props.db}
+          db={db}
           userData={userData}
           setUserData={setUserData}
-          firebaseConfig={props.firebaseConfig}
-          auth={props.auth}></Login>
+          firebaseConfig={firebaseConfig}
+          auth={auth}></Login>
       )}
     </ProfileBackgroundDisplay>
   );
 }
+
+Profile.propTypes = {
+  firebaseConfig: PropTypes.object,
+  db: PropTypes.object,
+  auth: PropTypes.object,
+  uid: PropTypes.string,
+  app: PropTypes.object,
+  setIsLogin: PropTypes.func,
+  isLogin: PropTypes.bool,
+};
 
 export default Profile;

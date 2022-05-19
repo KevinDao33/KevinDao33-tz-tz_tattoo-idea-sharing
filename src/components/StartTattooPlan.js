@@ -1,20 +1,12 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import React, {useState, useEffect} from "react";
-import {NavLink, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import Select from "react-select";
 import Calendar from "react-calendar";
 import {placementsOptions, sizeOptions, budgetOption, cities} from "../const";
-import {
-  collection,
-  getDocs,
-  getDoc,
-  doc,
-  addDoc,
-  setDoc,
-} from "firebase/firestore";
+import {collection, getDocs, getDoc, doc, setDoc} from "firebase/firestore";
 import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
 import {
   StartTattooPlanWrapper,
@@ -57,7 +49,7 @@ import {
 } from "../styles/StartTattooPlan.module";
 import Profile from "./Profile";
 
-function StartTattooPlan(props) {
+function StartTattooPlan({db, uid}) {
   const [selectedPlacement, setSelectedPlacement] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [isColor, setIsColor] = useState(true);
@@ -78,10 +70,10 @@ function StartTattooPlan(props) {
   };
 
   const getuserData = async () => {
-    if (!props.uid) {
+    if (!uid) {
       return;
     }
-    const userSnapshot = await getDoc(doc(props.db, "user", props.uid));
+    const userSnapshot = await getDoc(doc(db, "user", uid));
     setUserData(userSnapshot.data());
 
     return;
@@ -89,11 +81,11 @@ function StartTattooPlan(props) {
 
   useEffect(() => {
     getuserData();
-  }, [props.uid]);
+  }, [uid]);
 
   const getCollectionPins = async (id) => {
     const querySnapshot = await getDocs(
-      collection(props.db, `user/${id}`, "collection")
+      collection(db, `user/${id}`, "collection")
     );
 
     let myCollections = [];
@@ -107,8 +99,8 @@ function StartTattooPlan(props) {
   };
 
   useEffect(() => {
-    props.uid && getCollectionPins(props.uid);
-  }, [props.uid]);
+    uid && getCollectionPins(uid);
+  }, [uid]);
 
   const handleStartPlan = async () => {
     if (
@@ -120,28 +112,18 @@ function StartTattooPlan(props) {
       !selectedPlacement ||
       !selectedCity
     ) {
-      // alert("Please make sure all fields are filled");
-
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Please make sure all fields are filled :(",
-        // footer: '<a href="">Why do I have this issue?</a>'
       });
 
       return;
     }
-    console.log("we good to upload");
 
-    const allNewPlanRef = collection(props.db, "plan");
+    const allNewPlanRef = collection(db, "plan");
     const newPlanRef = doc(allNewPlanRef);
-    const userNewPlanRef = doc(
-      props.db,
-      "user",
-      props.uid,
-      "plan",
-      newPlanRef.id
-    );
+    const userNewPlanRef = doc(db, "user", uid, "plan", newPlanRef.id);
 
     await setDoc(newPlanRef, {
       artists: [],
@@ -175,7 +157,6 @@ function StartTattooPlan(props) {
       artists: [],
     });
 
-    // alert(`Plan created!`);
     await Swal.fire(
       `Plan created!`,
       "sooooooo~ excited about your new tattoo",
@@ -186,10 +167,8 @@ function StartTattooPlan(props) {
 
   return (
     <>
-      {props.uid ? (
+      {uid ? (
         <StartTattooPlanWrapper>
-          {/* ====================================================== */}
-
           {isShowAllPins && (
             <DisplayAllPinOverlay>
               <DisplayAllPinOverlay2></DisplayAllPinOverlay2>
@@ -216,13 +195,10 @@ function StartTattooPlan(props) {
                           }}></PinImage>
                       ))}
                   </Masonry>
-                  {/* <PinImage></PinImage> */}
                 </SelectReferencePinWrapper>
               </DisplayAllPinWrapper>
             </DisplayAllPinOverlay>
           )}
-
-          {/* ====================================================== */}
 
           <StartTattooPlanDataWrapper>
             <StartTattooPlanTitleWrapper>
@@ -233,7 +209,6 @@ function StartTattooPlan(props) {
                 Describe your tattoo
               </StartTattooPlanMainTitle>
             </StartTattooPlanTitleWrapper>
-            {/* ====================================================== */}
             <StartTattooPlanMainDataSelectorWrapper>
               <BackButton
                 onClick={() => {
@@ -257,7 +232,6 @@ function StartTattooPlan(props) {
                     options={sizeOptions}
                   />
                 </StartTattooPlanMainDataSectionWrapper>
-                {/* ====================================================== */}
                 <StartTattooPlanMainDataSectionWrapper>
                   <StartTattooPlanMainDataSectionTitle>
                     {"Short description"}
@@ -290,7 +264,7 @@ function StartTattooPlan(props) {
                           id='color'
                           defaultChecked={true}
                           onClick={() => {
-                            setIsColor((prev) => true);
+                            setIsColor(true);
                           }}
                         />
                         Color
@@ -307,7 +281,7 @@ function StartTattooPlan(props) {
                           id='no-color'
                           defaultChecked={false}
                           onClick={() => {
-                            setIsColor((prev) => false);
+                            setIsColor(false);
                           }}
                         />
                         No Color
@@ -315,7 +289,7 @@ function StartTattooPlan(props) {
                     </TattooPlanColorTypeWrapper>
                   </TattooPlanColorTypeMainWrapper>
                 </StartTattooPlanMainDataSectionWrapper>
-                {/* ====================================================== */}
+
                 <StartTattooPlanMainDataSectionWrapper>
                   <StartTattooPlanMainDataSectionTitle>
                     Reference
@@ -334,7 +308,6 @@ function StartTattooPlan(props) {
                     </StartPlanReferenceSelector>
                   </StartPlanReferenceWrapper>
                 </StartTattooPlanMainDataSectionWrapper>
-                {/* ====================================================== */}
                 <StartTattooPlanMainDataSectionWrapper>
                   <StartTattooPlanMainDataSectionTitle>
                     Budget
@@ -345,7 +318,6 @@ function StartTattooPlan(props) {
                     options={budgetOption}
                   />
                 </StartTattooPlanMainDataSectionWrapper>
-                {/* ====================================================== */}
                 <StartTattooPlanMainDataSectionWrapper>
                   <StartTattooPlanMainDataSectionTitle>
                     City
@@ -404,14 +376,11 @@ function StartTattooPlan(props) {
                       onChange={setPlanDate}
                       locale={"en"}
                       minDate={new Date()}
-                      // activeStartDate={planDate}
-                      // activeStartDate={new Date()}
                       selectRange={true}
                       calendarType={"US"}
                     />
                   </TattooPlanCalandarWrapper>
                 </StartTattooPlanMainDataSectionWrapper>
-                {/* ====================================================== */}
                 <StartPlanButtonWrapper>
                   <StartPlanButton
                     onClick={(e) => {
@@ -421,11 +390,9 @@ function StartTattooPlan(props) {
                     <StartPlanButtonSpan>Start Plan</StartPlanButtonSpan>
                   </StartPlanButton>
                 </StartPlanButtonWrapper>
-                {/* ====================================================== */}
               </StartTattooPlanMainDataForm>
             </StartTattooPlanMainDataSelectorWrapper>
           </StartTattooPlanDataWrapper>
-          {/* ====================================================== */}
           <StartTattooPlanImageWrapper>
             <StartTattooPlanImage
               src={
@@ -433,15 +400,17 @@ function StartTattooPlan(props) {
               }
             />
           </StartTattooPlanImageWrapper>
-
-          {/* ====================================================== */}
         </StartTattooPlanWrapper>
       ) : (
-        //nee to be fixed
         <Profile></Profile>
       )}
     </>
   );
 }
+
+StartTattooPlan.propTypes = {
+  db: PropTypes.object,
+  uid: PropTypes.string,
+};
 
 export default StartTattooPlan;

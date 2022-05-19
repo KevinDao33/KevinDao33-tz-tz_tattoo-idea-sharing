@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, {useState} from "react";
 import {useCombobox, useMultipleSelection} from "downshift";
 import {
@@ -15,8 +14,9 @@ import {
 } from "../styles/MultipleCombobox.modul";
 import {useEffect} from "react";
 import {items} from "../const";
+import PropTypes from "prop-types";
 
-function MultipleCombobox(props) {
+function MultipleCombobox({setPinTags}) {
   const [inputValue, setInputValue] = useState("");
 
   const {
@@ -25,14 +25,10 @@ function MultipleCombobox(props) {
     addSelectedItem,
     removeSelectedItem,
     selectedItems,
-    //   } = useMultipleSelection({initialSelectedItems: [items[0], items[1]]});
   } = useMultipleSelection({initialSelectedItems: []});
 
- // ==============================
-  // make sure it wont cause infinite loop
   useEffect(() => {
-    // set limits for selectedItems
-    props.setPinTags(selectedItems);
+    setPinTags(selectedItems);
   }, [selectedItems]);
 
   const getFilteredItems = (items) =>
@@ -80,16 +76,6 @@ function MultipleCombobox(props) {
     <AllComboboxWrapper>
       <TagTitle {...getLabelProps()}>Tags:</TagTitle>
       <ComboboxWrapper>
-        {/* {selectedItems.map((selectedItem, index) => (
-          <SelectedItem
-            key={`selected-item-${index}`}
-            {...getSelectedItemProps({selectedItem, index})}>
-            {selectedItem}
-            <SelectedItemIcon onClick={() => removeSelectedItem(selectedItem)}>
-              &#10005;
-            </SelectedItemIcon>
-          </SelectedItem>
-        ))} */}
         <Combobox {...getComboboxProps()}>
           <SearchTagInput
             {...getInputProps(getDropdownProps({preventKeyAction: isOpen}))}
@@ -119,7 +105,9 @@ function MultipleCombobox(props) {
           getFilteredItems(items).map((item, index) => (
             <li
               style={
-                highlightedIndex === index ? {backgroundColor: "snow", color:"black"} : {}
+                highlightedIndex === index
+                  ? {backgroundColor: "snow", color: "black"}
+                  : {}
               }
               key={`${item}${index}`}
               {...getItemProps({item, index})}>
@@ -130,5 +118,9 @@ function MultipleCombobox(props) {
     </AllComboboxWrapper>
   );
 }
+
+MultipleCombobox.propTypes = {
+  setPinTags: PropTypes.func,
+};
 
 export default MultipleCombobox;

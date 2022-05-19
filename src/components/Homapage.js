@@ -1,12 +1,10 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-undef */
 import React, {useState, useEffect, useRef} from "react";
 import {collection, getDocs} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import "../styles/style.css";
-// import {v4 as uuid} from "uuid";
 import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
 import LandingPage from "./LandingPageVideo";
 import AddPin from "./AddPin";
@@ -46,10 +44,8 @@ import {
   tagIntroductions,
 } from "../const";
 
-function Homapage(props) {
-  // check user visit is not done pageYOffset, so to prevent replay video everytime entering homepage, set isShowVideo' init to false
+function Homapage({db, uid}) {
   const [isShowVideo, setIsShowVideo] = useState(false);
-  // const [isShowVideo, setIsShowVideo] = useState(true);
   const [isShowAddPin, setIsShowAddPin] = useState(false);
   const [pins, setPins] = useState([]);
   const [filteredPins, setFilteredPins] = useState([]);
@@ -75,7 +71,7 @@ function Homapage(props) {
 
   const getPins = async () => {
     try {
-      const notesSnapshot = await getDocs(collection(props.db, "pin"));
+      const notesSnapshot = await getDocs(collection(db, "pin"));
       const pins = notesSnapshot.docs.map((doc) => doc.data());
       setPins(pins);
 
@@ -125,7 +121,6 @@ function Homapage(props) {
         (pin) => pin.pinPlacement === placement
       );
       setRenderPins([]);
-      // setPagedPins([]);
       setFilteredPins(filteredResult);
 
       setPagedPins(chunk(filteredResult, 16));
@@ -137,7 +132,6 @@ function Homapage(props) {
           pin.pinPlacement === placement && pin.pinTags.includes(filterByTag)
       );
       setRenderPins([]);
-      // setPagedPins([]);
       setFilteredPins(filteredResult);
 
       setPagedPins(chunk(filteredResult, 16));
@@ -203,7 +197,6 @@ function Homapage(props) {
     pageNow.current = 0;
   };
 
-  // ======================== page the pins (each page 16 pins) ====================================
   const chunk = (arr, size) =>
     arr.reduce(
       (carry, _, index, orig) =>
@@ -215,63 +208,22 @@ function Homapage(props) {
 
   const pagingPins = () => {
     if (!filteredPins.length > 0 && !pins.length > 0) {
-      console.log("no pin at all");
       return;
     }
     !filteredPins.length > 0 && setPagedPins(chunk(pins, 16));
-    // filteredPins.length > 0
-    //   ? setPagedPins(chunk(filteredPins, 16))
-    //   : setPagedPins(chunk(pins, 16));
   };
 
   useEffect(() => {
     pagingPins();
   }, [pins, filteredPins]);
 
-  // ======================== set up intersection obsever ====================================
-  // const makeInfiniteScrollPage = function () {
-  //   const options = {
-  //     rootMargin: "5px",
-  //     threshold: 1,
-  //   };
-
-  //   const callback = (entries) => {
-  //     entries.forEach((entry) => {
-  //       console.log("pageNow.current", pageNow.current);
-
-  //       if (entry.isIntersecting) {
-  //         // =========================
-  //         if (!pagedPins[pageNow.current]) {
-  //           console.log("there is no more pin");
-
-  //           return;
-  //         } else if (!pagedPins[pageNow.current - 1]) {
-  //           setRenderPins(pagedPins[pageNow.current]);
-  //           pageNow.current++;
-  //         } else {
-  //           setRenderPins((prev) =>
-  //             [...prev].concat(pagedPins[pageNow.current])
-  //           );
-  //           pageNow.current++;
-  //         }
-  //         // =========================
-  //       }
-  //     });
-  //   };
-  // const footerBlank = document.getElementById("footerBlank");
-  //   const observer = new IntersectionObserver(callback, options);
-  //   observer.observe(footerBlank);
-  // };
   const options = {
     rootMargin: "10px",
     threshold: 0.7,
   };
 
-  //things not working on Windows
-  //trying to find bugs
   useEffect(() => {
     const footerBlank = document.getElementById("footerBlank");
-    // if (pagedPins.length > 0) {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -294,27 +246,6 @@ function Homapage(props) {
     }
     return () => observer.disconnect();
   }, [pagedPins, renderPins, isShowVideo]);
-
-  // useEffect(() => {
-  // if (pagedPins.length < 1) return;
-  // makeInfiniteScrollPage();
-  // console.log("pagedPins", pagedPins);
-  // console.log("renderPins", renderPins);
-
-  // return () => makeInfiniteScrollPage()
-  // }, []);
-  // useEffect(() => {
-  //   pagedPins.length > 0 && makeInfiniteScrollPage();
-
-  // }, [pagedPins, filterByPlacement]);
-
-  // useEffect(() => {
-  //   console.log("filteredPins", filteredPins);
-  //   console.log("pagedPins", pagedPins);
-  //   console.log("renderPins", renderPins);
-  // }, [pagedPins, renderPins, filteredPins]);
-
-  // ============================================================
 
   return !isShowVideo ? (
     <LandingPage setIsShowVideo={setIsShowVideo}></LandingPage>
@@ -426,15 +357,13 @@ function Homapage(props) {
                   />
                   <SaveButton
                     $like={isShowLike === index}
-                    onClick={async() => {
-                      if (!props.uid) {
-                        // alert("Please sign-in bofore adding pins :)");
+                    onClick={async () => {
+                      if (!uid) {
                         await Swal.fire({
-                          icon: 'error',
-                          title: 'Oops...',
+                          icon: "error",
+                          title: "Oops...",
                           text: "Please sign-in bofore adding pins :o",
-                          // footer: '<a href="">Why do I have this issue?</a>'
-                        })
+                        });
                         redirect("profile");
                         return;
                       }
@@ -458,9 +387,8 @@ function Homapage(props) {
                       key={pin.pinName}
                       isShowAddPin={isShowAddPin}
                       setIsShowAddPin={setIsShowAddPin}
-                      // eslint-disable-next-line react/prop-types
-                      db={props.db}
-                      uid={props.uid}
+                      db={db}
+                      uid={uid}
                       pin={pin}
                       pins={pins}
                     />
@@ -479,5 +407,10 @@ function Homapage(props) {
     </>
   );
 }
+
+Homapage.propTypes = {
+  db: PropTypes.object,
+  uid: PropTypes.string,
+};
 
 export default Homapage;

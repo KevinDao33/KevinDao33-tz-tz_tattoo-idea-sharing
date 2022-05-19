@@ -1,11 +1,9 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-undef */
 import React, {useState, useEffect} from "react";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import "../styles/style.css";
 import {doc, getDoc, updateDoc} from "firebase/firestore";
-// import {useNavigate} from "react-router-dom";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
 import {
   PinImageArrange,
@@ -15,7 +13,7 @@ import {
   SaveButton,
 } from "../styles/Collection.module";
 
-function ArrangeCollection(props) {
+function ArrangeCollection({db, uid, switch2Show}) {
   const [columns, setColumns] = useState([]);
   const [collectionName, setCollectionName] = useState("");
   const [pinsInCollection, setPinsInCollection] = useState([]);
@@ -32,19 +30,19 @@ function ArrangeCollection(props) {
 
     const getPinsInCollection = async (id) => {
       const querySnapshot = await getDoc(
-        doc(props.db, "user", id, "collection", lastSegment)
+        doc(db, "user", id, "collection", lastSegment)
       );
       const pinsInCollec = querySnapshot.data();
 
       setPinsInCollection(pinsInCollec.pins);
     };
 
-    getPinsInCollection(props.uid);
+    getPinsInCollection(uid);
   };
 
   useEffect(() => {
-    props.uid && getCollectionName();
-  }, [props.uid]);
+    uid && getCollectionName();
+  }, [uid]);
 
   const seperateTestingArray = (array) => {
     let columnAArrange = [];
@@ -134,9 +132,7 @@ function ArrangeCollection(props) {
   };
 
   const saveNewPinOrder = () => {
-    Object.values(columns).length > 0
-      ? upDateCombinedColumns()
-      : console.log("there's nothing");
+    Object.values(columns).length > 0 && upDateCombinedColumns();
   };
 
   const upDateCombinedColumns = async () => {
@@ -146,7 +142,6 @@ function ArrangeCollection(props) {
       columns.column2C.items,
       columns.column3D.items,
     ];
-    console.log("all columns", unprocessedColumns);
     let combinedColumn = [];
     const aLength = columns.column0A.items.length;
     const bLength = columns.column1B.items.length;
@@ -166,25 +161,13 @@ function ArrangeCollection(props) {
     const filteredCombinedColumn = combinedColumn.filter((e) => {
       return typeof e !== "number";
     });
-    console.log("filteredCombinedColumn", filteredCombinedColumn);
 
-    const collectionRef = doc(
-      props.db,
-      "user",
-      props.uid,
-      "collection",
-      collectionName
-    );
+    const collectionRef = doc(db, "user", uid, "collection", collectionName);
 
     await updateDoc(collectionRef, {
       pins: filteredCombinedColumn,
     });
-    // alert("changes saved");
-    await Swal.fire(
-      'Changes saved',
-      '',
-      'success'
-    )
+    await Swal.fire("Changes saved", "", "success");
     window.location.reload();
 
     return;
@@ -199,7 +182,7 @@ function ArrangeCollection(props) {
               "changes not saved yet, do you want to leave?"
             );
             if (leave) {
-              props.switch2Show();
+              switch2Show();
             }
           }}></ArrangeBackButton>
         <ArrangeTitle>Arranging : {collectionName}</ArrangeTitle>
@@ -215,7 +198,6 @@ function ArrangeCollection(props) {
           margin: "30px auto 10px auto",
           borderRadius: "20px",
           boxShadow: "inset 0 4px 10px rgba(0, 0, 0, 0.3)",
-          // border: "5px solid blue",
         }}>
         <DragDropContext
           onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
@@ -227,7 +209,6 @@ function ArrangeCollection(props) {
                   flexDirection: "column",
                   alignItems: "center",
                   width: "22%",
-                  // border: "3px solid yellow",
                 }}
                 key={columnId}>
                 <div
@@ -236,7 +217,6 @@ function ArrangeCollection(props) {
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",
-                    // border: "4px solid red",
                   }}>
                   <Droppable droppableId={columnId} key={columnId}>
                     {(provided) => {
@@ -249,12 +229,8 @@ function ArrangeCollection(props) {
                             flexDirection: "column",
                             justifyContent: "flex-start",
                             alignItems: "center",
-                            // background: "snow",
                             padding: "4px",
-                            // width: "90%",
                             minHeight: "50vh",
-                            // backdropFilter: "blur(8px)",
-                            // border: "4px solid purple",
                           }}>
                           {column.items.map((item, index) => {
                             return (
@@ -268,21 +244,7 @@ function ArrangeCollection(props) {
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
-                                      // style={{
-                                      //   ...provided.draggableProps.style,
-                                      //   top: 0,
-                                      //   left: 0,
-                                      //   zIndex: 6000,
-                                      // }}
                                       src={item.pinImage}></PinImageArrange>
-                                    // <PinImageArrange
-                                    //   ref={provided.innerRef}
-                                    //   {...provided.draggableProps}
-                                    //   {...provided.dragHandleProps}
-
-                                    //   style={{top: 0, left: 0}}
-
-                                    //   src={item.pinImage}></PinImageArrange>
                                   );
                                 }}
                               </Draggable>
@@ -302,5 +264,11 @@ function ArrangeCollection(props) {
     </>
   );
 }
+
+ArrangeCollection.propTypes = {
+  db: PropTypes.object,
+  uid: PropTypes.string,
+  switch2Show: PropTypes.func,
+};
 
 export default ArrangeCollection;
