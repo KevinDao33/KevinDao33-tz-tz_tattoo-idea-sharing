@@ -1,9 +1,9 @@
-import GlobalStyle from "../styles/globalStyles";
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {initializeApp} from "firebase/app";
 import {getFirestore} from "firebase/firestore";
+import GlobalStyle from "../styles/globalStyles";
 
 import Collection from "./Collcetion";
 import Navbar from "./Navbar";
@@ -50,12 +50,82 @@ function App() {
     });
   }, []);
 
+  const routeDataList = [
+    {
+      path: "/",
+      element: "Homapage",
+      props: "uid={uid} isLogin={isLogin} db={db}",
+    },
+    {
+      path: "/profile",
+      element: "Profile",
+      props:
+        "uid={uid} db={db} auth={auth} setUid={setUid} isLogin={isLogin} setIsLogin={setIsLogin}",
+    },
+    {
+      path: "user/:otherUserId",
+      element: "OtherUserProfile",
+      props: "uid={uid} db={db}",
+    },
+    {
+      path: "edit-profile",
+      element: "EditProfile",
+      props: "uid={uid} db={db}",
+    },
+    {
+      path: "/create-pin",
+      element: "CreateNewPin",
+      props: "uid={uid} app={app} db={db}",
+    },
+    {
+      path: "pin-detail/:pinId",
+      element: "PinDetail",
+      props: "uid={uid} app={app} db={db}",
+    },
+    {
+      path: "collection/:collectionName",
+      element: "Collection",
+      props: "uid={uid} db={db}",
+    },
+    {
+      path: "/login",
+      element: "Login",
+      props:
+        "uid={uid} db={db}  setUid={setUid} isLogin={isLogin} setIsLogin={setIsLogin}",
+    },
+    // {
+    //   path: "pin-detail",
+    //   element: "PinDetail",
+    //   props: "uid={uid} db={db}  setUid={setUid} isLogin={isLogin} setIsLogin={setIsLogin}",
+    // },
+    {
+      path: "/start-tattoo-plan",
+      element: "StartTattooPlan",
+      props: "uid={uid} db={db}",
+    },
+    {
+      path: "/tattoo-plan",
+      element: "TattooPlan",
+      props: "uid={uid} db={db}",
+    },
+    {
+      path: "*",
+      element: "PageNotFound",
+    },
+  ];
+
+  const createRoute = () => {
+    routeDataList.map((route) => (
+      <Route path={route.path} element={<route.element />} />
+    ));
+  };
+
   return (
     <BrowserRouter>
       <GlobalStyle />
       <Navbar uid={uid} db={db} />
       <Routes>
-        <Route
+        {/* <Route
           path='/'
           element={<Homapage uid={uid} isLogin={isLogin} db={db} />}
         />
@@ -73,23 +143,24 @@ function App() {
           }
         />
         <Route
-          path={`user/:otherUserId`}
+          path='user/:otherUserId'
           element={<OtherUserProfile uid={uid} db={db} />}
         />
         <Route
           path='edit-profile'
           element={<EditProfile uid={uid} app={app} db={db} />}
         />
+
         <Route
           path='/create-pin'
           element={<CreateNewPin uid={uid} app={app} db={db} />}
         />
         <Route
-          path={`pin-detail/:pinId`}
+          path='pin-detail/:pinId'
           element={<PinDetail uid={uid} app={app} db={db} />}
         />
         <Route
-          path={`collection/:collectionName`}
+          path='collection/:collectionName'
           element={<Collection uid={uid} db={db} />}
         />
         <Route
@@ -110,7 +181,7 @@ function App() {
           element={<StartTattooPlan uid={uid} db={db} />}
         />
         <Route path='/tattoo-plan' element={<TattooPlan uid={uid} db={db} />} />
-        <Route path='*' element={<PageNotFound />} />
+        <Route path='*' element={<PageNotFound />} /> */}
       </Routes>
     </BrowserRouter>
   );

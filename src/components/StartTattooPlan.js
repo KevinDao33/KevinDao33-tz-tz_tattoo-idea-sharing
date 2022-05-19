@@ -2,11 +2,11 @@ import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import Select from "react-select";
-import Calendar from "react-calendar";
-import {placementsOptions, sizeOptions, budgetOption, cities} from "../const";
-import {collection, getDocs, getDoc, doc, setDoc} from "firebase/firestore";
-import Swal from "sweetalert2";
+import {Calendar} from "react-calendar";
 import PropTypes from "prop-types";
+import Swal from "sweetalert2";
+import {collection, getDocs, getDoc, doc, setDoc} from "firebase/firestore";
+import {placementsOptions, sizeOptions, budgetOption, cities} from "../const";
 
 import {
   StartTattooPlanWrapper,

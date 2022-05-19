@@ -1,16 +1,14 @@
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import {updateDoc, doc, getDoc, arrayRemove} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import {v4 as uuid} from "uuid";
 import "../styles/style.css";
-import arrangeIcon from "../icon/arrange.png";
-import removeIcon from "../icon/remove.png";
-import {SHOW_PINS} from "../const";
-import {ARRANGE_PINS} from "../const";
-import {DELETE_PINS} from "../const";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
+import arrangeIcon from "../icon/arrange.png";
+import removeIcon from "../icon/remove.png";
+import {SHOW_PINS, ARRANGE_PINS, DELETE_PINS} from "../const";
 
 import {
   CollectionBackgroundDisplay,
@@ -58,13 +56,7 @@ function Collection({db, uid}) {
   }, [uid]);
 
   const removePinFromCollection = async (collecName, pin, index) => {
-    const collectionRef = doc(
-      db,
-      "user",
-      uid,
-      "collection",
-      collecName
-    );
+    const collectionRef = doc(db, "user", uid, "collection", collecName);
     await updateDoc(collectionRef, {
       pins: arrayRemove({
         pinName: pin.pinName,
@@ -99,11 +91,7 @@ function Collection({db, uid}) {
   return (
     <CollectionBackgroundDisplay id='CollectionBackgroundDisplay'>
       {handlePin === ARRANGE_PINS ? (
-        <ArrangeCollection
-          uid={uid}
-          db={db}
-          switch2Show={switch2Show}
-        />
+        <ArrangeCollection uid={uid} db={db} switch2Show={switch2Show} />
       ) : (
         <CollectionHeader id='CollectionHeader'>
           <BackButton

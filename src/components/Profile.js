@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-undef */
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import {NavLink, useNavigate} from "react-router-dom";
 import {getAuth, signOut} from "firebase/auth";
 import Masonry from "react-masonry-css";
@@ -56,8 +54,8 @@ import {
   TattooPlanCardDetailDataDescription,
   ArtistLink,
 } from "../styles/Profile.module";
-import Login from "./Login";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
+import Login from "./Login";
 
 function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
   // myPin/ myCollection/ myPlan(artist only)

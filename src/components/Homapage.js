@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import {useState, useEffect, useRef} from "react";
 import {collection, getDocs} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
@@ -6,8 +6,6 @@ import "../styles/style.css";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
 
-import LandingPage from "./LandingPageVideo";
-import AddPin from "./AddPin";
 import {
   BackgroundDisplay,
   MainTitle,
@@ -36,13 +34,15 @@ import {
   PinTagIntroductionContext,
   FooterBlank,
 } from "../styles/Homepage.module";
-import Loader from "./Loader";
 import {
   items,
   placements,
   tagsWithIntroduction,
   tagIntroductions,
 } from "../const";
+import AddPin from "./AddPin";
+import LandingPage from "./LandingPageVideo";
+import Loader from "./Loader";
 
 function Homapage({db, uid}) {
   const [isShowVideo, setIsShowVideo] = useState(false);
@@ -383,7 +383,7 @@ function Homapage({db, uid}) {
                   {pin.isShow && (
                     <AddPin
                       handleClosePinShow={handleClosePinShow}
-                      indexxx={index}
+                      pinIndex={index}
                       key={pin.pinName}
                       isShowAddPin={isShowAddPin}
                       setIsShowAddPin={setIsShowAddPin}

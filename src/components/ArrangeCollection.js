@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
+import {doc, getDoc, updateDoc} from "firebase/firestore";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import "../styles/style.css";
-import {doc, getDoc, updateDoc} from "firebase/firestore";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
 
@@ -14,8 +14,8 @@ import {
 } from "../styles/Collection.module";
 
 function ArrangeCollection({db, uid, switch2Show}) {
-  const [columns, setColumns] = useState([]);
   const [collectionName, setCollectionName] = useState("");
+  const [columns, setColumns] = useState([]);
   const [pinsInCollection, setPinsInCollection] = useState([]);
   const [columnA, setColumnA] = useState([]);
   const [columnB, setColumnB] = useState([]);

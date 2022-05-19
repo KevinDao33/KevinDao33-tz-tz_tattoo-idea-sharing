@@ -1,5 +1,8 @@
-import React, {useState} from "react";
+import {useState, useEffect} from "react";
 import {useCombobox, useMultipleSelection} from "downshift";
+import PropTypes from "prop-types";
+import {items} from "../const";
+
 import {
   AllComboboxWrapper,
   MenuMultiple,
@@ -12,9 +15,6 @@ import {
   SearchTagInput,
   SelectedItemWrapper,
 } from "../styles/MultipleCombobox.modul";
-import {useEffect} from "react";
-import {items} from "../const";
-import PropTypes from "prop-types";
 
 function MultipleCombobox({setPinTags}) {
   const [inputValue, setInputValue] = useState("");

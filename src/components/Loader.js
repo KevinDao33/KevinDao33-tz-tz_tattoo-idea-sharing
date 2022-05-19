@@ -1,5 +1,3 @@
-import React from "react";
-
 import {LoaderWrapper, LoaderBall} from "../styles/Loader.module";
 
 function Loader() {

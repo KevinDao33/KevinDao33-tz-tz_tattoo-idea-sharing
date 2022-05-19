@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {
@@ -12,10 +12,10 @@ import {
 } from "firebase/firestore";
 import imageCompression from "browser-image-compression";
 import "../styles/style.css";
-import {placements} from "../const";
 import {v4 as uuid} from "uuid";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
+import {placements} from "../const";
 
 import {
   DarkBackgroundDisplay,

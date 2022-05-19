@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import {
   collection as co,
   getDocs,
@@ -25,10 +25,11 @@ import {
   NameNewCollection,
 } from "../styles/AddPin.module";
 
-function AddPin({db, uid, pin, handleClosePinShow, indexxx}) {
+function AddPin({db, uid, pin, handleClosePinShow, pinIndex}) {
   const [collections, setCollections] = useState([]);
   const [newCollectionName, setNewCollectionName] = useState("");
 
+  // !!!!!!!!!!!!!!!! move this function to api.js !!!!!!!!!!!!!!!!
   const getCollections = async (id) => {
     const querySnapshot = await getDocs(co(db, "user", id, "collection"));
 
@@ -42,7 +43,9 @@ function AddPin({db, uid, pin, handleClosePinShow, indexxx}) {
   useEffect(() => {
     uid && getCollections(uid);
   }, []);
+  // !!!!!!!!!!!!!!!! move this function to api.js !!!!!!!!!!!!!!!!
 
+  // !!!!!!!!!!!!!!!! move this function to api.js !!!!!!!!!!!!!!!!
   const addPinToCollection = (collection, pin) => {
     const collectionRef = doc(
       db,
@@ -68,7 +71,9 @@ function AddPin({db, uid, pin, handleClosePinShow, indexxx}) {
       "success"
     );
   };
+  // !!!!!!!!!!!!!!!! move this function to api.js !!!!!!!!!!!!!!!!“
 
+  // !!!!!!!!!!!!!!!! move this function to api.js !!!!!!!!!!!!!!!!“
   const setCollection2Firestore = (uid) => {
     const newCollectionRef = doc(
       db,
@@ -97,6 +102,7 @@ function AddPin({db, uid, pin, handleClosePinShow, indexxx}) {
       "success"
     );
   };
+  // !!!!!!!!!!!!!!!! move this function to api.js !!!!!!!!!!!!!!!!“
 
   const createNewCollection = () => {
     newCollectionName.length > 0
@@ -113,7 +119,7 @@ function AddPin({db, uid, pin, handleClosePinShow, indexxx}) {
       <AddPinOptions>
         <LeaveButton
           onClick={() => {
-            handleClosePinShow(indexxx);
+            handleClosePinShow(pinIndex);
           }}>
           x
         </LeaveButton>
@@ -127,7 +133,7 @@ function AddPin({db, uid, pin, handleClosePinShow, indexxx}) {
               <SaveButton
                 onClick={() => {
                   addPinToCollection(collection, pin);
-                  handleClosePinShow(indexxx);
+                  handleClosePinShow(pinIndex);
                 }}>
                 save
               </SaveButton>
@@ -155,7 +161,7 @@ AddPin.propTypes = {
   uid: PropTypes.string,
   pin: PropTypes.object,
   handleClosePinShow: PropTypes.func,
-  indexxx: PropTypes.number,
+  pinIndex: PropTypes.number,
 };
 
 export default AddPin;
