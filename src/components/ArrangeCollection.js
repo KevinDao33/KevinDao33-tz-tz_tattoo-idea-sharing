@@ -1,9 +1,9 @@
 import {useState, useEffect} from "react";
-import {doc, getDoc, updateDoc} from "firebase/firestore";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import "../styles/style.css";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
+import api from "../util/api";
 
 import {
   PinImageArrange,
@@ -13,61 +13,60 @@ import {
   SaveButton,
 } from "../styles/Collection.module";
 
-function ArrangeCollection({db, uid, switch2Show}) {
+function ArrangeCollection({uid, switch2Show}) {
   const [collectionName, setCollectionName] = useState("");
   const [columns, setColumns] = useState([]);
   const [pinsInCollection, setPinsInCollection] = useState([]);
-  const [columnA, setColumnA] = useState([]);
-  const [columnB, setColumnB] = useState([]);
-  const [columnC, setColumnC] = useState([]);
-  const [columnD, setColumnD] = useState([]);
+  const [columnA] = useState([]);
+  const [columnB] = useState([]);
+  const [columnC] = useState([]);
+  const [columnD] = useState([]);
+  // const [columnA, setColumnA] = useState([]);
+  // const [columnB, setColumnB] = useState([]);
+  // const [columnC, setColumnC] = useState([]);
+  // const [columnD, setColumnD] = useState([]);
 
-  const getCollectionName = () => {
+  const getArrangePin = () => {
     const url = window.location.href;
     const decodeUrl = decodeURI(url);
     const lastSegment = decodeUrl.split("/").pop();
     setCollectionName(lastSegment);
 
-    const getPinsInCollection = async (id) => {
-      const querySnapshot = await getDoc(
-        doc(db, "user", id, "collection", lastSegment)
-      );
-      const pinsInCollec = querySnapshot.data();
-
-      setPinsInCollection(pinsInCollec.pins);
-    };
-
-    getPinsInCollection(uid);
+    api.getPinsInCollection(setPinsInCollection, uid, lastSegment);
   };
 
   useEffect(() => {
-    uid && getCollectionName();
+    uid && getArrangePin();
   }, [uid]);
 
-  const seperateTestingArray = (array) => {
-    let columnAArrange = [];
-    let columnBArrange = [];
-    let columnCArrange = [];
-    let columnDArrange = [];
-    array.forEach((element, index) => {
+  const seperateOriginPinArray = async (array) => {
+    // let columnAArrange = [];
+    // let columnBArrange = [];
+    // let columnCArrange = [];
+    // let columnDArrange = [];
+    await array.forEach((element, index) => {
       if (index % 4 === 0) {
         columnA.push(element);
+        // setColumnA((prev) => [...prev, element]);
       } else if (index % 4 === 1) {
         columnB.push(element);
+        // setColumnB((prev) => [...prev, element]);
       } else if (index % 4 === 2) {
         columnC.push(element);
+        // setColumnC((prev) => [...prev, element]);
       } else if (index % 4 === 3) {
         columnD.push(element);
+        // setColumnD((prev) => [...prev, element]);
       }
     });
-    setColumnA(columnAArrange);
-    setColumnB(columnBArrange);
-    setColumnC(columnCArrange);
-    setColumnD(columnDArrange);
+    // setColumnA(columnAArrange);
+    // setColumnB(columnBArrange);
+    // setColumnC(columnCArrange);
+    // setColumnD(columnDArrange);
   };
 
   useEffect(() => {
-    pinsInCollection.length > 0 && seperateTestingArray(pinsInCollection);
+    pinsInCollection.length > 0 && seperateOriginPinArray(pinsInCollection);
   }, [pinsInCollection]);
 
   const columnsFromBackend = {
@@ -162,11 +161,8 @@ function ArrangeCollection({db, uid, switch2Show}) {
       return typeof e !== "number";
     });
 
-    const collectionRef = doc(db, "user", uid, "collection", collectionName);
+    api.updateRearrangedPin(uid, collectionName, filteredCombinedColumn);
 
-    await updateDoc(collectionRef, {
-      pins: filteredCombinedColumn,
-    });
     await Swal.fire("Changes saved", "", "success");
     window.location.reload();
 
@@ -266,7 +262,6 @@ function ArrangeCollection({db, uid, switch2Show}) {
 }
 
 ArrangeCollection.propTypes = {
-  db: PropTypes.object,
   uid: PropTypes.string,
   switch2Show: PropTypes.func,
 };

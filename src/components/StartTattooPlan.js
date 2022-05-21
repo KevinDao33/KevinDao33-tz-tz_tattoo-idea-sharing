@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import Select from "react-select";
 import {Calendar} from "react-calendar";
 import PropTypes from "prop-types";
 import Swal from "sweetalert2";
-import {collection, getDocs, getDoc, doc, setDoc} from "firebase/firestore";
 import {placementsOptions, sizeOptions, budgetOption, cities} from "../const";
+import api from "../util/api";
 
 import {
   StartTattooPlanWrapper,
@@ -49,7 +49,7 @@ import {
 } from "../styles/StartTattooPlan.module";
 import Profile from "./Profile";
 
-function StartTattooPlan({db, uid}) {
+function StartTattooPlan({uid}) {
   const [selectedPlacement, setSelectedPlacement] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [isColor, setIsColor] = useState(true);
@@ -69,38 +69,30 @@ function StartTattooPlan({db, uid}) {
     default: 3,
   };
 
-  const getuserData = async () => {
-    if (!uid) {
-      return;
-    }
-    const userSnapshot = await getDoc(doc(db, "user", uid));
-    setUserData(userSnapshot.data());
-
-    return;
-  };
-
   useEffect(() => {
-    getuserData();
+    api.getUserData(uid, setUserData);
   }, [uid]);
 
-  const getCollectionPins = async (id) => {
-    const querySnapshot = await getDocs(
-      collection(db, `user/${id}`, "collection")
-    );
-
-    let myCollections = [];
-    querySnapshot.forEach((doc) => {
-      myCollections.push(...doc.data().pins);
-    });
-
-    setCollectionPins(myCollections);
-
-    return;
-  };
-
   useEffect(() => {
-    uid && getCollectionPins(uid);
+    uid && api.getPinsInAllCollections(uid, setCollectionPins);
   }, [uid]);
+
+  const arrangedNewPlanData = {
+    reference: selectedReference,
+    date: planDate,
+    budget: planBudget.value,
+    description: planDescription,
+    isColor: isColor,
+    size: selectedSize.value,
+    placement: selectedPlacement.value,
+    city: selectedCity.value,
+    planOwner: {
+      ownerId: userData.uid,
+      ownerName: userData.name,
+      ownerPic: userData.pic,
+      ownerMail: userData.email,
+    },
+  };
 
   const handleStartPlan = async () => {
     if (
@@ -121,41 +113,7 @@ function StartTattooPlan({db, uid}) {
       return;
     }
 
-    const allNewPlanRef = collection(db, "plan");
-    const newPlanRef = doc(allNewPlanRef);
-    const userNewPlanRef = doc(db, "user", uid, "plan", newPlanRef.id);
-
-    await setDoc(newPlanRef, {
-      artists: [],
-      reference: selectedReference,
-      date: planDate,
-      budget: planBudget.value,
-      description: planDescription,
-      isColor: isColor,
-      size: selectedSize.value,
-      placement: selectedPlacement.value,
-      city: selectedCity.value,
-      planId: newPlanRef.id,
-      planOwner: {
-        ownerId: userData.uid,
-        ownerName: userData.name,
-        ownerPic: userData.pic,
-        ownerMail: userData.email,
-      },
-    });
-
-    await setDoc(userNewPlanRef, {
-      reference: selectedReference,
-      date: planDate,
-      budget: planBudget.value,
-      description: planDescription,
-      isColor: isColor,
-      size: selectedSize.value,
-      placement: selectedPlacement.value,
-      city: selectedCity.value,
-      planId: newPlanRef.id,
-      artists: [],
-    });
+    await api.startNewPlan(uid, arrangedNewPlanData);
 
     await Swal.fire(
       `Plan created!`,
@@ -328,7 +286,6 @@ function StartTattooPlan({db, uid}) {
                     options={cities}
                   />
                 </StartTattooPlanMainDataSectionWrapper>
-                {/* ====================================================== */}
                 <StartTattooPlanMainDataSectionWrapper>
                   <StartTattooPlanMainDataSectionTitle>
                     When do you want to get tattooed?
@@ -409,7 +366,6 @@ function StartTattooPlan({db, uid}) {
 }
 
 StartTattooPlan.propTypes = {
-  db: PropTypes.object,
   uid: PropTypes.string,
 };
 

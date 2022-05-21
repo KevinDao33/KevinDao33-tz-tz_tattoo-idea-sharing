@@ -1,14 +1,7 @@
 import {useEffect, useState} from "react";
 import {NavLink, useNavigate} from "react-router-dom";
-import {
-  collection,
-  onSnapshot,
-  query,
-  orderBy,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
 import PropTypes from "prop-types";
+import api from "../util/api";
 
 import {
   NavbarBlank,
@@ -28,7 +21,7 @@ import {
   NavTitle,
 } from "../styles/Navbar.module";
 
-function Navbar({db, uid}) {
+function Navbar({uid}) {
   const [isShowNotification, setIsShowNotofication] = useState(false);
   const [notificationData, setNotificationData] = useState([]);
   const [isUnRead, setIsUnRead] = useState(false);
@@ -40,31 +33,12 @@ function Navbar({db, uid}) {
     setIsShowNotofication((prev) => !prev);
   };
 
-  const listen2NewNotification = async () => {
-    const allNotificationDataRef = query(
-      collection(db, "user", uid, "notification"),
-      orderBy("timeStamp")
-    );
-
-    onSnapshot(allNotificationDataRef, (querySnapshot) => {
-      let allNotifications = [];
-      querySnapshot.forEach((doc) => {
-        allNotifications.push(doc.data());
-      });
-
-      setNotificationData(allNotifications.reverse());
-    });
-  };
-
   useEffect(() => {
-    uid && listen2NewNotification();
+    uid && api.listen2NewNotification(uid, setNotificationData);
   }, [uid]);
 
   const upDateNotificationIsRead = async (notiId) => {
-    const allNotificationDataRef = doc(db, "user", uid, "notification", notiId);
-    await updateDoc(allNotificationDataRef, {
-      isRead: true,
-    });
+    api.readNotification(uid, notiId);
     setNotificationData((prev) => [...prev, {isRead: true}]);
   };
 
@@ -94,7 +68,6 @@ function Navbar({db, uid}) {
           <NavLink to='/'>
             <LogoWrapper />
           </NavLink>
-
           <NavLink to='/' style={{textDecoration: "none", color: "inherit"}}>
             <NavTitle $isPageNow={pageNow == ""}>Tattoos</NavTitle>
           </NavLink>
@@ -105,13 +78,11 @@ function Navbar({db, uid}) {
             <NavTitle $isPageNow={pageNow == "tattoo-plan"}>Plans</NavTitle>
           </NavLink>
         </NavLefttWrapper>
-
         <NavRightWrapper>
           <Notify onClick={handleIsShowNotification} $isUnRead={isUnRead} />
           <NavLink to='/profile'>
             <MemberPictureWrapper />
           </NavLink>
-
           <AllNotificationWrapper $showNoti={isShowNotification}>
             <NotificationTitle>Notifications</NotificationTitle>
             {notificationData.length > 0 ? (
@@ -122,7 +93,6 @@ function Navbar({db, uid}) {
                   onClick={async () => {
                     !noti.isRead &&
                       (await upDateNotificationIsRead(noti.notificationId));
-
                     redirect(`/pin-detail/${noti.pinId}`);
                   }}>
                   <AuthorImageWrapper src={noti.authorPic} />
@@ -145,7 +115,6 @@ function Navbar({db, uid}) {
 }
 
 Navbar.propTypes = {
-  db: PropTypes.object,
   uid: PropTypes.string,
 };
 

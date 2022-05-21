@@ -1,14 +1,8 @@
-import React, {useState, useEffect} from "react";
-import {
-  collection,
-  getDocs,
-  doc,
-  updateDoc,
-  arrayUnion,
-} from "firebase/firestore";
+import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
+import api from "../util/api";
 
 import {
   TattooPlanWrapper,
@@ -42,45 +36,18 @@ import {
   StartPlanButtonSpan,
 } from "../styles/TattooPlan.module";
 
-function TattooPlan({db, uid}) {
+function TattooPlan({uid}) {
   const [plans, setPlans] = useState([]);
-  // const [userData, setUserData] = useState([]);
   const [isShowFull, setIsShowFull] = useState(-1);
 
   const redirect = useNavigate();
 
-  const getPlans = async () => {
-    try {
-      const notesSnapshot = await getDocs(collection(db, "plan"));
-      const plans = notesSnapshot.docs.map((doc) => doc.data());
-      setPlans(plans);
-
-      return plans;
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    getPlans();
+    api.getPlans(setPlans);
   }, []);
 
   const handleSignUp = async (plan) => {
-    const allPlanRef = doc(db, "plan", plan.planId);
-    const ownerPlanRef = doc(
-      db,
-      "user",
-      plan.planOwner.ownerId,
-      "plan",
-      plan.planId
-    );
-    await updateDoc(allPlanRef, {
-      artists: arrayUnion(uid),
-    });
-    await updateDoc(ownerPlanRef, {
-      artists: arrayUnion(uid),
-    });
-
+    await api.signUp4TattooPlan(uid, plan);
     Swal.fire("Sign up successfully!", "You're the tattoo master!", "success");
     setIsShowFull(-1);
   };
@@ -96,7 +63,6 @@ function TattooPlan({db, uid}) {
           <StartPlanButtonSpan>Start a plan</StartPlanButtonSpan>
         </StartPlanButton>
       </StartPlanButtonWrapper>
-
       <AllTattooPlanCardWrapper>
         {plans.length > 0 &&
           plans.map((plan, index) => {
@@ -118,7 +84,6 @@ function TattooPlan({db, uid}) {
                       </TattooPlanCardUserMail>
                     </TattooPlanCardUserInfoWrapper>
                   </TattooPlanCardUser>
-
                   <TattooPlanCardBriefDataMainWrapper>
                     <TattooPlanCardBriefDataWrapper>
                       <TattooPlanCardBriefDataCity>
@@ -130,7 +95,6 @@ function TattooPlan({db, uid}) {
                     </TattooPlanCardBriefDataWrapper>
                   </TattooPlanCardBriefDataMainWrapper>
                 </TattooPlanCardWrapper>
-
                 <TattooPlanCardDetailDataMainWrapper
                   $showAll={isShowFull === index}>
                   <CloseButton
@@ -191,7 +155,6 @@ function TattooPlan({db, uid}) {
 }
 
 TattooPlan.propTypes = {
-  db: PropTypes.object,
   uid: PropTypes.string,
 };
 

@@ -1,23 +1,10 @@
 import {useEffect, useState} from "react";
-import {
-  collection,
-  getDoc,
-  getDocs,
-  doc,
-  addDoc,
-  serverTimestamp,
-  onSnapshot,
-  query,
-  where,
-  updateDoc,
-  arrayUnion,
-  orderBy,
-} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import {v4 as uuid} from "uuid";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
+import api from "../util/api";
 
 import "../styles/style.css";
 import {
@@ -57,7 +44,7 @@ import {
 } from "../styles/PinDetail.module";
 import Loader from "./Loader";
 
-function PinDetail({db, uid}) {
+function PinDetail({uid}) {
   const [pinId, setPinid] = useState("");
   const [pinData, setPinData] = useState("");
   const [authorData, setAuthorData] = useState("");
@@ -91,76 +78,34 @@ function PinDetail({db, uid}) {
     getPinId();
   }, []);
 
-  const getAuthorData = async (authorId) => {
-    if (!authorId) {
-      return;
-    }
-    const authorSnapshot = await getDoc(doc(db, "user", authorId));
-    setAuthorData(authorSnapshot.data());
-
-    return;
-  };
-
   useEffect(() => {
-    pinData && getAuthorData(pinData.pinAutor.uid);
+    pinData && api.getUserData(pinData.pinAutor.uid, setAuthorData);
   }, [pinData]);
 
-  const getUserData = async (userId) => {
-    if (!uid) {
-      return;
-    }
-    const docRef = doc(db, `user/${userId}`);
-    const docSnap = await getDoc(docRef);
+  const handleUserData = (data) => {
     setUserData({
-      name: docSnap.data().name,
-      email: docSnap.data().email,
-      role: docSnap.data().role,
-      following: docSnap.data().following,
-      follower: docSnap.data().follower,
-      pic: docSnap.data().pic,
-      id: docSnap.data().uid,
-      link: docSnap.data().link,
-      desc: docSnap.data().desc,
+      name: data.name,
+      email: data.email,
+      role: data.role,
+      following: data.following,
+      follower: data.follower,
+      pic: data.pic,
+      id: data.uid,
+      link: data.link,
+      desc: data.desc,
     });
   };
 
   useEffect(() => {
-    getUserData(uid);
+    uid && api.getUserData(uid, handleUserData);
   }, [uid]);
 
-  const getUserCollection = async (userId) => {
-    if (!userId) {
-      return;
-    }
-    const collectionSnapshot = await getDocs(
-      collection(db, "user", userId, "collection")
-    );
-
-    let myCollections = [];
-    collectionSnapshot.forEach((doc) => {
-      myCollections.push({...doc.data()});
-    });
-    setUserCollection(myCollections);
-
-    return;
-  };
-
   useEffect(() => {
-    getUserCollection(uid);
+    api.getUserCollection(uid, setUserCollection);
   }, [uid]);
 
-  const getPin = async () => {
-    if (!pinId) {
-      return;
-    }
-    const pinSnapshot = await getDoc(doc(db, "pin", pinId));
-    setPinData(pinSnapshot.data());
-
-    return;
-  };
-
   useEffect(() => {
-    getPin();
+    api.gitPinData(pinId, setPinData);
   }, [pinId]);
 
   const handleCollectionSelector = (e) => {
@@ -177,24 +122,9 @@ function PinDetail({db, uid}) {
 
       return;
     }
-    const collectionRef = doc(
-      db,
-      "user",
-      uid,
-      "collection",
-      selectedCollection
-    );
-    updateDoc(
-      collectionRef,
-      {
-        pins: arrayUnion({
-          pinName: pinData.pinName,
-          pinId: pinData.pinId,
-          pinImage: pinData.pinImage,
-        }),
-      },
-      {merge: true}
-    );
+
+    api.addPin2Collection(uid, selectedCollection, pinData);
+
     Swal.fire(
       `Pin added to ${selectedCollection}`,
       "Good choice ~~",
@@ -202,28 +132,8 @@ function PinDetail({db, uid}) {
     );
   };
 
-  const getRelatedPins = async () => {
-    if (!pinData) {
-      return;
-    }
-
-    const pinsRef = collection(db, "pin");
-    const q = query(
-      pinsRef,
-      where("pinTags", "array-contains-any", pinData.pinTags)
-    );
-
-    const querySnapshot = await getDocs(q);
-    let localSimiliarPins = [];
-    querySnapshot.forEach((doc) => {
-      pinData.pinName !== doc.data().pinName &&
-        localSimiliarPins.push(doc.data());
-    });
-    setSimiliarPins(localSimiliarPins);
-  };
-
   useEffect(() => {
-    getRelatedPins();
+    api.getRelatedPins(pinData, setSimiliarPins);
   }, [pinData]);
 
   const sendNewComment = async () => {
@@ -235,49 +145,20 @@ function PinDetail({db, uid}) {
       });
       return;
     }
-    await addDoc(collection(db, "pin", pinId, "comment"), {
-      commentator: uid,
-      commentTime: serverTimestamp(),
-      commentMessage: newComment,
-    });
+
+    await api.sendNewCommentMessage(uid, pinId, newComment);
+
     document.getElementById("commentInputField").value = "";
     setNewComment("");
   };
 
-  const getPinCommentData = async () => {
-    const allCommentsDataRef = query(
-      collection(db, "pin", pinId, "comment"),
-      orderBy("commentTime")
-    );
-    // eslint-disable-next-line no-unused-vars
-    const allCommentsData = onSnapshot(allCommentsDataRef, (querySnapshot) => {
-      let allComments = [];
-      querySnapshot.forEach((doc) => {
-        allComments.push(doc.data());
-      });
-      setPinCommentData(allComments);
-    });
-  };
-
   useEffect(() => {
-    pinId && getPinCommentData();
+    pinId && api.getPinCommentData(pinId, setPinCommentData);
   }, [pinId]);
 
-  const getPinCommentator = async () => {
-    if (pinCommentData.length < 0) {
-      return;
-    }
-
-    let commentatorData = [];
-    for (let i = 0; i < pinCommentData.length; i++) {
-      let test = await getDoc(doc(db, "user", pinCommentData[i].commentator));
-      commentatorData.push(test.data());
-    }
-    setPinCommentator(commentatorData);
-  };
-
   useEffect(() => {
-    pinCommentData.length > 0 && getPinCommentator();
+    pinCommentData.length > 0 &&
+      api.getPinCommentator(pinCommentData, setPinCommentator);
   }, [pinCommentData]);
 
   const handleIsShowSimilar = () => {
@@ -409,7 +290,6 @@ function PinDetail({db, uid}) {
 }
 
 PinDetail.propTypes = {
-  db: PropTypes.object,
   uid: PropTypes.string,
 };
 

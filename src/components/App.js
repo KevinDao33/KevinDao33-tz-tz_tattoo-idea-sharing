@@ -1,9 +1,9 @@
+import {getAuth} from "firebase/auth";
 import {useState, useEffect} from "react";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {initializeApp} from "firebase/app";
-import {getFirestore} from "firebase/firestore";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import GlobalStyle from "../styles/globalStyles";
+import api from "../util/api";
 
 import Collection from "./Collcetion";
 import Navbar from "./Navbar";
@@ -30,37 +30,25 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [uid, setUid] = useState("");
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        console.log("status : not login");
-
-        return;
-      }
-      const uid = user.uid;
-      console.log("status : login", uid);
-      setUid(uid);
-      setIsLogin(true);
-    });
+    api.checkLoginStatus(setUid, setIsLogin);
   }, []);
 
   const routeDataList = [
     {
       path: "/",
-      element: <Homapage uid={uid} isLogin={isLogin} db={db} />,
+      element: <Homapage uid={uid} isLogin={isLogin} />,
     },
     {
       path: "/profile",
       element: (
         <Profile
           uid={uid}
-          db={db}
           auth={auth}
           setUid={setUid}
           isLogin={isLogin}
@@ -70,30 +58,29 @@ function App() {
     },
     {
       path: "user/:otherUserId",
-      element: <OtherUserProfile uid={uid} db={db} />,
+      element: <OtherUserProfile uid={uid} />,
     },
     {
       path: "edit-profile",
-      element: <EditProfile uid={uid} db={db} />,
+      element: <EditProfile uid={uid} />,
     },
     {
       path: "/create-pin",
-      element: <CreateNewPin uid={uid} app={app} db={db} />,
+      element: <CreateNewPin uid={uid} app={app} />,
     },
     {
       path: "pin-detail/:pinId",
-      element: <PinDetail uid={uid} app={app} db={db} />,
+      element: <PinDetail uid={uid} app={app} />,
     },
     {
       path: "collection/:collectionName",
-      element: <Collection uid={uid} db={db} />,
+      element: <Collection uid={uid} />,
     },
     {
       path: "/login",
       element: (
         <Login
           uid={uid}
-          db={db}
           setUid={setUid}
           isLogin={isLogin}
           setIsLogin={setIsLogin}
@@ -102,11 +89,11 @@ function App() {
     },
     {
       path: "/start-tattoo-plan",
-      element: <StartTattooPlan uid={uid} db={db} />,
+      element: <StartTattooPlan uid={uid} />,
     },
     {
       path: "/tattoo-plan",
-      element: <TattooPlan uid={uid} db={db} />,
+      element: <TattooPlan uid={uid} />,
     },
     {
       path: "*",
@@ -117,7 +104,7 @@ function App() {
   return (
     <BrowserRouter>
       <GlobalStyle />
-      <Navbar uid={uid} db={db} />
+      <Navbar uid={uid} />
       <Routes>
         {routeDataList.map((route) => (
           <Route key={route.path} path={route.path} element={route.element} />

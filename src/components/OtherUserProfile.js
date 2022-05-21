@@ -1,16 +1,8 @@
 import {useEffect, useState} from "react";
 import {v4 as uuid} from "uuid";
 import Masonry from "react-masonry-css";
-import {
-  doc,
-  getDoc,
-  collection,
-  getDocs,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-} from "firebase/firestore";
 import PropTypes from "prop-types";
+import api from "../util/api";
 
 import {
   FollowButton,
@@ -32,7 +24,7 @@ import {
   FilterTagLink as PinLink,
 } from "../styles/Homepage.module";
 
-function OtherUserProfile({db, uid}) {
+function OtherUserProfile({uid}) {
   const [otherUserUid, setOtherUserUid] = useState("");
   const [otherUserData, setOtherUserData] = useState(null);
   const [otherUserPin, setOtherUserPin] = useState([]);
@@ -48,19 +40,13 @@ function OtherUserProfile({db, uid}) {
     500: 1,
   };
 
-  const getMyData = async (uid) => {
-    if (!uid) {
-      return;
-    }
-
-    const myDataRef = doc(db, "user", uid);
-    const myDataDoc = await getDoc(myDataRef);
-    setMyData(myDataDoc.data());
-    setMyFollowingList(myDataDoc.data().following);
+  const handleMyData = (data) => {
+    setMyData(data);
+    setMyFollowingList(data.following);
   };
 
   useEffect(() => {
-    uid && getMyData(uid);
+    uid && api.getUserData(uid, handleMyData);
   }, [uid]);
 
   const getOtherUserUid = () => {
@@ -87,50 +73,25 @@ function OtherUserProfile({db, uid}) {
     }
   }, [otherUserUid, uid]);
 
-  const getOtherUserData = async (otherId) => {
-    if (!otherUserUid) {
-      return;
-    }
+  const handleOtherUserData = (data) => {
+    setOtherUserData(data);
+    setOtherUserFollowerList(data.follower);
 
-    const otherUserRef = doc(db, "user", otherId);
-    const otherUserDoc = await getDoc(otherUserRef);
-    setOtherUserData(otherUserDoc.data());
-    setOtherUserFollowerList(otherUserDoc.data().follower);
+    console.log("1", data);
+    console.log("2", data.follower);
   };
 
   useEffect(() => {
-    otherUserUid && getOtherUserData(otherUserUid);
+    otherUserUid && api.getUserData(otherUserUid, handleOtherUserData);
   }, [otherUserUid]);
 
-  const getOtherUserPin = async (otherId) => {
-    if (!otherUserUid) {
-      return;
-    }
-
-    const otherUserPinRef = collection(db, "user", otherId, "pin");
-    const otherUserPinData = await getDocs(otherUserPinRef);
-    let otherUserAllPins = [];
-    otherUserPinData.forEach((doc) => {
-      otherUserAllPins.push({...doc.data()});
-    });
-
-    setOtherUserPin(otherUserAllPins);
-  };
-
   useEffect(() => {
-    otherUserUid && getOtherUserPin(otherUserUid);
+    otherUserUid && api.gitUserPins(otherUserUid, setOtherUserPin);
   }, [otherUserUid]);
 
   const handleFollow = async () => {
-    const myFollowingRef = doc(db, "user", uid);
-    await updateDoc(myFollowingRef, {
-      following: arrayUnion(otherUserUid),
-    });
-
-    const otherUserFollowerRef = doc(db, "user", otherUserUid);
-    await updateDoc(otherUserFollowerRef, {
-      follower: arrayUnion(uid),
-    });
+    api.handleMyNewFollowing(uid, otherUserUid);
+    api.handleOtherUserNewFollower(uid, otherUserUid);
 
     setMyFollowingList((prev) => [...prev, otherUserUid]);
     setOtherUserFollowerList((prev) => [...prev, uid]);
@@ -141,15 +102,8 @@ function OtherUserProfile({db, uid}) {
       return;
     }
 
-    const myFollowingRef = doc(db, "user", uid);
-    await updateDoc(myFollowingRef, {
-      following: arrayRemove(otherUserUid),
-    });
-
-    const otherUserFollowerRef = doc(db, "user", otherUserUid);
-    await updateDoc(otherUserFollowerRef, {
-      follower: arrayRemove(uid),
-    });
+    api.removeFromMyFollowing(uid, otherUserUid);
+    api.removeFromOtherUserFollower(uid, otherUserUid);
 
     let clonedMyFollowingList = [...myFollowingList];
     const filteredMyList = clonedMyFollowingList.filter(
@@ -211,7 +165,6 @@ function OtherUserProfile({db, uid}) {
 }
 
 OtherUserProfile.propTypes = {
-  db: PropTypes.object,
   uid: PropTypes.string,
 };
 

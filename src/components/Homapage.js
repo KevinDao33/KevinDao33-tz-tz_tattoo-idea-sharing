@@ -1,5 +1,4 @@
 import {useState, useEffect, useRef} from "react";
-import {collection, getDocs} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import "../styles/style.css";
@@ -40,11 +39,12 @@ import {
   tagsWithIntroduction,
   tagIntroductions,
 } from "../const";
+import api from "../util/api";
 import AddPin from "./AddPin";
 import LandingPage from "./LandingPageVideo";
 import Loader from "./Loader";
 
-function Homapage({db, uid}) {
+function Homapage({uid}) {
   const [isShowVideo, setIsShowVideo] = useState(false);
   const [isShowAddPin, setIsShowAddPin] = useState(false);
   const [pins, setPins] = useState([]);
@@ -71,11 +71,7 @@ function Homapage({db, uid}) {
 
   const getPins = async () => {
     try {
-      const notesSnapshot = await getDocs(collection(db, "pin"));
-      const pins = notesSnapshot.docs.map((doc) => doc.data());
-      setPins(pins);
-
-      return pins;
+      api.getPins4Homepage(setPins);
     } catch (error) {
       console.error(error);
     }
@@ -387,7 +383,6 @@ function Homapage({db, uid}) {
                       key={pin.pinName}
                       isShowAddPin={isShowAddPin}
                       setIsShowAddPin={setIsShowAddPin}
-                      db={db}
                       uid={uid}
                       pin={pin}
                       pins={pins}
@@ -409,7 +404,6 @@ function Homapage({db, uid}) {
 }
 
 Homapage.propTypes = {
-  db: PropTypes.object,
   uid: PropTypes.string,
 };
 

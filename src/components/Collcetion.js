@@ -1,14 +1,13 @@
 import {useState, useEffect} from "react";
-import {updateDoc, doc, getDoc, arrayRemove} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
-import {v4 as uuid} from "uuid";
 import "../styles/style.css";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
 import arrangeIcon from "../icon/arrange.png";
 import removeIcon from "../icon/remove.png";
 import {SHOW_PINS, ARRANGE_PINS, DELETE_PINS} from "../const";
+import api from "../util/api";
 
 import {
   CollectionBackgroundDisplay,
@@ -28,42 +27,29 @@ import {
 } from "../styles/Collection.module";
 import ArrangeCollection from "./ArrangeCollection";
 
-function Collection({db, uid}) {
+function Collection({uid}) {
   const [pinsInCollection, setPinsInCollection] = useState([]);
   const [collectionName, setCollectionName] = useState("");
   const [handlePin, setHandlePin] = useState(SHOW_PINS);
 
   const redirect = useNavigate();
 
-  const getCollectionName = () => {
+  const getAllPinsInCollection = () => {
     const url = window.location.href;
     const decodeUrl = decodeURI(url);
     const lastSegment = decodeUrl.split("/").pop();
     setCollectionName(lastSegment);
 
-    const getPinsInCollection = async (id) => {
-      const querySnapshot = await getDoc(
-        doc(db, "user", id, "collection", lastSegment)
-      );
-      const pinsInCollec = querySnapshot.data();
-      setPinsInCollection(pinsInCollec);
-    };
-    getPinsInCollection(uid);
+    api.getAllPinsDataInCollection(setPinsInCollection, uid, lastSegment);
   };
 
   useEffect(() => {
-    getCollectionName();
+    uid && getAllPinsInCollection();
   }, [uid]);
 
   const removePinFromCollection = async (collecName, pin, index) => {
-    const collectionRef = doc(db, "user", uid, "collection", collecName);
-    await updateDoc(collectionRef, {
-      pins: arrayRemove({
-        pinName: pin.pinName,
-        pinId: pin.pinId,
-        pinImage: pin.pinImage,
-      }),
-    });
+    api.removePin(uid, collecName, pin);
+
     setPinsInCollection((prev) => prev.pins.splice(index, 1));
     await Swal.fire(`pin removed from ${collectionName}`, "bye bye", "success");
 
@@ -91,7 +77,7 @@ function Collection({db, uid}) {
   return (
     <CollectionBackgroundDisplay id='CollectionBackgroundDisplay'>
       {handlePin === ARRANGE_PINS ? (
-        <ArrangeCollection uid={uid} db={db} switch2Show={switch2Show} />
+        <ArrangeCollection uid={uid} switch2Show={switch2Show} />
       ) : (
         <CollectionHeader id='CollectionHeader'>
           <BackButton
@@ -128,7 +114,7 @@ function Collection({db, uid}) {
                   pinsInCollection.pins.length > 0 &&
                   handlePin === DELETE_PINS
                     ? pinsInCollection.pins.map((pin, index) => (
-                        <PinWrapper key={uuid()}>
+                        <PinWrapper key={pin.pinId}>
                           <PinImageDelete src={pin.pinImage} />
 
                           <RemoveButton
@@ -144,7 +130,7 @@ function Collection({db, uid}) {
                         </PinWrapper>
                       ))
                     : pinsInCollection.pins.map((pin) => (
-                        <PinWrapper key={uuid()}>
+                        <PinWrapper key={pin.pinId}>
                           <PinImage src={pin.pinImage} />
                         </PinWrapper>
                       ))}
@@ -161,7 +147,6 @@ function Collection({db, uid}) {
 }
 
 Collection.propTypes = {
-  db: PropTypes.object,
   uid: PropTypes.string,
 };
 

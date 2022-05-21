@@ -1,13 +1,9 @@
 import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
-import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
-import {
-  getDoc,
-  doc,
-  updateDoc,
-} from "firebase/firestore";
+import {getStorage, ref, uploadBytes} from "firebase/storage";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
+import api from "../util/api";
 
 import {
   EditProfileBackgroundDisplay,
@@ -32,7 +28,7 @@ import {
 } from "../styles/EditProfile.module";
 import Loader from "./Loader";
 
-function EditProfile({app, db, uid}) {
+function EditProfile({app, uid}) {
   const [userData, setUserData] = useState(null);
   const [displayPhoto, setDisplayPhoto] = useState("");
   const [selectedFile, setSelectedFile] = useState("");
@@ -44,29 +40,26 @@ function EditProfile({app, db, uid}) {
   const storage = getStorage(app);
   const redirect = useNavigate();
 
-  const getUserData = async () => {
-    const userquery = await getDoc(doc(db, "user", uid));
-    const userAAA = userquery.data();
-
+  const handleUserData = (userDataFromFirebase) => {
     setUserData({
-      name: userAAA.name,
-      email: userAAA.email,
-      role: userAAA.role,
-      following: userAAA.following,
-      follower: userAAA.follower,
-      pic: userAAA.pic,
-      id: userAAA.uid,
-      link: userAAA.link,
-      desc: userAAA.desc,
+      name: userDataFromFirebase.name,
+      email: userDataFromFirebase.email,
+      role: userDataFromFirebase.role,
+      following: userDataFromFirebase.following,
+      follower: userDataFromFirebase.follower,
+      pic: userDataFromFirebase.pic,
+      id: userDataFromFirebase.uid,
+      link: userDataFromFirebase.link,
+      desc: userDataFromFirebase.desc,
     });
-    setDisplayPhoto(userAAA.pic);
-    setNewDescription(userAAA.desc);
-    setNewName(userAAA.name);
-    setNewLink(userAAA.link);
+    setDisplayPhoto(userDataFromFirebase.pic);
+    setNewDescription(userDataFromFirebase.desc);
+    setNewName(userDataFromFirebase.name);
+    setNewLink(userDataFromFirebase.link);
   };
 
   useEffect(() => {
-    uid && !userData && getUserData();
+    api.getUserData(uid, handleUserData);
   }, [uid]);
 
   const handleImageUpload = async (e) => {
@@ -78,7 +71,6 @@ function EditProfile({app, db, uid}) {
     setSelectedFile(imageFile);
 
     const imageName = imageFile.name.split(".");
-    // localStorage.setItem("newUserPhotoName", imageName[0]);
     setNewUserPhotoName(imageName[0]);
   };
 
@@ -111,10 +103,10 @@ function EditProfile({app, db, uid}) {
   const cancelDataChange = () => {
     if (!userData) {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
+        icon: "error",
+        title: "Oops...",
         text: "Something went wrong, please try again later",
-      })
+      });
 
       return;
     }
@@ -128,31 +120,10 @@ function EditProfile({app, db, uid}) {
     }
   };
 
-  const updateUserData = async () => {
-    const userRef = doc(db, "user", uid);
-    updateDoc(userRef, {
-      name: newName,
-      link: newLink,
-      desc: newDescription,
-    });
-  };
-
   const getUserImageUrl = async (name) => {
-    getDownloadURL(ref(storage, `profileImages/${name}`))
-      .then((url) => {
-        const userRef = doc(db, "user", uid);
-        updateDoc(userRef, {
-          pic: url,
-        });
-      })
-      .then(async() => {
-        await Swal.fire(
-          "profile updated!",
-          'Looking fresh',
-          'success'
-        )
-        redirect("/profile");
-      });
+    await api.updateProfileImageUrl(storage, name, uid);
+    await Swal.fire("profile updated!", "Looking fresh", "success");
+    redirect("/profile");
   };
 
   async function uploadNewUserPhotoImage() {
@@ -170,26 +141,22 @@ function EditProfile({app, db, uid}) {
   const submitNewUserData = async () => {
     if (!newName && !newDescription && !newLink && !selectedFile) {
       Swal.fire(
-        'Nothing changed',
+        "Nothing changed",
         "if not updating, press the leave-button on the left",
-        'question'
-      )
+        "question"
+      );
 
       return;
     } else if (newName || newDescription || newLink || selectedFile) {
       if (selectedFile && !newName && !newDescription && !newLink) {
         await uploadNewUserPhotoImage();
       } else if ((newName || newDescription || newLink) && !selectedFile) {
-        await updateUserData();
-        await Swal.fire(
-          "Changes saved",
-          'Looking fresh :)',
-          'success'
-        )
-        
+        await api.updateUserData(uid, newName, newLink, newDescription);
+        await Swal.fire("Changes saved", "Looking fresh :)", "success");
+
         redirect("/profile");
       } else if ((newName || newDescription || newLink) && selectedFile) {
-        await updateUserData();
+        await api.updateUserData(uid, newName, newLink, newDescription);
         await uploadNewUserPhotoImage();
       }
     }
@@ -254,7 +221,6 @@ function EditProfile({app, db, uid}) {
 
 EditProfile.propTypes = {
   app: PropTypes.object,
-  db: PropTypes.object,
   uid: PropTypes.string,
 };
 

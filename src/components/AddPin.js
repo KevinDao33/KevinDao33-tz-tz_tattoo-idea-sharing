@@ -1,14 +1,7 @@
 import {useState, useEffect} from "react";
-import {
-  collection as co,
-  getDocs,
-  doc,
-  setDoc,
-  updateDoc,
-  arrayUnion,
-} from "firebase/firestore";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
+import api from "../util/api";
 
 import {
   Overlay,
@@ -25,88 +18,36 @@ import {
   NameNewCollection,
 } from "../styles/AddPin.module";
 
-function AddPin({db, uid, pin, handleClosePinShow, pinIndex}) {
+function AddPin({uid, pin, handleClosePinShow, pinIndex}) {
   const [collections, setCollections] = useState([]);
   const [newCollectionName, setNewCollectionName] = useState("");
 
-  // !!!!!!!!!!!!!!!! move this function to api.js !!!!!!!!!!!!!!!!
-  const getCollections = async (id) => {
-    const querySnapshot = await getDocs(co(db, "user", id, "collection"));
-
-    let myCollections = [];
-    querySnapshot.forEach((doc) => {
-      myCollections.push({...doc.data()});
-    });
-    setCollections(myCollections);
-  };
-
   useEffect(() => {
-    uid && getCollections(uid);
+    api.getUserCollection(uid, setCollections);
   }, []);
-  // !!!!!!!!!!!!!!!! move this function to api.js !!!!!!!!!!!!!!!!
 
-  // !!!!!!!!!!!!!!!! move this function to api.js !!!!!!!!!!!!!!!!
   const addPinToCollection = (collection, pin) => {
-    const collectionRef = doc(
-      db,
-      "user",
-      uid,
-      "collection",
-      collection.collectionName
-    );
-    updateDoc(
-      collectionRef,
-      {
-        pins: arrayUnion({
-          pinName: pin.pinName,
-          pinId: pin.pinId,
-          pinImage: pin.pinImage,
-        }),
-      },
-      {merge: true}
-    );
+    api.addPin2Collection(uid, collection.collectionName, pin);
+
     Swal.fire(
       "success",
       `pin added to ${collection.collectionName}`,
       "success"
     );
   };
-  // !!!!!!!!!!!!!!!! move this function to api.js !!!!!!!!!!!!!!!!“
 
-  // !!!!!!!!!!!!!!!! move this function to api.js !!!!!!!!!!!!!!!!“
-  const setCollection2Firestore = (uid) => {
-    const newCollectionRef = doc(
-      db,
-      "user",
-      uid,
-      "collection",
-      newCollectionName
-    );
-    setDoc(
-      newCollectionRef,
-      {
-        collectionName: newCollectionName,
-        pins: [
-          {
-            pinId: pin.pinId,
-            pinImage: pin.pinImage,
-            pinName: pin.pinName,
-          },
-        ],
-      },
-      {merge: true}
-    );
+  const setCollection2Firestore = () => {
+    api.addPin2NewCollection(uid, pin, newCollectionName);
     Swal.fire(
       "success",
-      `pin added to new collection ${newCollectionName}!`,
+      `Pin added to new collection ${newCollectionName}!`,
       "success"
     );
   };
-  // !!!!!!!!!!!!!!!! move this function to api.js !!!!!!!!!!!!!!!!“
 
   const createNewCollection = () => {
     newCollectionName.length > 0
-      ? setCollection2Firestore(uid)
+      ? setCollection2Firestore()
       : Swal.fire({
           icon: "error",
           title: "Oops...",
@@ -125,7 +66,6 @@ function AddPin({db, uid, pin, handleClosePinShow, pinIndex}) {
         </LeaveButton>
         <PinName>{pin.pinName}</PinName>
         <PinImage src={pin.pinImage} />
-
         {collections.length > 0 &&
           collections.map((collection, index) => (
             <AddToCollection key={index}>
@@ -140,7 +80,6 @@ function AddPin({db, uid, pin, handleClosePinShow, pinIndex}) {
             </AddToCollection>
           ))}
       </AddPinOptions>
-
       <CreateCollectionWrapper>
         <NameNewCollectionTitle>new collection</NameNewCollectionTitle>
         <NameNewCollection
@@ -157,7 +96,6 @@ function AddPin({db, uid, pin, handleClosePinShow, pinIndex}) {
 }
 
 AddPin.propTypes = {
-  db: PropTypes.object,
   uid: PropTypes.string,
   pin: PropTypes.object,
   handleClosePinShow: PropTypes.func,

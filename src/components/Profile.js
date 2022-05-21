@@ -2,9 +2,9 @@ import {useState, useEffect} from "react";
 import {NavLink, useNavigate} from "react-router-dom";
 import {getAuth, signOut} from "firebase/auth";
 import Masonry from "react-masonry-css";
-import {collection, getDocs, getDoc, doc, setDoc} from "firebase/firestore";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
+import api from "../util/api";
 
 import {
   ProfileBackgroundDisplay,
@@ -57,8 +57,7 @@ import {
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
 import Login from "./Login";
 
-function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
-  // myPin/ myCollection/ myPlan(artist only)
+function Profile({firebaseConfig, uid, app, setIsLogin, isLogin}) {
   const MY_PIN = "myPin";
   const MY_COLLECTION = "myCollection";
   const MY_PLAN = "myPlan";
@@ -77,6 +76,8 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
   const [followerUserData, setFollowerUserData] = useState([]);
   const [artistData, setArtistData] = useState([]);
   const [windowWidth, setWindowWidth] = useState(0);
+
+  const redirect = useNavigate();
 
   const breakpointColumnsObj = {
     default: 7,
@@ -99,7 +100,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
   const showMyCollection = () => {
     setShowSection(MY_COLLECTION);
   };
-  // eslint-disable-next-line no-unused-vars
   const showMyPlan = () => {
     setShowSection(MY_PLAN);
   };
@@ -108,8 +108,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
     signOut(auth)
       .then(() => {
         setIsLogin(false);
-
-        // for the planned functions now, the localStorage would be better be clear out when user logout (including user data and pin image url), so that the next user wouldn't be affected at all.
         localStorage.clear();
       })
       .catch((error) => {
@@ -117,10 +115,7 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
       });
   }
 
-  const redirect = useNavigate();
-
   const renderUserSection = () => {
-    // let params = useParams();
     if (showSection === MY_PIN) {
       return (
         <AllPinsWrapper>
@@ -135,11 +130,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
                 </PinWrapper>
               ))}
           </Masonry>
-          {/* <NavLink to='/create-pin'>
-            <CreateButton>
-              <CreateButtonSpan> New Pin</CreateButtonSpan>
-            </CreateButton>
-          </NavLink> */}
         </AllPinsWrapper>
       );
     } else if (showSection === MY_COLLECTION) {
@@ -151,7 +141,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
                 <CollectionWarpper
                   key={collection.collectionName}
                   onClick={() => {
-                    // eslint-disable-next-line no-unused-vars
                     redirect(`/collection/${collection.collectionName}`);
                   }}>
                   <CollectionImage
@@ -186,7 +175,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
                     <TattooPlanCardDetailData>{`・${plan.budget}`}</TattooPlanCardDetailData>
                     <TattooPlanCardDetailData>{`・${plan.size}`}</TattooPlanCardDetailData>
                     <TattooPlanCardDetailData>{`・${plan.placement}`}</TattooPlanCardDetailData>
-
                     <TattooPlanCardDetailData>
                       {plan.date.length === 2
                         ? `・${new Date(
@@ -206,14 +194,12 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
                             plan.date[0] * 1000
                           ).getDate()}`}
                     </TattooPlanCardDetailData>
-
                     <TattooPlanCardDetailDataDescription>{`${plan.description}`}</TattooPlanCardDetailDataDescription>
                   </TattooPlanCardDetailDataMainWrapper>
                   <TattooPlanCardArtistMainWrapper>
                     <TattooPlanCardDetailDataTitle>
                       Artists
                     </TattooPlanCardDetailDataTitle>
-
                     {artistData[index] && artistData[index].length > 0 ? (
                       artistData[index].map((artist) => (
                         <TattooPlanCardArtistWrapper key={artist.uid}>
@@ -227,7 +213,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
                             </TattooPlanCardArtistMail>
                             <ArtistLink href={artist.link}>
                               <TattooPlanCardArtistMail>
-                                {/* {artist.link} */}
                                 Click to view my work
                               </TattooPlanCardArtistMail>
                             </ArtistLink>
@@ -246,68 +231,25 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
     }
   };
 
-  const getPins = async () => {
-    const querySnapshot = await getDocs(collection(db, "user", uid, "pin"));
-    let myPins = [];
-    querySnapshot.forEach((doc) => {
-      myPins.push({...doc.data()});
-    });
-    setPins(myPins);
-  };
-
-  const getCollections = async (id) => {
-    const querySnapshot = await getDocs(
-      collection(db, "user", id, "collection")
-    );
-
-    let myCollections = [];
-    querySnapshot.forEach((doc) => {
-      myCollections.push({...doc.data()});
-    });
-
-    setCollections(myCollections);
-
-    return;
-  };
-
-  const getUserData = async (userId) => {
-    if (!uid) {
-      return;
-    }
-    // const docRef = doc(db, `user/${userId}`);
-    const docRef = doc(db, "user", userId);
-    const docSnap = await getDoc(docRef);
+  const handleUserData = (userDataFromFirebase) => {
     setUserData({
-      name: docSnap.data().name,
-      email: docSnap.data().email,
-      role: docSnap.data().role,
-      following: docSnap.data().following,
-      follower: docSnap.data().follower,
-      pic: docSnap.data().pic,
-      id: docSnap.data().uid,
-      link: docSnap.data().link,
-      desc: docSnap.data().desc,
+      name: userDataFromFirebase.name,
+      email: userDataFromFirebase.email,
+      role: userDataFromFirebase.role,
+      following: userDataFromFirebase.following,
+      follower: userDataFromFirebase.follower,
+      pic: userDataFromFirebase.pic,
+      id: userDataFromFirebase.uid,
+      link: userDataFromFirebase.link,
+      desc: userDataFromFirebase.desc,
     });
-  };
-
-  const getPlans = async () => {
-    if (!uid) {
-      return;
-    }
-
-    const querySnapshot = await getDocs(collection(db, "user", uid, "plan"));
-    let myPlans = [];
-    querySnapshot.forEach((doc) => {
-      myPlans.push({...doc.data()});
-    });
-    setPlans(myPlans);
   };
 
   async function getUserInfoAndPinsAndCollection() {
-    getUserData(uid);
-    getPlans();
-    await getPins();
-    await getCollections(uid);
+    api.getUserData(uid, handleUserData);
+    api.getUserPlan(uid, setPlans);
+    await api.gitUserPins(uid, setPins);
+    await api.getUserCollection(uid, setCollections);
   }
 
   useEffect(() => {
@@ -315,22 +257,8 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
   }, [uid]);
 
   const setCollection2Firestore = async (uid) => {
-    const newCollectionRef = doc(
-      db,
-      "user",
-      uid,
-      "collection",
-      newCollectionName
-    );
-    await setDoc(
-      newCollectionRef,
-      {
-        collectionName: newCollectionName,
-        pins: [],
-      },
-      {merge: true}
-    );
-    // alert(`collection ${newCollectionName} created!`);
+    api.createNewCollection(uid, newCollectionName);
+
     await Swal.fire(
       `Collection ${newCollectionName} created!`,
       "What a great collection!",
@@ -342,12 +270,10 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
   const createNewCollection = () => {
     newCollectionName
       ? setCollection2Firestore(uid)
-      : // : alert("please enter a name for the new collection");
-        Swal.fire({
+      : Swal.fire({
           icon: "error",
           title: "Oops...",
           text: "Please enter a name for the new collection :(",
-          // footer: '<a href="">Why do I have this issue?</a>'
         });
   };
 
@@ -368,9 +294,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
                   setNewCollectionName(e.target.value)
                 }></NameNewCollection>
               <SaveButton onClick={createNewCollection}>create</SaveButton>
-              {/* <CreateButton onClick={createNewCollection}>
-                <CreateButtonSpan>create</CreateButtonSpan>
-              </CreateButton> */}
             </CreateCollectionWrapper>
           </>
         )}
@@ -384,15 +307,7 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
     }
 
     const clonedFollowing = [...userData.following];
-
-    let result = [];
-    clonedFollowing.map(async (user) => {
-      const docRef = doc(db, "user", user);
-
-      const docSnap = await getDoc(docRef);
-      result.push(docSnap.data());
-    });
-    setFollowingUserData(result);
+    api.getMyFollow(clonedFollowing, setFollowingUserData);
   };
 
   const getFollowerUserData = async () => {
@@ -401,14 +316,7 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
     }
 
     const clonedFollower = [...userData.follower];
-
-    let result = [];
-    clonedFollower.map(async (user) => {
-      const docRef = doc(db, "user", user);
-      const docSnap = await getDoc(docRef);
-      result.push(docSnap.data());
-    });
-    setFollowerUserData(result);
+    api.getMyFollow(clonedFollower, setFollowerUserData);
   };
 
   useEffect(() => {
@@ -420,22 +328,7 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
     if (!plans.length > 0) {
       return;
     }
-
-    let allArtist = [];
-
-    plans.map((plan) => {
-      const clonedArtist = [...plan.artists];
-
-      let result = [];
-      clonedArtist.map(async (artist) => {
-        const docRef = doc(db, "user", artist);
-        const docSnap = await getDoc(docRef);
-        result.push(docSnap.data());
-      });
-      allArtist.push(result);
-    });
-
-    setArtistData(allArtist);
+    api.getArtistData(plans, setArtistData);
   };
 
   useEffect(() => {
@@ -447,7 +340,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
       return;
     } else if (isShowFollowing && followingUserData.length > 0) {
       return followingUserData.map((data) => (
-        // to={`/user/${authorData.uid}`}
         <NavLink
           key={data.uid}
           to={`/user/${data.uid}`}
@@ -460,7 +352,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
       ));
     } else if (isShowFollower && followerUserData.length > 0) {
       return followerUserData.map((data) => (
-        // to={`/user/${authorData.uid}`}
         <NavLink
           key={data.uid}
           to={`/user/${data.uid}`}
@@ -483,12 +374,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
       {isLogin ? (
         userData && (
           <>
-            {/* {showCreateCollection && (
-              <Overlay id={"Overlay"} $showOverlay={showCreateCollection}>
-                {" "}
-              </Overlay>
-            )} */}
-
             <PorfileWrapper>
               <UserInfoWrapper $showFollow={isShowFollower || isShowFollowing}>
                 <UserImage src={userData.pic}></UserImage>
@@ -510,8 +395,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
                   <Button onClick={logOut}>logOut</Button>
                 </ButtonWrapper>
               </UserInfoWrapper>
-
-              {/* ======================= */}
               <FollowInfoWrapper
                 $showFollow={isShowFollower || isShowFollowing}>
                 <FollowTitle>
@@ -528,8 +411,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
                 </CloseButton>
                 <FollowUserWrapper>{renderFollow()}</FollowUserWrapper>
               </FollowInfoWrapper>
-              {/* ======================= */}
-
               <UserStuffWrapper>
                 <ButtonWrapper>
                   <SelectSection
@@ -569,7 +450,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
                     ) : showSection === MY_PLAN ? (
                       <CreateButton
                         onClick={() => {
-                          // setShowCreateCollection(true);
                           redirect("/start-tattoo-plan");
                         }}>
                         <CreateButtonSpan>
@@ -589,7 +469,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
         )
       ) : (
         <Login
-          db={db}
           userData={userData}
           setUserData={setUserData}
           firebaseConfig={firebaseConfig}
@@ -601,7 +480,6 @@ function Profile({firebaseConfig, db, uid, app, setIsLogin, isLogin}) {
 
 Profile.propTypes = {
   firebaseConfig: PropTypes.object,
-  db: PropTypes.object,
   auth: PropTypes.object,
   uid: PropTypes.string,
   app: PropTypes.object,

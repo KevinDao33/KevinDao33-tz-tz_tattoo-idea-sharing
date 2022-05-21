@@ -1,21 +1,12 @@
 import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
-import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
-import {
-  getDoc,
-  collection,
-  doc,
-  setDoc,
-  addDoc,
-  serverTimestamp,
-  updateDoc,
-} from "firebase/firestore";
+import {getStorage, ref, uploadBytes} from "firebase/storage";
 import imageCompression from "browser-image-compression";
 import "../styles/style.css";
-import {v4 as uuid} from "uuid";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
 import {placements} from "../const";
+import api from "../util/api";
 
 import {
   DarkBackgroundDisplay,
@@ -35,7 +26,7 @@ import {
 } from "../styles/CreateNewPin.module";
 import MultipleCombobox from "./MultipleCombobox";
 
-function CreateNewPin({app, db, uid}) {
+function CreateNewPin({app, uid}) {
   const [pinName, setPinName] = useState("");
   const [pinDescription, setPinDescription] = useState("");
   const [pinLink, setPinLink] = useState("");
@@ -68,6 +59,7 @@ function CreateNewPin({app, db, uid}) {
       maxWidthOrHeight: 1920,
       useWebWorker: true,
     };
+
     try {
       const compressedFile = await imageCompression(imageFile, options);
 
@@ -137,7 +129,7 @@ function CreateNewPin({app, db, uid}) {
         });
   };
 
-  const writeUserData = () => {
+  const writeUserData = async () => {
     if (!pinImage) {
       Swal.fire({
         icon: "error",
@@ -148,20 +140,7 @@ function CreateNewPin({app, db, uid}) {
       return;
     }
 
-    const collectionRefPin = collection(db, "pin");
-    const docRefCollectionRefPin = doc(collectionRefPin);
-
-    const collectionRefUser = doc(
-      db,
-      "user",
-      uid,
-      "pin",
-      docRefCollectionRefPin.id
-    );
-
-    setDoc(collectionRefUser, {
-      pinAutor: {uid: uid},
-      pinId: docRefCollectionRefPin.id,
+    const newPinData = {
       pinDesc: pinDescription,
       pinName: pinName,
       pinImage: pinImage,
@@ -169,26 +148,11 @@ function CreateNewPin({app, db, uid}) {
       pinTags: pinTags,
       pinPlacement: pinPlacement,
       pinType: pinType,
-    });
-    setDoc(docRefCollectionRefPin, {
-      pinAutor: {uid: uid},
-      pinId: docRefCollectionRefPin.id,
-      pinDesc: pinDescription,
-      pinName: pinName,
-      pinImage: pinImage,
-      pinLink: pinLink,
-      pinTags: pinTags,
-      pinPlacement: pinPlacement,
-      pinType: pinType,
-    });
+    };
 
-    return docRefCollectionRefPin.id;
-  };
+    const returnedNewPinId = await api.setNewPinData(uid, newPinData);
 
-  const getPinImageUrl = (name) => {
-    getDownloadURL(ref(storage, `pinImages/${name}`)).then((url) => {
-      setPinImage(url);
-    });
+    return returnedNewPinId;
   };
 
   useEffect(() => {
@@ -211,50 +175,41 @@ function CreateNewPin({app, db, uid}) {
     const storageRef = ref(storage, `pinImages/${uploadedImageName}`);
 
     try {
-      uploadBytes(storageRef, result).then(() => {
-        getPinImageUrl(uploadedImageName);
-        Swal.fire("Picture all set!", "good job! you're the best", "success");
-      });
+      uploadBytes(storageRef, result)
+        .then(() => {
+          api.getPinImageUrl(storage, uploadedImageName, setPinImage);
+        })
+        .then(() => {
+          Swal.fire("Picture all set!", "good job! you're the best", "success");
+        });
     } catch (error) {
       console.error(error);
     }
   }
 
-  const getUserData = async () => {
-    const userquery = await getDoc(doc(db, "user", uid));
-    const userAAA = userquery.data();
-    setUserData(userAAA);
-  };
   useEffect(() => {
-    getUserData();
+    api.getUserData(uid, setUserData);
   }, [uid]);
 
-  const sendNotification2Follower = (pinIddd) => {
+  const sendNotification2Follower = (newCreatePinId) => {
     if (!userData) {
       return;
     }
 
-    userData.follower.map(async (user) => {
-      const docRef = collection(db, "user", user, "notification");
-      const notificationDocRef = await addDoc(docRef, {
-        isRead: false,
-        authorUid: uid,
-        authorName: userData.name,
-        authorPic: userData.pic,
-        timeStamp: serverTimestamp(),
-        pinId: pinIddd,
-      });
-      updateDoc(doc(db, "user", user, "notification", notificationDocRef.id), {
-        notificationId: notificationDocRef.id,
-      });
-    });
+    userData.follower.map((user) =>
+      api.sendNotification(user, uid, userData, newCreatePinId)
+    );
   };
 
   async function handleCreatePin() {
     try {
       submitPinData(dataUrl2Blob);
-      const pinIddd = writeUserData();
-      sendNotification2Follower(pinIddd);
+      console.log("before writeUserData");
+
+      const newPinId = await writeUserData();
+
+      console.log("newPinId", newPinId);
+      sendNotification2Follower(newPinId);
     } catch (error) {
       console.error(error);
     }
@@ -343,7 +298,7 @@ function CreateNewPin({app, db, uid}) {
                 {placements &&
                   placements.map((option) => {
                     return (
-                      <label key={uuid()}>
+                      <label key={option}>
                         <input
                           type='radio'
                           name='placement'
@@ -375,7 +330,6 @@ function CreateNewPin({app, db, uid}) {
 }
 
 CreateNewPin.propTypes = {
-  db: PropTypes.object,
   uid: PropTypes.string,
   app: PropTypes.object,
 };
