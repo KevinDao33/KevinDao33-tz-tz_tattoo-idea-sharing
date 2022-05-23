@@ -5,7 +5,7 @@ import {
   ErrorTitle,
   ErrorTextArea,
 } from "../styles/PageNotFound.module";
-import {errorMessage} from "../const";
+import {errorMessage} from "../config";
 
 function PageNotFound() {
   const [shownText, setShownText] = useState("");

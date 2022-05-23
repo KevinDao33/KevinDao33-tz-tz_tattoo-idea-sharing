@@ -38,7 +38,7 @@ import {
   placements,
   tagsWithIntroduction,
   tagIntroductions,
-} from "../const";
+} from "../config";
 import api from "../util/api";
 import AddPin from "./AddPin";
 import LandingPage from "./LandingPageVideo";

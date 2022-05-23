@@ -71,7 +71,6 @@ function Profile({firebaseConfig, uid, app, setIsLogin, isLogin}) {
   const [newCollectionName, setNewCollectionName] = useState("");
   const [isShowFollower, setIsShowFollower] = useState(false);
   const [isShowFollowing, setIsShowFollowing] = useState(false);
-
   const [followingUserData, setFollowingUserData] = useState([]);
   const [followerUserData, setFollowerUserData] = useState([]);
   const [artistData, setArtistData] = useState([]);

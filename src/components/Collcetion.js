@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import PropTypes from "prop-types";
 import arrangeIcon from "../icon/arrange.png";
 import removeIcon from "../icon/remove.png";
-import {SHOW_PINS, ARRANGE_PINS, DELETE_PINS} from "../const";
+import {SHOW_PINS, ARRANGE_PINS, DELETE_PINS} from "../config";
 import api from "../util/api";
 
 import {

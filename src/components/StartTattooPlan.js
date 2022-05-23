@@ -5,7 +5,7 @@ import Select from "react-select";
 import {Calendar} from "react-calendar";
 import PropTypes from "prop-types";
 import Swal from "sweetalert2";
-import {placementsOptions, sizeOptions, budgetOption, cities} from "../const";
+import {placementsOptions, sizeOptions, budgetOption, cities} from "../config";
 import api from "../util/api";
 
 import {

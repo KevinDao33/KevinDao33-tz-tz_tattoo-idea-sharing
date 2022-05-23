@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import {useCombobox, useMultipleSelection} from "downshift";
 import PropTypes from "prop-types";
-import {items} from "../const";
+import {items} from "../config";
 
 import {
   AllComboboxWrapper,

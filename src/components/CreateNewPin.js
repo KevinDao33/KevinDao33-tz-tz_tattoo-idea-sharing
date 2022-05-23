@@ -2,10 +2,10 @@ import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes} from "firebase/storage";
 import imageCompression from "browser-image-compression";
-import "../styles/style.css";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
-import {placements} from "../const";
+import {placements} from "../config";
+import "../styles/style.css";
 import api from "../util/api";
 
 import {
@@ -189,6 +189,8 @@ function CreateNewPin({app, uid}) {
 
   useEffect(() => {
     api.getUserData(uid, setUserData);
+    // const userData = await api.getUserData(uid);
+    // setUserData(userData)
   }, [uid]);
 
   const sendNotification2Follower = (newCreatePinId) => {

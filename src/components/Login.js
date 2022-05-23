@@ -23,7 +23,7 @@ import {
   SignButtonSpan,
   NoAccount,
 } from "../styles/Login.module";
-import * as myConstClass from "../const";
+import * as myConstClass from "../config";
 
 function Login({auth, isLogin}) {
   const [isShowSignIn, setIsShowSignIn] = useState(false);

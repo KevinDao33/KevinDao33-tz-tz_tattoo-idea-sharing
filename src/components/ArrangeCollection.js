@@ -150,7 +150,6 @@ function ArrangeCollection({uid, switch2Show}) {
     await Swal.fire("Changes saved", "", "success");
     window.location.reload();
 
-    return;
   };
 
   return (
