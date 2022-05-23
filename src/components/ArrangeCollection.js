@@ -21,10 +21,6 @@ function ArrangeCollection({uid, switch2Show}) {
   const [columnB] = useState([]);
   const [columnC] = useState([]);
   const [columnD] = useState([]);
-  // const [columnA, setColumnA] = useState([]);
-  // const [columnB, setColumnB] = useState([]);
-  // const [columnC, setColumnC] = useState([]);
-  // const [columnD, setColumnD] = useState([]);
 
   const getArrangePin = () => {
     const url = window.location.href;
@@ -40,29 +36,17 @@ function ArrangeCollection({uid, switch2Show}) {
   }, [uid]);
 
   const seperateOriginPinArray = async (array) => {
-    // let columnAArrange = [];
-    // let columnBArrange = [];
-    // let columnCArrange = [];
-    // let columnDArrange = [];
     await array.forEach((element, index) => {
       if (index % 4 === 0) {
         columnA.push(element);
-        // setColumnA((prev) => [...prev, element]);
       } else if (index % 4 === 1) {
         columnB.push(element);
-        // setColumnB((prev) => [...prev, element]);
       } else if (index % 4 === 2) {
         columnC.push(element);
-        // setColumnC((prev) => [...prev, element]);
       } else if (index % 4 === 3) {
         columnD.push(element);
-        // setColumnD((prev) => [...prev, element]);
       }
     });
-    // setColumnA(columnAArrange);
-    // setColumnB(columnBArrange);
-    // setColumnC(columnCArrange);
-    // setColumnD(columnDArrange);
   };
 
   useEffect(() => {
