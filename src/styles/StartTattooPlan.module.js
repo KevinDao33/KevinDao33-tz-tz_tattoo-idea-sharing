@@ -35,8 +35,6 @@ const StartTattooPlanDataWrapper = styled.div`
   min-height: 100vh;
   position: relative;
   overflow-y: scroll;
-
-  /* border: 5px solid yellow; */
 `;
 
 const StartTattooPlanTitleWrapper = styled.div`
@@ -104,8 +102,6 @@ const StartTattooPlanMainDataSelectorWrapper = styled.div`
   padding: 0 16px;
   padding-top: 32px;
   width: 432px;
-
-  /* border: 5px solid red; */
 `;
 
 const StartTattooPlanMainDataForm = styled.form`
@@ -115,8 +111,6 @@ const StartTattooPlanMainDataForm = styled.form`
   width: 100%;
   height: 100%;
   position: relative;
-
-  /* border: 3px solid coral; */
 `;
 
 const StartTattooPlanMainDataSectionWrapper = styled.div`
@@ -124,10 +118,7 @@ const StartTattooPlanMainDataSectionWrapper = styled.div`
   flex-direction: column;
   margin: 0 auto 28px 0;
   width: 100%;
-  /* max-width: 100%; */
   height: fit-content;
-
-  /* border: 3px solid green; */
 `;
 
 const StartTattooPlanMainDataSectionTitle = styled.div`
@@ -137,8 +128,6 @@ const StartTattooPlanMainDataSectionTitle = styled.div`
   font-weight: 700;
   line-height: 1.33;
   margin-bottom: 16px;
-
-  /* border: 3px solid yellow; */
 `;
 
 const BlankDiv = styled.div`
@@ -189,8 +178,6 @@ const TattooPlanColorTypeTitle = styled.div`
   align-items: center;
   font-size: 14px;
   width: 40%;
-
-  /* border: 1px solid blue; */
 `;
 
 const TattooPlanColorTypeWrapper = styled.div`
@@ -200,8 +187,6 @@ const TattooPlanColorTypeWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-
-  /* border: 2px solid red; */
 `;
 
 const TattooPlanColorTypeLabel = styled.label`
@@ -210,9 +195,7 @@ const TattooPlanColorTypeLabel = styled.label`
   font-size: 14px;
   line-height: 14px;
   display: flex;
-  /* margin: 20px auto; */
   transition: 0.4s;
-  /* color: #232323; */
   color: ${(props) => (props.$isColor ? " #f68535" : "#232323")};
 
   &:hover {
@@ -249,8 +232,6 @@ const TattooPlanColorTypeInput = styled.input`
 `;
 
 const TattooPlanCalandarWrapper = styled.div`
-  /* width: fit-content;
-  height: fit-content; */
   width: ${(props) => (props.$isShowCalendar ? "fit-content" : "0")};
   height: ${(props) => (props.$isShowCalendar ? "fit-content" : "0")};
   overflow: hidden;
@@ -258,15 +239,12 @@ const TattooPlanCalandarWrapper = styled.div`
 
 const TattooPlanTimeSectionSelectorWrapper = styled.div`
   display: flex;
-  /* flex-direction: row; */
   width: fit-content;
   margin: 0 auto 8px auto;
   height: fit-content;
   justify-content: center;
   align-items: center;
   min-height: 100%;
-
-  /* border: 1px solid green; */
 `;
 
 const TattooPlanTimeSectionSelectorInput = styled.input`
@@ -279,7 +257,6 @@ const TattooPlanTimeSectionSelectorInput = styled.input`
       color: #1a1a1a;
     }
     &:after {
-      /* background: #f68535; */
       background: #1a1a1a;
       content: "";
       height: 100%;
@@ -288,7 +265,6 @@ const TattooPlanTimeSectionSelectorInput = styled.input`
       transition: left 200ms cubic-bezier(0.77, 0, 0.175, 1);
       width: 100%;
       z-index: -1;
-      /* border-radius: 5px; */
     }
   }
   &.toggle-left + label {
@@ -298,7 +274,6 @@ const TattooPlanTimeSectionSelectorInput = styled.input`
     }
   }
   &.toggle-right + label {
-    /* margin-left: 0px; */
     &:after {
       left: -100%;
     }
@@ -326,10 +301,8 @@ const TattooPlanTimeSectionSelectorLable = styled.label`
 
 const StartPlanButtonWrapper = styled.div`
   width: fit-content;
-  /* height: auto; */
   display: flex;
-  /* justify-content: flex-end; */
-  /* margin: */
+
   position: absolute;
   right: calc((100% - 340px) / 2);
   bottom: 50px;
@@ -380,8 +353,6 @@ const StartPlanReferenceWrapper = styled.div`
   border-radius: 10px;
   background-color: white;
   border: 1px solid lightgrey;
-  /* position: relative; */
-  /* z-index: 0; */
 `;
 
 // ======================================
@@ -407,8 +378,6 @@ const StartPlanReferencePreview = styled.img`
   height: 72px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 `;
-
-// ==============================================
 
 const DisplayAllPinOverlay = styled.div`
   width: 100vw;
@@ -479,7 +448,6 @@ const PinImage = styled.img`
       rgba(67, 67, 67, 0.05) 20px 20px;
   }
 `;
-// ======================================
 
 const StartPlanButtonSpan = styled.span`
   color: white;

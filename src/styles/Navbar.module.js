@@ -32,7 +32,6 @@ const NavbarWrapper = styled.div`
   position: absolute;
   top: 0;
   background-color: snow;
-  /* background-color: rgb(39, 39, 39, 0.9); */
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -138,7 +137,6 @@ const Notify = styled.div`
   margin: auto 30px auto 0;
   cursor: pointer;
   border-radius: 50px;
-  /* background: url(${NotifyIcon}) snow; */
   background: ${(props) =>
     props.$isUnRead
       ? `url(${NotifyIconMove}) snow`
@@ -289,7 +287,6 @@ const NotificationMessageWrapper = styled.div`
   align-items: center;
   margin: auto 10px auto 0;
 
-  /* border: 1px solid blueviolet; */
   color: black;
 `;
 
@@ -309,7 +306,6 @@ const NoNotification = styled.div`
   align-items: center;
   margin: auto auto auto 20px;
 
-  /* border: 1px solid blueviolet; */
   color: black;
 `;
 
@@ -319,11 +315,9 @@ const NavTitle = styled.div`
   justify-content: center;
   font-size: 29px;
   font-weight: 550;
-  /* color: darkslategray; */
   color: ${(props) => (props.$isPageNow ? "#dc762e" : "darkslategray")};
   margin: 0 15px;
   padding: 20px 5px 2px 5px;
-  /* border-bottom: 3px solid darkslategray; */
   border-bottom: ${(props) =>
     props.$isPageNow ? "3px solid #dc762e" : "3px solid darkslategray"};
   transition: 0.4s;
@@ -333,6 +327,37 @@ const NavTitle = styled.div`
     color: #dc762e;
     border-bottom: 3px solid #dc762e;
     text-shadow: 4px 3px 0px #fff, 9px 8px 0px rgba(0, 0, 0, 0.15);
+  }
+
+  @media (max-width: 1621px) {
+    font-size: 27px;
+    font-weight: 550;
+  }
+  @media (max-width: 962px) {
+    font-size: 24px;
+    font-weight: 550;
+  }
+  @media (max-width: 637px) {
+    font-size: 22px;
+    font-weight: 550;
+  }
+  @media (max-width: 500px) {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0 10px;
+    padding: 15px 5px 2px 5px;
+  }
+  @media (max-width: 430px) {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 5px;
+    padding: 15px 2px 2px 2px;
+  }
+  @media (max-width: 370px) {
+    font-size: 16px;
+    font-weight: 200;
+    margin: 0 5px 0 0;
+    padding: 15px 0 2px 0;
   }
 `;
 

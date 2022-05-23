@@ -79,7 +79,6 @@ const BackButton = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  /* border: 1px solid lightgray; */
   border-radius: 50px;
   margin: auto 20px auto 0;
   cursor: pointer;
@@ -207,14 +206,6 @@ const InputFileWrapper = styled.div`
   margin: 30px auto 0 auto;
   border-radius: 10px;
   border: 1px solid lightgray;
-  /* transition: 0.4s;
-
-  &:hover {
-    transform: scale(1);
-    box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
-      rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
-      rgba(67, 67, 67, 0.05) 12px 12px;
-  } */
 `;
 
 const InputFileTitle = styled.span`
@@ -301,13 +292,6 @@ const InputDesc = styled.textarea`
     outline: none;
   }
 `;
-
-// display: block;
-// width: 100%;
-// overflow: hidden;
-// resize: both;
-// min-height: 40px;
-// line-height: 20px;
 
 export {
   EditProfileBackgroundDisplay,

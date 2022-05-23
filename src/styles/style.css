@@ -1,27 +1,23 @@
 /* css bolow are for masonry-style, which is accoomplished with my-masonry-grid */
 
 .my-masonry-grid {
-  /* Not needed if autoprefixing */
   display: -webkit-box;
   display: -ms-flexbox;
 
   display: flex;
-  margin-left: -5px; /* gutter size offset */
+  margin-left: -5px;
   width: auto;
-  /* border:1px solid green; */
 }
 
 .my-masonry-grid_column {
   flex: 1;
-  padding-left: 5px; /* gutter size */
+  padding-left: 5px;
   background-clip: padding-box;
-  /* min-width: 260px; */
 }
 
 @media (max-width: 630px) {
   .my-masonry-grid_column {
-    /* min-width: 100px; */
-    padding-left: 0px; /* gutter size */
+    padding-left: 0px;
     justify-content: center;
     margin: 10px auto;
   }
@@ -30,10 +26,7 @@
   }
 }
 
-/* Style your items */
 .my-masonry-grid_column > div {
-  /* change div to reference your elements you put in <Masonry> */
-  /* background: grey; */
   margin: 10px auto;
 }
 
@@ -75,9 +68,6 @@
 
 @import url(https://fonts.googleapis.com/css?family=Raleway);
 .list-choice {
-  /* height: 200px; */
-  /* overflow: scroll; */
-
   width: 333px;
   margin: 20px;
   position: relative;
@@ -93,7 +83,6 @@
 }
 
 .list-choice-title {
-  /* color: rgb(39, 39, 39); */
   height: 40px;
   width: 100%;
   display: block;
@@ -101,7 +90,6 @@
   text-align: center;
   padding: 0.55em 1em;
   box-sizing: border-box;
-  /* color: #fff; */
   text-shadow: 0 1px 0 #cacaca;
   border-radius: 10px;
   z-index: 1001;
@@ -152,7 +140,6 @@
 
 .list-choice:hover .list-choice-objects {
   max-height: 1400px;
-  /* overflow: scroll; */
 }
 
 div.react-calendar {

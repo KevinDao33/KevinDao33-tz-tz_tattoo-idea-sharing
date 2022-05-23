@@ -19,17 +19,12 @@ const AllAddPinWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   z-index: 3;
-  /* position: absolute; */
   position: fixed;
   top: 80px;
   right: 35%;
 `;
 
 const AddPinOptions = styled.div`
-  /* position: absolute; */
-  /* position: fixed;
-  top: 80px;
-  right: 25%; */
   border-radius: 20px;
   width: 100%;
   height: 650px;
@@ -77,9 +72,8 @@ const AddToCollection = styled.div`
   justify-content: space-between;
   box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px;
   transition: 0.4s;
-  
+
   &:hover {
-    /* transform: scale(1.1); */
     box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
   }
 `;
@@ -113,8 +107,6 @@ const CreateCollectionWrapper = styled.div`
   right: 25%;
   align-items: center;
   justify-content: space-between;
-  /* bottom: 45px;
-  position: fixed; */
   background-color: #f2f1eb;
   border-radius: 20px;
   z-index: 4;

@@ -1,6 +1,5 @@
 import styled, {keyframes} from "styled-components";
 
-// ===================================
 const AllSignWrapper = styled.div`
   margin: auto;
   width: 420px;
@@ -34,7 +33,6 @@ const SigninWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  /* background: #eee; */
   background: #232323;
 
   border-radius: 60% / 10%;
@@ -94,21 +92,14 @@ const SignUpRoleTypeLabel = styled.label`
   font-size: 1rem;
   line-height: 1.1;
   display: flex;
-  /* margin: 20px auto; */
   transition: 0.4s;
   color: #232323;
-  /* grid-template-columns: 1em auto;
-  gap: 0.5em; */
 
   &:hover {
     color: #f68535;
     font-size: 1.1rem;
     text-shadow: lightgray 1px 0 1px;
   }
-
-  /* :focus-within {
-    color: #f68535;
-  } */
 `;
 
 const SignUpRoleTypeInput = styled.input`
@@ -172,9 +163,7 @@ const SignButton = styled.button`
     border-radius: 5px;
     content: "";
     width: 21%;
-    /* opacity:0.8; */
     height: 103%;
-    /* background: #232323; */
     background: #272727;
     position: absolute;
     top: 0;

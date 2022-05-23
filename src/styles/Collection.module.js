@@ -26,18 +26,14 @@ const CollectionBackgroundDisplay = styled.div`
   }
 `;
 
-// ======================header section==================================
 const CollectionHeader = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   width: 90%;
-  /* height: 300px; */
   margin: 0 auto 10px auto;
   border-radius: 20px;
   box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
-
-  /* border: 5px solid red; */
 `;
 
 const UserPhoto = styled.img`
@@ -151,11 +147,9 @@ const SaveOrderButton = styled.button`
   }
 `;
 
-// ======================Pin section==================================
 const MainWrapper = styled.div`
   width: 1400px;
   margin: 15px auto;
-  /* border: 1px solid red; */
   display: flex;
   justify-content: center;
 `;
@@ -165,14 +159,8 @@ const AllPinsWrapper = styled.div`
   margin: 20px auto;
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: flex-start; */
   align-items: flex-start;
   justify-content: center;
-  /* border-top: 1px solid gray; */
-  /* 
-  background-color:red; */
-
-  /* border: 5px solid blue; */
   height: auto;
 
   @media (max-width: 630px) {
@@ -180,19 +168,9 @@ const AllPinsWrapper = styled.div`
 `;
 
 const PinWrapper = styled.div`
-  /* width: 325px;
-  height: auto;
-  border: 1px solid red;
-  border-radius: 20px;
-  margin: 10px;
-  background-color: lightblue; */
   position: relative;
   display: flex;
   justify-content: center;
-
-  @media (max-width: 630px) {
-    /* width: 80%; */
-  }
 `;
 
 const PinImage = styled.img`
@@ -208,13 +186,8 @@ const PinImage = styled.img`
     box-shadow: rgba(67, 67, 67, 0.4) 3px 3px, rgba(67, 67, 67, 0.3) 8px 8px,
       rgba(67, 67, 67, 0.2) 12px 12px, rgba(67, 67, 67, 0.1) 18px 18px,
       rgba(67, 67, 67, 0.05) 20px 20px;
-    /* animation: shake 0.5s;
-    animation-iteration-count: infinite; */
   }
 
-  /* @media (max-width: 630px) {
-    width: 80%;
-  } */
   @media (max-width: 1460px) {
     width: 95%;
   }
@@ -254,16 +227,11 @@ const PinImageArrange = styled.img`
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
   position: static;
 
-  /* border: 3px solid cornflowerblue; */
-
   &:hover {
-    /* transform: scale(1.1); */
     transform: rotate(5deg);
     box-shadow: rgba(67, 67, 67, 0.4) 3px 3px, rgba(67, 67, 67, 0.3) 8px 8px,
       rgba(67, 67, 67, 0.2) 12px 12px, rgba(67, 67, 67, 0.1) 18px 18px,
       rgba(67, 67, 67, 0.05) 20px 20px;
-    /* animation: shake 0.5s; */
-    /* animation-iteration-count:infinite; */
   }
   @media (max-width: 538px) {
     margin: 8px;
@@ -284,7 +252,6 @@ const RemoveButton = styled.button`
   opacity: 0.9;
   border: none;
   border-radius: 30px;
-  /* padding: 10px; */
   font: inherit;
   cursor: pointer;
   outline: inherit;
@@ -331,10 +298,7 @@ const ArrangeNavWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* margin: 70px auto 0 auto; */
   margin: auto;
-
-  /* border: 5px solid green; */
   position: relative;
 `;
 
@@ -348,7 +312,6 @@ const BackButton = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  /* border: 1px solid lightgray; */
   border-radius: 50px;
   margin: auto 20px auto 0;
   cursor: pointer;
@@ -374,7 +337,6 @@ const BackButton = styled.div`
     width: 45px;
     height: 45px;
   }
- 
 `;
 
 const ArrangeBackButton = styled.div`
@@ -387,7 +349,6 @@ const ArrangeBackButton = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  /* border: 1px solid lightgray; */
   border-radius: 50px;
   margin: auto 20px auto 0;
   cursor: pointer;
@@ -420,7 +381,6 @@ const ArrangeBackButton = styled.div`
     width: 30px;
     height: 30px;
   }
-
 `;
 
 const ArrangeTitle = styled.div`
@@ -466,10 +426,6 @@ const SaveButton = styled.button`
   transition: 0.4s;
 
   &:hover {
-    /* transform: scale(1.1);
-    box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,
-      rgba(67, 67, 67, 0.2) 6px 6px, rgba(67, 67, 67, 0.1) 8px 8px,
-      rgba(67, 67, 67, 0.05) 12px 12px; */
     background-color: coral;
     transform: scale(0.97);
     box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);

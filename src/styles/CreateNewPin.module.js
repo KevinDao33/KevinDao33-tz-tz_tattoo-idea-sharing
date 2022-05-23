@@ -55,23 +55,32 @@ const CreateNewPinWrapper = styled.div`
       color: black;
     }
   }
+
+  @media (max-width: 1250px) {
+    width: 80%;
+    flex-wrap: wrap;
+  }
 `;
 
 const PinDataUploadWrapper = styled.div`
   position: relative;
   width: 50%;
-  /* border: 1px solid green; */
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
-  /* padding-top: 50px; */
+
   @-moz-document url-prefix() {
     div {
       border-radius: 0 20px 20px 0;
     }
+  }
+
+  @media (max-width: 1250px) {
+    width: 100%;
+    padding-bottom: 100px;
   }
 `;
 
@@ -79,19 +88,21 @@ const PinImageUploadWrapper = styled.div`
   width: 50%;
   position: relative;
   padding: 0 0 80px 0;
-  /* height: 100%; */
-  /* border-right: 4px dashed lightgray; */
-  /* box-shadow: rgba(0, 0, 0, 0.3) 0 0 38px; */
   border-radius: 20px 0 0 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
+
+  @media (max-width: 1250px) {
+    width: 100%;
+    border-radius: 0;
+    padding: 0 0 150px 0;
+  }
 `;
 
 const NewPinDataWrapper = styled.div`
   width: 100%;
-  /* border: 1px solid blue; */
   border-radius: 20px;
   display: flex;
   flex-wrap: wrap;
@@ -108,7 +119,6 @@ const NewPinDataInput = styled.input`
   border: none;
   margin: 20px;
   background-color: snow;
-  /* color: white; */
   padding-left: 20px;
   cursor: text;
   -webkit-filter: drop-shadow(12px 12px 7px rgba(0, 0, 0, 0.2));
@@ -143,6 +153,22 @@ const CreatePinButton = styled.button`
     background-color: #f68535;
     box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
   }
+
+  @media (max-width: 1250px) {
+    font-size: 1.5rem;
+  }
+  @media (max-width: 900px) {
+    font-size: 1.4rem;
+  }
+  @media (max-width: 750px) {
+    font-size: 1.3rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+  }
+  @media (max-width: 500px) {
+    font-size: 1rem;
+  }
 `;
 
 const UploadNewPinImageLabel = styled.label`
@@ -152,8 +178,6 @@ const UploadNewPinImageLabel = styled.label`
   height: 80%;
   border-radius: 30px;
   border: none;
-  /* border-bottom: 1.5px solid #e3e0e0; */
-  /* background-color: white; */
   padding-left: 20px;
   cursor: copy;
   margin: 20px auto 0 auto;
@@ -161,13 +185,27 @@ const UploadNewPinImageLabel = styled.label`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* -webkit-filter: drop-shadow(12px 12px 7px rgba(0, 0, 0, 0.2)); */
-  /* filter: drop-shadow(5px 5px 2px rgba(0, 0, 0, 0.2)); */
   font-size: 1.5rem;
   position: relative;
 
   &:hover {
     color: lightgreen;
+  }
+
+  @media (max-width: 1250px) {
+    font-size: 1.5rem;
+  }
+  @media (max-width: 900px) {
+    font-size: 1.4rem;
+  }
+  @media (max-width: 750px) {
+    font-size: 1.3rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+  }
+  @media (max-width: 500px) {
+    font-size: 1rem;
   }
 `;
 
@@ -189,7 +227,6 @@ const breath = keyframes`
 
 const PreviewImage = styled.img`
   width: 90%;
-  /* min-width: 250px; */
   max-height: 730px;
   border-radius: 30px;
   border: none;
@@ -197,9 +234,28 @@ const PreviewImage = styled.img`
   font-size: 1.5rem;
   position: absolute;
   top: 0;
-  /* box-shadow: 20px 28px 24px -20px snow; */
   transition: 0.8s;
   animation: ${breath} 2.5s ease-in-out infinite;
+
+  @media (max-width: 1250px) {
+    max-width: 30%;
+    height: fit-content;
+    max-height: 350px;
+    min-width: 0;
+    margin: 0 auto 50px auto;
+  }
+  @media (max-width: 900px) {
+    max-width: 40%;
+  }
+  @media (max-width: 750px) {
+    max-width: 50%;
+  }
+  @media (max-width: 600px) {
+    max-width: 60%;
+  }
+  @media (max-width: 500px) {
+    max-width: 70%;
+  }
 `;
 
 const PlacementTitle = styled.label`
@@ -207,6 +263,22 @@ const PlacementTitle = styled.label`
   font-size: 1.6rem;
   margin: 20px auto 20px 20px;
   color: snow;
+
+  @media (max-width: 1250px) {
+    font-size: 1.5rem;
+  }
+  @media (max-width: 900px) {
+    font-size: 1.4rem;
+  }
+  @media (max-width: 750px) {
+    font-size: 1.3rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+  }
+  @media (max-width: 500px) {
+    font-size: 1rem;
+  }
 `;
 
 const PinTypeWrapper = styled.div`
@@ -224,18 +296,27 @@ const PinTypeLabel = styled.label`
   margin: auto 20px auto 0;
   transition: 0.4s;
   color: snow;
-  /* grid-template-columns: 1em auto;
-  gap: 0.5em; */
 
   &:hover {
     color: #f68535;
     font-size: 1.5rem;
     text-shadow: lightgray 1px 0 1px;
   }
-
-  /* :focus-within {
-    color: #f68535;
-  } */
+  @media (max-width: 1250px) {
+    font-size: 1.5rem;
+  }
+  @media (max-width: 900px) {
+    font-size: 1.4rem;
+  }
+  @media (max-width: 750px) {
+    font-size: 1.3rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+  }
+  @media (max-width: 500px) {
+    font-size: 1rem;
+  }
 `;
 
 const PinTypeInput = styled.input`
@@ -269,6 +350,21 @@ const PinTypeInput = styled.input`
   :focus {
     outline: max(1px, 0.15em) solid #f68535;
     outline-offset: max(1px, 0.15em);
+  }
+  @media (max-width: 1250px) {
+    font-size: 1.5rem;
+  }
+  @media (max-width: 900px) {
+    font-size: 1.4rem;
+  }
+  @media (max-width: 750px) {
+    font-size: 1.3rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+  }
+  @media (max-width: 500px) {
+    font-size: 1rem;
   }
 `;
 

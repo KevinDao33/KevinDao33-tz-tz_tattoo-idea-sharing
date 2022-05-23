@@ -8,8 +8,6 @@ const TattooPlanWrapper = styled.div`
   justify-content: center;
   padding-bottom: 120px;
   position: relative;
-
-  /* border: 5px solid yellow; */
 `;
 
 const TattooPlanTitle = styled.div`
@@ -21,8 +19,6 @@ const TattooPlanTitle = styled.div`
   color: #202125;
   font-weight: 600;
   line-height: 1.1;
-
-  /* border: 5px solid coral; */
 `;
 
 const AllTattooPlanCardWrapper = styled.div`
@@ -30,17 +26,13 @@ const AllTattooPlanCardWrapper = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  /* flex-direction: column; */
   width: 80%;
   height: fit-content;
   min-height: 50vh;
-  /* min-height: 100vh; */
   position: relative;
   overflow-y: scroll;
   padding: 30px 20px;
   gap: 30px;
-
-  /* border: 5px solid red; */
 `;
 
 const FullTattooPlanCardWrapper = styled.div`
@@ -50,23 +42,18 @@ const FullTattooPlanCardWrapper = styled.div`
   display: flex;
   flex-direction: row;
   transition: 0.3s;
-  /* width: ${(props) => (props.$showAll ? "550px" : "300px")}; */
   width: fit-content;
   height: 340px;
   padding: 0;
   overflow: hidden;
   cursor: default;
-  /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-
-  /* border: 3px solid lightgray; */
 `;
 
 const TattooPlanCardWrapper = styled.div`
   background-color: #fff;
   border-radius: 16px;
-  /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 15%), 0 0 1px 0 rgb(0 0 0 / 5%); */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -74,10 +61,6 @@ const TattooPlanCardWrapper = styled.div`
   height: 340px;
   padding: 0;
   cursor: pointer;
-
-  /* border: 3px solid green; */
-
-  /* position: relative; */
 `;
 
 const TattooPlanCardImg = styled.img`
@@ -184,22 +167,15 @@ const TattooPlanCardDetailDataMainWrapper = styled.div`
   background-color: #f7f7f7;
   padding: ${(props) => (props.$showAll ? "16px" : "0")};
   opacity: ${(props) => (props.$showAll ? "1" : "0")};
-  /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 15%), 0 0 1px 0 rgb(0 0 0 / 5%); */
   display: flex;
   flex-direction: column;
   gap: 10px;
   overflow: hidden;
   transition: 0.4s;
-  /* position: relative; */
-  /* transition: box-shadow 0.2s cubic-bezier(0.2, 0, 0.4, 1); */
-  /* width: 250px; */
+
   width: ${(props) => (props.$showAll ? "180px" : "0")};
   height: calc(100% - 32px);
   border-radius: 0 16px 16px 0;
-
-  /* border: 3px solid yellow; */
-  /* border: ${(props) =>
-    props.$showAll ? "3px solid yellow" : "0px solid yellow"}; */
 `;
 
 const TattooPlanCardDetailDataTitle = styled.div`
@@ -207,7 +183,6 @@ const TattooPlanCardDetailDataTitle = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  /* opacity: 0.8; */
   font-size: 22px;
   font-weight: 550;
   margin: 0 auto 7px auto;
@@ -260,13 +235,6 @@ const TattooPlanCardDetailDataDate = styled.div`
 `;
 
 const TattooPlanCardDetailDataDescription = styled.div`
-  /* display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  opacity: 0.7;
-  font-size: 19px;
-  font-weight: 400; */
   margin: 0 auto 0 0px;
 
   appearance: none;
@@ -289,12 +257,8 @@ const TattooPlanCardDetailDataDescription = styled.div`
 
 const SignUpPlanButtonWrapper = styled.div`
   width: calc(100% - 32px);
-  /* height: auto; */
   display: flex;
-  /* justify-content: flex-end; */
-  /* margin: */
   position: absolute;
-  /* right: calc((100% - 16px) / 2); */
   right: 16px;
   bottom: 15px;
 `;
@@ -306,11 +270,9 @@ const SignUpPlanButton = styled.button`
   cursor: pointer;
   border: none;
   border-radius: 5px;
-  /* padding: 10px 18px; */
   font-size: 14px;
   position: relative;
-  /* box-shadow: 0px 1px 0px #b2a98f, 0px 8px 6px rgba(0, 0, 0, 0.15),
-    0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1); */
+
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   &:before {
     transition: all 0.55s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -350,18 +312,20 @@ const CloseButton = styled.div`
   opacity: 0.8;
 `;
 
-
 const StartPlanButtonWrapper = styled.div`
   width: 120px;
-
-  /* height: auto; */
   display: flex;
-  /* justify-content: flex-end; */
-  /* margin: */
   position: absolute;
-  /* right: calc((100% - 16px) / 2); */
   right: calc(21%);
   top: 65px;
+
+  @media (max-width: 1075px) {
+    right: 5%;
+  }
+  @media (max-width: 630px) {
+    top: 100px;
+    right: 40%;
+  }
 `;
 
 const StartPlanButton = styled.button`
@@ -371,11 +335,9 @@ const StartPlanButton = styled.button`
   cursor: pointer;
   border: none;
   border-radius: 5px;
-  /* padding: 10px 18px; */
   font-size: 18px;
   position: relative;
-  /* box-shadow: 0px 1px 0px #b2a98f, 0px 8px 6px rgba(0, 0, 0, 0.15),
-    0px 12px 2px rgba(0, 0, 0, 0.1), 0px 20px 18px rgba(0, 0, 0, 0.1); */
+
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   &:before {
     transition: all 0.55s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -394,13 +356,15 @@ const StartPlanButton = styled.button`
       height: 100%;
     }
   }
+  @media (max-width: 630px) {
+    height: 30px;
+  }
 `;
 
 const StartPlanButtonSpan = styled.span`
   color: white;
   mix-blend-mode: difference;
 `;
-
 
 export {
   TattooPlanWrapper,
@@ -431,5 +395,5 @@ export {
   CloseButton,
   StartPlanButtonWrapper,
   StartPlanButton,
-  StartPlanButtonSpan
+  StartPlanButtonSpan,
 };

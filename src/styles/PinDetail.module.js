@@ -70,13 +70,9 @@ const PinImage = styled.img`
 `;
 
 const PinDetailDataWrapper = styled.div`
-  /* background-color: rgba(330, 330, 330, 0.2); */
-  /* filter: blur(5px); */
   border-radius: 0 10px 10px 0;
-  /* opacity: 0.8; */
   width: 45%;
-  /* margin-left: 3%; */
-  /* height: 100%; */
+
   display: flex;
   flex-direction: column;
   position: relative;
@@ -120,7 +116,6 @@ const CollectionSelector = styled.select`
   border-radius: 10px;
   background-color: lightgray;
   border: none;
-  /* color: gray; */
   color: gray;
   font-size: 1rem;
   text-align: center;
@@ -162,8 +157,7 @@ const CollectionName = styled.option`
 
 const SaveButton = styled.button`
   color: snow;
-  /* color: white; */
-  /* background-color: black; */
+
   background-color: gray;
   border: none;
   border-radius: 10px;
@@ -177,7 +171,6 @@ const SaveButton = styled.button`
   transition: 0.4s;
 
   &:hover {
-    /* animation: none; */
     background-color: #f68535;
     color: white;
   }
@@ -250,23 +243,6 @@ const PinName = styled.h2`
     font-size: 2.25rem;
     margin: 45px auto 10px 30px;
   }
-
-  /* @media (max-width: 1205px) {
-    font-size: 2rem;
-    margin: calc(23%) auto calc(1%) 30px;
-  }
-  @media (max-width: 1050px) {
-    font-size: 1.75rem;
-    margin: calc(27%) auto calc(1%) 20px;
-  }
-  @media (max-width: 875px) {
-    font-size: 1.5rem;
-    margin: calc(30%) auto calc(1%) 15px;
-  } */
-  /* @media (max-width: 650px) {
-    font-size: 1.25rem;
-    margin: calc(30%) auto calc(1%) 15px;
-  } */
 `;
 
 const PinDescriptionWrapper = styled.div`
@@ -296,7 +272,6 @@ const PinDescription = styled.p`
 
   &:hover {
     background-size: 100% 100%;
-    /* color:snow; */
   }
   @media (max-width: 1200px) {
     font-size: 1.1rem;
@@ -307,12 +282,10 @@ const PinDescription = styled.p`
 `;
 
 const PinAuthorWrapper = styled(NavLink)`
-  /* width: 100%; */
   display: flex;
   align-items: flex-end;
   cursor: pointer;
   margin: 5px 20px 5px auto;
-  /* border: 1px solid orange; */
   text-decoration: none;
   color: inherit;
 `;
@@ -322,7 +295,6 @@ const PinAuthorPhoto = styled.img`
   width: 55px;
   height: 55px;
   margin: 0 10px 0 10px;
-  /* border: 1px solid red; */
   cursor: pointer;
 
   @media (max-width: 656px) {
@@ -355,7 +327,6 @@ const PinCommentTitle = styled.h4`
   color: #39393a;
   position: absolute;
   bottom: calc(25% + 100px);
-  /* border: 1px solid red; */
   @media (max-width: 656px) {
     font-size: 1.25rem;
   }
@@ -369,7 +340,6 @@ const AllPinCommentWrapper = styled.div`
   bottom: 100px;
   background-color: rgba(230, 230, 230, 0.8);
   width: 90%;
-  /* max-height: 380px; */
   height: calc(25%);
   overflow: scroll;
   display: flex;
@@ -392,8 +362,6 @@ const OtherPinCommentWrapper = styled.div`
     width: calc(100% - 30px);
     margin: 15px 0;
   }
-
-  /* border: 1px solid orange; */
 `;
 
 const PinCommentWrapper = styled.div`
@@ -402,11 +370,8 @@ const PinCommentWrapper = styled.div`
   display: flex;
   flex-wrap: nowrap;
   margin: 20px 0;
-  /* border-radius: 10px; */
-  /* border: 1px solid lightgray; */
-  /* box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2); */
+
   @media (max-width: 500px) {
-    /* width: calc(100% - 30px); */
     margin: 15px 0;
   }
 `;
@@ -415,7 +380,6 @@ const NoCommentMessage = styled.h4`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* margin-top: 150px; */
   margin: auto;
   font-size: 1.15rem;
   color: gray;
@@ -428,7 +392,7 @@ const Link2CommentatorProfile = styled(NavLink)`
   align-items: center;
   text-decoration: none;
   color: inherit;
-  
+
   @media (max-width: 750px) {
     min-width: 45px;
   }
@@ -440,7 +404,6 @@ const MyPinCommentWrapper = styled.div`
   min-height: 30px;
   display: flex;
   flex-wrap: nowrap;
-  /* border: 1px solid red; */
   margin: 10px 0;
   bottom: 20px;
 `;
@@ -450,7 +413,6 @@ const UserPhoto = styled.img`
   width: 45px;
   height: 45px;
   margin: auto 10px;
-  /* border: 1px solid red; */
   cursor: pointer;
 `;
 
@@ -459,7 +421,6 @@ const MyPhoto = styled.img`
   width: 60px;
   height: 60px;
   margin: auto 10px;
-  /* border: 1px solid red; */
   cursor: pointer;
 `;
 
@@ -467,7 +428,6 @@ const PinCommentInput = styled.input`
   width: calc(100% - 60px - 10px - 10px - 10px);
   height: 35px;
   font-size: 1.5rem;
-  /* border: 2px solid gray; */
   border-radius: 10px;
   background-color: white;
   padding-left: 15px;
@@ -532,7 +492,6 @@ const ViewMoreIconWrapper = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   background-size: 80%;
-  /* transform: rotate(180deg); */
   transform: ${(props) => (props.$similar ? "rotate(180deg)" : "rotate(0deg)")};
 
   &:hover {

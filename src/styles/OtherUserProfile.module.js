@@ -42,7 +42,6 @@ const FollowButton = styled.button`
   text-align: center;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
   transition: 0.4s;
-  /* pointer-events: ${(props) => (props.$self ? "none" : "auto")}; */
 
   &:hover {
     box-shadow: rgba(67, 67, 67, 0.4) 0.5px 0.5px, rgba(67, 67, 67, 0.3) 2px 2px,

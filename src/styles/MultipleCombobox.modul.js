@@ -16,7 +16,7 @@ const MenuMultiple = styled.ul`
   width: 260px;
   margin: 0;
   border-top: 0;
-  background: #5A5A5A;
+  background: #5a5a5a;
   color: white;
   font-size: 1.25rem;
   position: absolute;
@@ -72,7 +72,6 @@ const ShowTagOptions = styled.button`
   border: none;
   margin: 20px 0 0 0;
   border-radius: 10px 30px 30px 10px;
-  /* padding: 3px 5px; */
   font: inherit;
   cursor: pointer;
   outline: inherit;
@@ -90,13 +89,28 @@ const ShowTagOptions = styled.button`
 const TagTitle = styled.label`
   font-size: 1.5rem;
   margin: 20px 0 20px 20px;
-  width: 30%;
+  width: 33%;
   color: snow;
+
+  @media (max-width: 1250px) {
+    font-size: 1.5rem;
+  }
+  @media (max-width: 900px) {
+    font-size: 1.4rem;
+  }
+  @media (max-width: 750px) {
+    font-size: 1.3rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+  }
+  @media (max-width: 500px) {
+    font-size: 1rem;
+  }
 `;
 
 const SearchTagInput = styled.input`
   width: 72%;
-  /* min-width: 90px; */
   height: 40px;
   border-radius: 10px;
   border: none;

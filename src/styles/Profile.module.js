@@ -19,11 +19,9 @@ const ProfileBackgroundDisplay = styled.div`
   background-image: linear-gradient(#cdcdcd 4px, transparent 4px),
     linear-gradient(to right, #cdcdcd 4px, #f9f9f9 4px);
   background-size: 80px 80px;
-  /* position: relative; */
 `;
 
 const PorfileWrapper = styled.div`
-  /* width: 1350px; */
   width: 80%;
   margin: 0 auto;
   display: flex;
@@ -145,7 +143,6 @@ const UserStuffWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  /* border: 1px solid purple; */
   margin: 20px auto;
 `;
 
@@ -183,20 +180,15 @@ const MainAllCollectionWrapper = styled.div`
   height: fit-content;
   width: 100%;
   margin: 0 auto;
-
-  /* border: 1px solid green; */
 `;
 
 const AllCollectionsWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: flex-start; */
   justify-content: center;
   height: auto;
   width: fit-content;
   margin: 0 auto;
-
-  /* border: 1px solid red; */
 `;
 
 const CollectionWarpper = styled.div`
@@ -208,8 +200,6 @@ const CollectionWarpper = styled.div`
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-
-  /* border: 1px solid blue; */
 `;
 
 const CollectionImage = styled.div`
@@ -238,11 +228,7 @@ const CollectionName = styled.h3`
 `;
 
 const CreateButtonWrapper = styled.div`
-  /* width: 100%; */
-  /* height: auto; */
   display: flex;
-  /* justify-content: flex-end; */
-  /* margin: */
   position: absolute;
   right: -5px;
   bottom: 3px;
@@ -255,10 +241,6 @@ const CreateButtonWrapper = styled.div`
     right: -5px;
     bottom: 360px;
   }
-  /* @media (max-width: 404px) {
-    right: -5px;
-    bottom: 340px;
-  } */
 `;
 
 const CreateButton = styled.button`
@@ -311,7 +293,6 @@ const CreateButtonSpan = styled.span`
 `;
 
 const Overlay = styled.div`
-  /* opacity: ${(props) => (props.$showOverlay ? "0.7" : "0")}; */
   opacity: 0.7;
   background-color: gray;
   position: fixed;
@@ -320,7 +301,6 @@ const Overlay = styled.div`
   height: 100%;
   top: 0;
   left: 0;
-  /* z-index: ${(props) => (props.$showOverlay ? "20" : "0")}; */
   z-index: 2;
 `;
 
@@ -413,7 +393,7 @@ const UserInfoWrapper = styled.div`
   align-items: center;
   justify-content: center;
   transition: 0.4s;
-  /* margin: ${(props) => (props.$showFollow ? "0 583px 0 0" : "0 541px")}; */
+
   margin: ${(props) => (props.$showFollow ? "0 83px 0 0" : "0 541px")};
 
   @media (max-width: 2229px) {
@@ -433,7 +413,6 @@ const UserInfoWrapper = styled.div`
   }
   @media (max-width: 1072px) {
     margin: ${(props) => (props.$showFollow ? "0 auto 250px auto" : "0 541px")};
-    /* margin: 0 auto 250px auto; */
   }
 `;
 
@@ -500,7 +479,6 @@ const FollowTitle = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   flex-wrap: wrap;
-  /* width:100%; */
   height: 25px;
   border-radius: 3px;
   margin: 15px auto 10px 15px;
@@ -545,7 +523,6 @@ const FollowUserWrapper = styled.div`
     height: fit-content;
     width: fit-content;
     margin: auto auto 10px auto;
-    /* border: 1px solid red; */
   }
 `;
 
@@ -621,8 +598,6 @@ const MyPlanWrapper = styled.div`
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: center;
-
-  /* border: 5px solid red; */
 `;
 
 const FullTattooPlanCardWrapper = styled.div`
@@ -632,13 +607,11 @@ const FullTattooPlanCardWrapper = styled.div`
   display: flex;
   flex-direction: row;
   transition: 0.3s;
-  /* width: ${(props) => (props.$showAll ? "550px" : "300px")}; */
   width: fit-content;
   height: 340px;
   padding: 0;
   overflow: hidden;
   cursor: default;
-  /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 
@@ -648,7 +621,6 @@ const FullTattooPlanCardWrapper = styled.div`
 const TattooPlanCardWrapper = styled.div`
   background-color: #fff;
   border-radius: 16px 0 0 16px;
-  /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 15%), 0 0 1px 0 rgb(0 0 0 / 5%); */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -656,10 +628,6 @@ const TattooPlanCardWrapper = styled.div`
   height: 340px;
   padding: 0;
   cursor: pointer;
-
-  /* border: 3px solid green; */
-
-  /* position: relative; */
 `;
 
 const TattooPlanCardImg = styled.img`
@@ -667,8 +635,6 @@ const TattooPlanCardImg = styled.img`
   height: 100%;
   border-radius: 16px 0 0 16px;
   object-fit: cover;
-
-  /* border: 5px solid red; */
 `;
 
 const TattooPlanCardDetailDataMainWrapper = styled.div`
@@ -690,7 +656,6 @@ const TattooPlanCardDetailDataTitle = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  /* opacity: 0.8; */
   width: fit-content;
   font-size: 21px;
   font-weight: 550;
@@ -714,26 +679,18 @@ const TattooPlanCardArtistMainWrapper = styled.div`
   position: relative;
   background-color: #f7f7f7;
   padding: 16px;
-  /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 15%), 0 0 1px 0 rgb(0 0 0 / 5%); */
   display: flex;
   flex-direction: column;
   gap: 10px;
   overflow: scroll;
   transition: 0.4s;
-  /* position: relative; */
-  /* transition: box-shadow 0.2s cubic-bezier(0.2, 0, 0.4, 1); */
-  /* width: 250px; */
+
   width: 230px;
   height: calc(100% - 32px);
   border-radius: 0 16px 16px 0;
-
-  /* border: 3px solid yellow; */
-  /* border: ${(props) =>
-    props.$showAll ? "3px solid yellow" : "0px solid yellow"}; */
 `;
 
 const TattooPlanCardArtistWrapper = styled.div`
-  /* background-color: #fff; */
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -741,7 +698,6 @@ const TattooPlanCardArtistWrapper = styled.div`
   height: 50px;
   padding: 10px 2px;
   border-bottom: 1px dashed lightgray;
-  /* height:fit-content; */
 `;
 
 const TattooPlanCardArtistPic = styled.img`

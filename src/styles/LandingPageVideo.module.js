@@ -4,7 +4,6 @@ const LandingPageVideoWrapper = styled.div`
   width: 100vw;
   height: calc(100vh);
   z-index: 10;
-  /* background-color: #EBC9AD; */
   background-color: black;
   opacity: 0.8;
   display: flex;

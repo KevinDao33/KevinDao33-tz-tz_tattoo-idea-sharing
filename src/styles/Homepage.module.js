@@ -65,8 +65,7 @@ const ShowFilterKey = styled.h3`
   flex-direction: column;
   align-items: flex-start;
   margin: 5px auto 5px 0;
-  /* margin: 80px auto 15px 0; */
-  /* transition: 0.4s; */
+
   color: gray;
   font-weight: bolder;
   cursor: default;
@@ -122,15 +121,11 @@ const BackgroundDisplay = styled.div`
 `;
 
 const MainWrapper = styled.div`
-  /* width: 1400px; */
-  /* width: fit-content; */
   width: 90%;
   margin: 15px auto;
   display: flex;
   justify-content: center;
   overflow: scroll;
-
-  /* border: 1px solid orange; */
 `;
 
 const AllPinsWrapper = styled.div`
@@ -142,21 +137,10 @@ const AllPinsWrapper = styled.div`
   justify-content: center;
   height: auto;
 
-  /* border: 1px solid red; */
-
-  //seem useless since its parent's width is fit-content
   width: 100%;
-  // to prevent
-  /* min-height: 100vh; */
 `;
 
 const PinWrapper = styled.div`
-  /* width: 325px;
-  height: auto;
-  border: 1px solid red;
-  border-radius: 20px;
-  margin: 10px;
-  background-color: lightblue; */
   position: relative;
 `;
 
@@ -175,7 +159,6 @@ const PinImage = styled.img`
       rgba(67, 67, 67, 0.05) 20px 20px;
   }
 
-  /* border: 1px solid blue; */
   @media (max-width: 630px) {
     width: 100%;
     margin: 3px;
@@ -198,13 +181,6 @@ const PinTagIntroduction = styled.div`
     margin: 3px;
     padding: 10px 3px;
   }
-  /* 
-  &:hover {
-    transform: scale(1.1);
-    box-shadow: rgba(67, 67, 67, 0.4) 3px 3px, rgba(67, 67, 67, 0.3) 8px 8px,
-      rgba(67, 67, 67, 0.2) 12px 12px, rgba(67, 67, 67, 0.1) 18px 18px,
-      rgba(67, 67, 67, 0.05) 20px 20px;
-  } */
 `;
 
 const PinTagIntroductionTitle = styled.h1`
@@ -260,7 +236,6 @@ const Heart = styled.div`
 const LinkButton = styled.button`
   width: 40px;
   height: 40px;
-  /* background-color: lightgray; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -287,8 +262,7 @@ const LinkButton = styled.button`
 const FilterTitleWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  //RWD width should be %
-  /* width: 1400px; */
+
   width: 90%;
   margin: 15px auto;
   justify-content: flex-start;
@@ -298,8 +272,6 @@ const FilterTitleWrapper = styled.div`
   transition: 0.4s;
   height: fit-content;
 
-  /* border: 1px solid red; */
-
   @media (max-width: 450px) {
     min-height: 10px;
   }
@@ -308,8 +280,7 @@ const FilterTitleWrapper = styled.div`
 const FilterWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  //RWD width should be %
-  /* width: 1400px; */
+
   width: 98%;
   margin: auto;
   justify-content: flex-start;
@@ -318,8 +289,6 @@ const FilterWrapper = styled.div`
   min-height: 30px;
   transition: 0.4s;
   height: fit-content;
-
-  /* border: 1px solid coral; */
 `;
 
 const FilterButton = styled.button`
@@ -392,7 +361,6 @@ const FilterTitle = styled.div`
 
 const FitlerTagWrapper = styled.div`
   display: flex;
-  /* align-items: center; */
   height: 1.25rem;
   justify-content: center;
   margin: 15px 10px;
@@ -452,13 +420,11 @@ const FilterTagLink = styled(NavLink)`
 
 const ClearFitlerTagWrapper = styled.div`
   display: flex;
-  /* align-items: center; */
   height: 1.25rem;
   justify-content: center;
   margin: 15px 10px;
   padding: 8px 10px;
   border-radius: 10px;
-  /* border: 1px solid white; */
   background-color: lightgray;
   transition: 0.4s;
   box-shadow: 20px 38px 34px -26px hsla(0, 0%, 0%, 0.2);
@@ -510,7 +476,6 @@ const ClearFilterTagLink = styled(NavLink)`
 const MainFilterWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  /* width: 1380px; */
   width: 88%;
   margin: 10px auto 30px auto;
   border-radius: 10px;
@@ -586,7 +551,6 @@ const HoverPinName = styled.div`
 const FooterBlank = styled.div`
   width: 100vw;
   height: 50px;
-  /* border: 1px solid rebeccapurple; */
 `;
 
 export {
