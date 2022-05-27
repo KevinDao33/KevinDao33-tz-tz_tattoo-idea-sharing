@@ -1,70 +1,41 @@
-# Getting Started with Create React App
+# tz tz 刺刺
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+__A tattoo-sharing platform that inspires people with tattoo ideas and matches them with the right artists__
 
-## Available Scripts
+![tztz intro video](https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/other%2Ftztz-README.gif?alt=media&token=95c01556-46b0-4c2a-abcc-58fb4c71169f)
 
-In the project directory, you can run:
+## About The Project
 
-### `npm start`
+Because getting a tattoo should be a great experience. tztz provides various tattoo ideas and categorizes them with placements, styles, and topics, allowing users to save tattoo pins into the collections they've created. Moreover, users could start their own tattoo plans by specifying the placement, size, color, budget, and most importantly, selecting a tattoo pin they’ve saved as a reference. After a tattoo plan has been created, it shows up on the tattoo plan wall, and artists could check if any of the plans fit their professions and recommend themselves; on the other hand, users could check all the self-recommended artists on each of the tattoo plans they’ve created.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Link
+tz tz : https://tz-tz-fa8a7.web.app/
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tech
 
-### `npm test`
+ * Built with create-react-app, applied react-router-dom for SPA, styled with styled-components, and managed login and data with Firebase (Firestore, Storage, Authentication).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+ * Implemented lazy loading with Intersection Observer API, and arranged tattoo pins display with react-masonry-css.
 
-### `npm run build`
+ * Applied react-beautiful-dnd and a self-designed calculating function to allow users to arrange images they’ve saved by dragging them to other positions.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+ * Compressed uploaded image with browser-image-compression to improve render efficiency and reduce usage cost of Firebase Storage.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+ * Managed frequently used data with useContext.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+## Future Features
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+ * Add introdction section, site link, studio map on artists personal page.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+ * Allow user to share pins and artist's personal page link.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+ * Allow users to report irrelevant or inappropriate pins.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Contact
+ * Name: Kevin P.H. Chiou
+  
+ * E-mail: kevinph.chiou@gmail.com
+ 
+ * LinkedIn: https://www.linkedin.com/in/kevin-chiou-435a93141/
