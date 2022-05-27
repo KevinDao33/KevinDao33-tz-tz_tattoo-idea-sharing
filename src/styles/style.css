@@ -1,0 +1,277 @@
+/* css bolow are for masonry-style, which is accoomplished with my-masonry-grid */
+
+.my-masonry-grid {
+  display: -webkit-box;
+  display: -ms-flexbox;
+
+  display: flex;
+  margin-left: -5px;
+  width: auto;
+}
+
+.my-masonry-grid_column {
+  flex: 1;
+  padding-left: 5px;
+  background-clip: padding-box;
+}
+
+@media (max-width: 630px) {
+  .my-masonry-grid_column {
+    padding-left: 0px;
+    justify-content: center;
+    margin: 10px auto;
+  }
+  .my-masonry-grid {
+    width: 100%;
+  }
+}
+
+.my-masonry-grid_column > div {
+  margin: 10px auto;
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
+}
+
+@import url(https://fonts.googleapis.com/css?family=Raleway);
+.list-choice {
+  width: 333px;
+  margin: 20px;
+  position: relative;
+  cursor: pointer;
+  z-index: 500;
+  font-size: 1.25rem;
+  -webkit-filter: drop-shadow(12px 12px 7px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(5px 5px 2px rgba(0, 0, 0, 0.2));
+}
+.list-choice input[type="radio"] {
+  position: absolute;
+  left: -9999px;
+}
+
+.list-choice-title {
+  height: 40px;
+  width: 100%;
+  display: block;
+  background: snow;
+  text-align: center;
+  padding: 0.55em 1em;
+  box-sizing: border-box;
+  text-shadow: 0 1px 0 #cacaca;
+  border-radius: 10px;
+  z-index: 1001;
+}
+.list-choice:hover .list-choice-title {
+  transition: 0.4s;
+  border-radius: 0.2em 0.2em 0 0;
+  transform: scale(0.98);
+}
+.list-choice-objects label:nth-last-of-type(1) span {
+  border-radius: 0 0 0.2em 0.2em;
+}
+.list-choice input[type="radio"] + span {
+  color: #fff;
+  background: #d8d8d8;
+  padding: 0.55em 1em;
+  display: block;
+  text-align: center;
+  box-sizing: border-box;
+  cursor: pointer;
+  width: 98%;
+}
+.list-choice-objects {
+  position: absolute;
+  top: 0;
+  padding-top: 2.1em;
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
+  max-height: 0;
+  transition: all 0.2s ease;
+}
+.list-choice:hover .list-choice-objects input[type="radio"] + span {
+  position: relative;
+  top: 0;
+  transition: all 0.4s ease-in-out;
+}
+.list-choice:hover input[type="radio"] + span:hover {
+  background: #bbb;
+}
+.list-choice:hover
+  .list-choice-objects
+  label:nth-last-of-type(1)
+  input[type="radio"]:checked
+  + span {
+  border-radius: 0 0 0.2em 0.2em;
+}
+
+.list-choice:hover .list-choice-objects {
+  max-height: 1400px;
+}
+
+div.react-calendar {
+  width: 85%;
+  background: white;
+  border: none;
+  font-family: inherit;
+  line-height: 1.125em;
+  border-radius: 5px;
+  margin: 0 auto;
+  padding-bottom: 2px;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+}
+
+.react-calendar--doubleView {
+  width: 700px;
+}
+.react-calendar--doubleView .react-calendar__viewContainer {
+  display: flex;
+  margin: -0.5em;
+}
+.react-calendar--doubleView .react-calendar__viewContainer > * {
+  width: 50%;
+  margin: 0.5em;
+}
+.react-calendar,
+.react-calendar *,
+.react-calendar *:before,
+.react-calendar *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.react-calendar button {
+  margin: 0;
+  border: 0;
+  outline: none;
+}
+.react-calendar button:enabled:hover {
+  cursor: pointer;
+}
+.react-calendar__navigation {
+  display: flex;
+  height: 44px;
+  margin-bottom: 1em;
+}
+.react-calendar__navigation button {
+  font-size: 14px;
+  font-weight: bold;
+  min-width: 44px;
+  background: none;
+}
+div.react-calendar__navigation button:disabled {
+  border-radius: 10px;
+  background-color: white;
+}
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #e6e6e6;
+}
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.75em;
+}
+.react-calendar__month-view__weekdays__weekday {
+  padding: 0.5em;
+}
+.react-calendar__month-view__weekNumbers .react-calendar__tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+button.react-calendar__month-view__days__day--weekend {
+  color: black;
+}
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #757575;
+}
+.react-calendar__year-view .react-calendar__tile,
+.react-calendar__decade-view .react-calendar__tile,
+.react-calendar__century-view .react-calendar__tile {
+  padding: 2em 0.5em;
+}
+.react-calendar__tile {
+  max-width: 100%;
+  padding: 10px 6.6667px;
+  background: none;
+  text-align: center;
+  line-height: 16px;
+}
+button.react-calendar__tile:disabled {
+  background-color: #f1f1f1;
+  border-radius: 1px;
+}
+.react-calendar__tile:enabled:hover,
+button.react-calendar__tile:enabled:focus {
+  background-color: #a9d4ff;
+  border-radius: 1px;
+}
+button.react-calendar__tile--now {
+  background: #ffff76;
+  border-radius: 1px;
+}
+.react-calendar__tile--now:enabled:hover,
+button.react-calendar__tile--now:enabled:focus {
+  background: #a9d4ff;
+  border-radius: 1px;
+}
+button.react-calendar__tile--hasActive {
+  background: #a9d4ff;
+  border-radius: 1px;
+}
+.react-calendar__tile--hasActive:enabled:hover,
+button.react-calendar__tile--hasActive:enabled:focus {
+  background: #a9d4ff;
+  border-radius: 1px;
+}
+button.react-calendar__tile--active {
+  background: #14ac9e;
+  border-radius: 1px;
+  color: white;
+}
+.react-calendar__tile--active:enabled:hover,
+button.react-calendar__tile--active:enabled:focus {
+  background: #14ac9e;
+  border-radius: 1px;
+}
+div.react-calendar--selectRange .react-calendar__tile--hover {
+  background-color: #a9d4ff;
+  border-radius: 1px;
+}

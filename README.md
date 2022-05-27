@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# tz tz 刺刺
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+__A tattoo-sharing platform that inspires people with tattoo ideas and matches them with the right artists__
 
-## Available Scripts
+![tztz intro video](https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/other%2Ftztz-README.gif?alt=media&token=95c01556-46b0-4c2a-abcc-58fb4c71169f)
 
-In the project directory, you can run:
+## About The Project
+Because getting a tattoo should be a great experience. tztz provides various tattoo ideas and categorizes them with placements, styles, and topics, allowing users to save tattoo pins into the collections they've created. Moreover, users could start their own tattoo plans by specifying the placement, size, color, budget, and most importantly, selecting a tattoo pin they’ve saved as a reference. After a tattoo plan has been created, it shows up on the tattoo plan wall, and artists could check if any of the plans fit their professions and recommend themselves; on the other hand, users could check all the self-recommended artists on each of the tattoo plans they’ve created.
 
-### `npm start`
+## Link
+tz tz : https://tz-tz-fa8a7.web.app/
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tech
+ * Built with create-react-app, applied react-router-dom for SPA, styled with styled-components, and managed login and data with Firebase (Firestore, Storage, Authentication).
 
-### `npm test`
+ * Implemented lazy loading with Intersection Observer API, and arranged tattoo pins display with react-masonry-css.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+ * Applied react-beautiful-dnd and a self-designed calculating function to allow users to arrange images they’ve saved by dragging them to other positions.
 
-### `npm run build`
+ * Compressed uploaded image with browser-image-compression to improve render efficiency and reduce usage cost of Firebase Storage.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+ * Managed frequently used data with useContext.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Flow Chart
+***
+![Flow Chart](https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/other%2Ftztz-Flowchart.jpg?alt=media&token=9e208dc7-d6dc-43b1-a3ca-3ebef51756bf)
 
-### `npm run eject`
+## Demo
+Various types of tattoo pins are displayed in waterfall flow; users could filter pins through placements, styles, and topics.
+![Homepage-Demo](https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/other%2FHomapega-Demo-GIF.gif?alt=media&token=c66bcff0-a22c-4f91-b1f5-a8cdf05bed91)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Users could delete a pin and arrange orders of the pins inside a collection.
+![Collection-Demo](https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/other%2FCollection-Demo-GIF.gif?alt=media&token=8b897a5c-ada0-4a0b-b6de-dd3c5131efe2)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+By selecting details for the next tattoo, users could create a tattoo plan.
+![StartPlan-Demo](https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/other%2FStartPlan-Demo-GIF.gif?alt=media&token=dc16d9a4-f994-4113-b896-ccbf3d9985df)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Artists could click on tattoo plans to view more details.
+![Plan-Demo](https://firebasestorage.googleapis.com/v0/b/tz-tz-fa8a7.appspot.com/o/other%2FTattooPlan-Demo-GIF.gif?alt=media&token=3d8d039a-98c1-40d2-bb3e-80cba9c81af2)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+## Future Features
+ * Add introdction section, site link, studio map on artists personal page.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+ * Allow user to share pins and artist's personal page link.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+ * Allow users to report irrelevant or inappropriate pins.
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Contact
+ * Name: Kevin P.H. Chiou
+ * E-mail: kevinph.chiou@gmail.com
+ * LinkedIn: https://www.linkedin.com/in/kevin-chiou-435a93141/

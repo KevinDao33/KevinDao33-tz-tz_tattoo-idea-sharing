@@ -1,16 +1,13 @@
-/* eslint-disable no-undef */
-import React, {useState, useEffect} from "react";
-import {NavLink} from "react-router-dom";
-import {initializeApp} from "firebase/app";
+import {useState, useEffect} from "react";
+import {NavLink, useNavigate} from "react-router-dom";
 import {getAuth, signOut} from "firebase/auth";
+import Masonry from "react-masonry-css";
+import Swal from "sweetalert2";
+import PropTypes from "prop-types";
+import api from "../util/api";
+
 import {
-  getFirestore,
-  collection,
-  getDocs,
-  onSnapshot,
-  doc,
-} from "firebase/firestore";
-import {
+  ProfileBackgroundDisplay,
   PorfileWrapper,
   UserImage,
   UserName,
@@ -19,56 +16,81 @@ import {
   Button,
   UserStuffWrapper,
   SelectSection,
+  MainAllCollectionWrapper,
   AllCollectionsWrapper,
   CollectionWarpper,
   CollectionImage,
   CollectionName,
-  CreatePinButton,
+  CreateButtonWrapper,
+  CreateButton,
+  CreateButtonSpan,
+  Overlay,
+  SaveButton,
+  CreateCollectionWrapper,
+  NameNewCollectionTitle,
+  NameNewCollection,
+  LeaveButton,
+  UserInfoWrapper,
+  FollowInfoWrapper,
+  FollowTitle,
+  FollowUserWrapper,
+  FollowUser,
+  FollowUserImage,
+  FollowUserName,
+  CloseButton,
+  MyPlanWrapper,
+  FullTattooPlanCardWrapper,
+  TattooPlanCardWrapper,
+  TattooPlanCardImg,
+  TattooPlanCardDetailDataMainWrapper,
+  TattooPlanCardDetailDataTitle,
+  TattooPlanCardDetailData,
+  TattooPlanCardArtistMainWrapper,
+  TattooPlanCardArtistWrapper,
+  TattooPlanCardArtistPic,
+  TattooPlanCardArtistInfoWrapper,
+  TattooPlanCardArtistName,
+  TattooPlanCardArtistMail,
+  TattooPlanCardDetailDataDescription,
+  ArtistLink,
 } from "../styles/Profile.module";
-
-import Login from "./Login";
 import {AllPinsWrapper, PinWrapper, PinImage} from "../styles/Homepage.module";
+import Login from "./Login";
 
-const mockAllCollections = [
-  {
-    arm: [
-      {pinId: "idididid", pinName: "Chicken", pinImageLink: "imageLink"},
-      {pinId: "ididi222", pinName: "Bear", pinImageLink: "imageLink222"},
-    ],
-  },
-  {
-    back: [
-      {pinId: "ididi333", pinName: "Wolf", pinImageLink: "imageLink333"},
-      {pinId: "ididi444", pinName: "Frog", pinImageLink: "imageLink444"},
-    ],
-  },
-  {
-    vintage: [
-      {pinId: "ididi555", pinName: "Tree", pinImageLink: "imageLink555"},
-      {pinId: "ididi666", pinName: "Flower", pinImageLink: "imageLink666"},
-    ],
-  },
-];
-
-function Profile(props) {
-  // myPin/ myCollection/ mySchedule(artist only)
+function Profile({firebaseConfig, uid, app, setIsLogin, isLogin}) {
   const MY_PIN = "myPin";
   const MY_COLLECTION = "myCollection";
-  const MY_SCHEDULE = "mySchedule";
+  const MY_PLAN = "myPlan";
 
   const [showSection, setShowSection] = useState("");
   const [pins, setPins] = useState([]);
+  const [plans, setPlans] = useState([]);
   const [userData, setUserData] = useState(null);
-  const [collections, setCollections] = useState();
+  const [collections, setCollections] = useState([]);
+  const [showCreateCollection, setShowCreateCollection] = useState(false);
+  const [newCollectionName, setNewCollectionName] = useState("");
+  const [isShowFollower, setIsShowFollower] = useState(false);
+  const [isShowFollowing, setIsShowFollowing] = useState(false);
+  const [followingUserData, setFollowingUserData] = useState([]);
+  const [followerUserData, setFollowerUserData] = useState([]);
+  const [artistData, setArtistData] = useState([]);
+  const [windowWidth, setWindowWidth] = useState(0);
 
-  // Initialize Firebase  
-  const app = initializeApp(props.firebaseConfig);  
-  const auth = getAuth();
-  const db = getFirestore(app);
+  const redirect = useNavigate();
+
+  const breakpointColumnsObj = {
+    default: 7,
+    2580: 6,
+    2205: 5,
+    1825: 4,
+    1455: 3,
+    1077: 2,
+    715: 1,
+  };
+  const auth = getAuth(app);
 
   useEffect(() => {
     setShowSection(MY_COLLECTION);
-    setCollections(mockAllCollections);
   }, []);
 
   const showMyPin = () => {
@@ -77,20 +99,18 @@ function Profile(props) {
   const showMyCollection = () => {
     setShowSection(MY_COLLECTION);
   };
-  const showMySchedule = () => {
-    setShowSection(MY_SCHEDULE);
+  const showMyPlan = () => {
+    setShowSection(MY_PLAN);
   };
 
   function logOut() {
     signOut(auth)
       .then(() => {
-        props.setIsLogin(false);
-
-        // for the planned functions now, the localStorage would be better be clear out when user logout (including user data and pin image url), so that the next user wouldn't be affect at all.
+        setIsLogin(false);
         localStorage.clear();
       })
       .catch((error) => {
-        console.erroe(error);
+        console.error(error);
       });
   }
 
@@ -98,103 +118,371 @@ function Profile(props) {
     if (showSection === MY_PIN) {
       return (
         <AllPinsWrapper>
-          {pins.length > 0 &&
-            pins.map((pin, index) => (
-              <PinWrapper key={index}>
-                <PinImage src={pin.pinImage} />
-              </PinWrapper>
-            ))}
-          <NavLink to='/create-pin'>
-            <CreatePinButton>+</CreatePinButton>
-          </NavLink>
+          <Masonry
+            breakpointCols={breakpointColumnsObj}
+            className='my-masonry-grid'
+            columnClassName='my-masonry-grid_column'>
+            {pins.length > 0 &&
+              pins.map((pin, index) => (
+                <PinWrapper key={index}>
+                  <PinImage src={pin.pinImage} />
+                </PinWrapper>
+              ))}
+          </Masonry>
         </AllPinsWrapper>
       );
     } else if (showSection === MY_COLLECTION) {
       return (
-        <AllCollectionsWrapper>
-          {collections &&
-            collections.map((collection, index) => (
-              <CollectionWarpper key={index}>
-                <CollectionImage></CollectionImage>
-                <CollectionName>{Object.keys(collection)}</CollectionName>
-              </CollectionWarpper>
-            ))}
-        </AllCollectionsWrapper>
+        <MainAllCollectionWrapper>
+          <AllCollectionsWrapper>
+            {collections.length > 0 &&
+              collections.map((collection) => (
+                <CollectionWarpper
+                  key={collection.collectionName}
+                  onClick={() => {
+                    redirect(`/collection/${collection.collectionName}`);
+                  }}>
+                  <CollectionImage
+                    $pinImg={
+                      collection.pins.length > 0
+                        ? collection.pins[0].pinImage
+                        : null
+                    }></CollectionImage>
+                  <CollectionName>{`${collection.collectionName}`}</CollectionName>
+                </CollectionWarpper>
+              ))}
+          </AllCollectionsWrapper>
+        </MainAllCollectionWrapper>
       );
-    } else if (showSection === MY_SCHEDULE) {
-      return <div>welcome to my schedule</div>;
+    } else if (showSection === MY_PLAN) {
+      return (
+        <>
+          {plans.length > 0 &&
+            plans.map((plan, index) => (
+              <MyPlanWrapper key={plan.planId}>
+                <FullTattooPlanCardWrapper>
+                  <TattooPlanCardWrapper>
+                    <TattooPlanCardImg
+                      src={plan.reference.pinImage}></TattooPlanCardImg>
+                  </TattooPlanCardWrapper>
+
+                  <TattooPlanCardDetailDataMainWrapper>
+                    <TattooPlanCardDetailDataTitle>
+                      Plan Details
+                    </TattooPlanCardDetailDataTitle>
+                    <TattooPlanCardDetailData>{`・${plan.city}`}</TattooPlanCardDetailData>
+                    <TattooPlanCardDetailData>{`・${plan.budget}`}</TattooPlanCardDetailData>
+                    <TattooPlanCardDetailData>{`・${plan.size}`}</TattooPlanCardDetailData>
+                    <TattooPlanCardDetailData>{`・${plan.placement}`}</TattooPlanCardDetailData>
+                    <TattooPlanCardDetailData>
+                      {plan.date.length === 2
+                        ? `・${new Date(
+                            plan.date[0] * 1000
+                          ).getMonth()}/${new Date(
+                            plan.date[0] * 1000
+                          ).getDate()} - ${new Date(
+                            plan.date[1] * 1000
+                          ).getMonth()}/${new Date(
+                            plan.date[1] * 1000
+                          ).getDate()}`
+                        : new Date(plan.date[0]) === new Date(-2209017600000)
+                        ? "Anytime"
+                        : `・${new Date(
+                            plan.date[0] * 1000
+                          ).getMonth()}/${new Date(
+                            plan.date[0] * 1000
+                          ).getDate()}`}
+                    </TattooPlanCardDetailData>
+                    <TattooPlanCardDetailDataDescription>{`${plan.description}`}</TattooPlanCardDetailDataDescription>
+                  </TattooPlanCardDetailDataMainWrapper>
+                  <TattooPlanCardArtistMainWrapper>
+                    <TattooPlanCardDetailDataTitle>
+                      Artists
+                    </TattooPlanCardDetailDataTitle>
+                    {artistData[index] && artistData[index].length > 0 ? (
+                      artistData[index].map((artist) => (
+                        <TattooPlanCardArtistWrapper key={artist.uid}>
+                          <TattooPlanCardArtistPic src={artist.pic} />
+                          <TattooPlanCardArtistInfoWrapper>
+                            <TattooPlanCardArtistName>
+                              {artist.name}
+                            </TattooPlanCardArtistName>
+                            <TattooPlanCardArtistMail>
+                              {artist.email}
+                            </TattooPlanCardArtistMail>
+                            <ArtistLink href={artist.link}>
+                              <TattooPlanCardArtistMail>
+                                Click to view my work
+                              </TattooPlanCardArtistMail>
+                            </ArtistLink>
+                          </TattooPlanCardArtistInfoWrapper>
+                        </TattooPlanCardArtistWrapper>
+                      ))
+                    ) : (
+                      <div>No artists sign up yet</div>
+                    )}
+                  </TattooPlanCardArtistMainWrapper>
+                </FullTattooPlanCardWrapper>
+              </MyPlanWrapper>
+            ))}
+        </>
+      );
     }
   };
 
-  const getPins = async (id) => {
-    const querySnapshot = await getDocs(collection(db, "user", id, "pin"));
-    let myPins = [];
-    querySnapshot.forEach((doc) => {
-      myPins.push({...doc.data()});
-    });
-    setPins(myPins);
-  };
-
-  const getUserData = (userId) => {
-    const unsub = onSnapshot(doc(db, "user/" + userId), (doc) => {
-      if (!props.uid) {
-        return;
-      }
-      setUserData({
-        name: doc.data().name,
-        email: doc.data().email,
-        role: doc.data().role,
-        following: doc.data().following,
-        follower: doc.data().follower,
-        pic: doc.data().pic,
-        id: doc.data().uid,
-        link: doc.data().link,
-      });
+  const handleUserData = (userDataFromFirebase) => {
+    setUserData({
+      name: userDataFromFirebase.name,
+      email: userDataFromFirebase.email,
+      role: userDataFromFirebase.role,
+      following: userDataFromFirebase.following,
+      follower: userDataFromFirebase.follower,
+      pic: userDataFromFirebase.pic,
+      id: userDataFromFirebase.uid,
+      link: userDataFromFirebase.link,
+      desc: userDataFromFirebase.desc,
     });
   };
 
-  async function getUserInfoAndPins() {
-    getUserData(props.uid);
-    (await userData) && getPins(userData.id);
+  async function getUserInfoAndPinsAndCollection() {
+    api.getUserData(uid, handleUserData);
+    api.getUserPlan(uid, setPlans);
+    await api.gitUserPins(uid, setPins);
+    await api.getUserCollection(uid, setCollections);
   }
 
   useEffect(() => {
-    getUserInfoAndPins();
+    getUserInfoAndPinsAndCollection();
+  }, [uid]);
+
+  const setCollection2Firestore = async (uid) => {
+    api.createNewCollection(uid, newCollectionName);
+
+    await Swal.fire(
+      `Collection ${newCollectionName} created!`,
+      "What a great collection!",
+      "success"
+    );
+    window.location.reload();
+  };
+
+  const createNewCollection = () => {
+    newCollectionName
+      ? setCollection2Firestore(uid)
+      : Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Please enter a name for the new collection :(",
+        });
+  };
+
+  const showCreateCollectionSection = () => {
+    return (
+      <>
+        {showCreateCollection && (
+          <>
+            <Overlay></Overlay>
+            <CreateCollectionWrapper>
+              <LeaveButton onClick={() => setShowCreateCollection(false)}>
+                x
+              </LeaveButton>
+              <NameNewCollectionTitle>new collection</NameNewCollectionTitle>
+              <NameNewCollection
+                value={newCollectionName}
+                onChange={(e) =>
+                  setNewCollectionName(e.target.value)
+                }></NameNewCollection>
+              <SaveButton onClick={createNewCollection}>create</SaveButton>
+            </CreateCollectionWrapper>
+          </>
+        )}
+      </>
+    );
+  };
+
+  const getFollowingUserData = async () => {
+    if (!userData) {
+      return;
+    }
+
+    const clonedFollowing = [...userData.following];
+    api.getMyFollow(clonedFollowing, setFollowingUserData);
+  };
+
+  const getFollowerUserData = async () => {
+    if (!userData) {
+      return;
+    }
+
+    const clonedFollower = [...userData.follower];
+    api.getMyFollow(clonedFollower, setFollowerUserData);
+  };
+
+  useEffect(() => {
+    getFollowingUserData();
+    getFollowerUserData();
   }, [userData]);
 
+  const getArtistData = async () => {
+    if (!plans.length > 0) {
+      return;
+    }
+    api.getArtistData(plans, setArtistData);
+  };
+
+  useEffect(() => {
+    plans.length > 0 && getArtistData();
+  }, [plans]);
+
+  const renderFollow = () => {
+    if (!isShowFollowing && !isShowFollower) {
+      return;
+    } else if (isShowFollowing && followingUserData.length > 0) {
+      return followingUserData.map((data) => (
+        <NavLink
+          key={data.uid}
+          to={`/user/${data.uid}`}
+          style={{color: "inherit", textDecoration: "none"}}>
+          <FollowUser id={"mela"}>
+            <FollowUserImage src={data.pic}></FollowUserImage>
+            <FollowUserName>{data.name}</FollowUserName>
+          </FollowUser>
+        </NavLink>
+      ));
+    } else if (isShowFollower && followerUserData.length > 0) {
+      return followerUserData.map((data) => (
+        <NavLink
+          key={data.uid}
+          to={`/user/${data.uid}`}
+          style={{color: "inherit", textDecoration: "none"}}>
+          <FollowUser>
+            <FollowUserImage src={data.pic}></FollowUserImage>
+            <FollowUserName>{data.name}</FollowUserName>
+          </FollowUser>
+        </NavLink>
+      ));
+    }
+  };
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+  }, []);
+
   return (
-    <>
-      {props.isLogin ? (
+    <ProfileBackgroundDisplay>
+      {isLogin ? (
         userData && (
-          <PorfileWrapper>
-            <UserImage></UserImage>
-            <UserName>{userData.name}</UserName>
-            <ShowFollow>{userData.follower.length} following</ShowFollow>
-            <ShowFollow>{userData.following.length} follower</ShowFollow>
-            <ButtonWrapper>
-              <Button>share</Button>
-              <Button>edit</Button>
-              <Button onClick={logOut}>logOut</Button>
-            </ButtonWrapper>
-            <UserStuffWrapper>
-              <ButtonWrapper>
-                <SelectSection onClick={showMyPin}>my pin</SelectSection>
-                <SelectSection onClick={showMyCollection}>
-                  my collection
-                </SelectSection>
-              </ButtonWrapper>
-              {renderUserSection()}
-            </UserStuffWrapper>
-          </PorfileWrapper>
+          <>
+            <PorfileWrapper>
+              <UserInfoWrapper $showFollow={isShowFollower || isShowFollowing}>
+                <UserImage src={userData.pic}></UserImage>
+                <UserName>{userData.name}</UserName>
+                <ShowFollow onClick={() => setIsShowFollowing((prev) => !prev)}>
+                  {userData.following.length} following
+                </ShowFollow>
+                <ShowFollow onClick={() => setIsShowFollower((prev) => !prev)}>
+                  {userData.follower.length} follower
+                </ShowFollow>
+                <ButtonWrapper>
+                  <Button
+                    onClick={() => {
+                      redirect("/edit-profile");
+                    }}>
+                    edit
+                  </Button>
+                  <Button onClick={logOut}>logOut</Button>
+                </ButtonWrapper>
+              </UserInfoWrapper>
+              <FollowInfoWrapper
+                $showFollow={isShowFollower || isShowFollowing}>
+                <FollowTitle>
+                  {isShowFollower
+                    ? "My Follower"
+                    : isShowFollowing && "My Following"}
+                </FollowTitle>
+                <CloseButton
+                  onClick={() => {
+                    setIsShowFollower(false);
+                    setIsShowFollowing(false);
+                  }}>
+                  x
+                </CloseButton>
+                <FollowUserWrapper>{renderFollow()}</FollowUserWrapper>
+              </FollowInfoWrapper>
+              <UserStuffWrapper>
+                <ButtonWrapper>
+                  <SelectSection
+                    onClick={showMyPin}
+                    $section={showSection === MY_PIN}>
+                    my pin
+                  </SelectSection>
+                  <SelectSection
+                    $section={showSection === MY_COLLECTION}
+                    onClick={showMyCollection}>
+                    my collection
+                  </SelectSection>
+                  <SelectSection
+                    $section={showSection === MY_PLAN}
+                    onClick={showMyPlan}>
+                    my plan
+                  </SelectSection>
+                  <CreateButtonWrapper>
+                    {showSection === MY_PIN ? (
+                      <NavLink to='/create-pin'>
+                        <CreateButton>
+                          <CreateButtonSpan>
+                            {" "}
+                            {windowWidth > 1141 ? " + New Pin" : "+"}
+                          </CreateButtonSpan>
+                        </CreateButton>
+                      </NavLink>
+                    ) : showSection === MY_COLLECTION ? (
+                      <CreateButton
+                        onClick={() => {
+                          setShowCreateCollection(true);
+                        }}>
+                        <CreateButtonSpan>
+                          {windowWidth > 1141 ? " + New Collection" : "+"}
+                        </CreateButtonSpan>
+                      </CreateButton>
+                    ) : showSection === MY_PLAN ? (
+                      <CreateButton
+                        onClick={() => {
+                          redirect("/start-tattoo-plan");
+                        }}>
+                        <CreateButtonSpan>
+                          {windowWidth > 1141 ? " + New Plan" : "+"}
+                        </CreateButtonSpan>
+                      </CreateButton>
+                    ) : (
+                      <h2>Something went wrong</h2>
+                    )}
+                  </CreateButtonWrapper>
+                </ButtonWrapper>
+                {renderUserSection()}
+                {showCreateCollectionSection()}
+              </UserStuffWrapper>
+            </PorfileWrapper>
+          </>
         )
       ) : (
         <Login
           userData={userData}
           setUserData={setUserData}
-          firebaseConfig={props.firebaseConfig}></Login>
+          firebaseConfig={firebaseConfig}
+          auth={auth}></Login>
       )}
-    </>
+    </ProfileBackgroundDisplay>
   );
 }
+
+Profile.propTypes = {
+  firebaseConfig: PropTypes.object,
+  auth: PropTypes.object,
+  uid: PropTypes.string,
+  app: PropTypes.object,
+  setIsLogin: PropTypes.func,
+  isLogin: PropTypes.bool,
+};
 
 export default Profile;

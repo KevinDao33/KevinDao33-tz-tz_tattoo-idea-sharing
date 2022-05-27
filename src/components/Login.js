@@ -1,48 +1,69 @@
-/* eslint-disable no-undef */
-import {initializeApp} from "firebase/app";
-import React, {useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import {Button} from "../styles/Profile.module";
-import {getFirestore, doc, setDoc, onSnapshot} from "firebase/firestore";
+import Swal from "sweetalert2";
+import PropTypes from "prop-types";
+import api from "../util/api";
 
-import {LoginWrapper} from "../styles/Login.module";
-import * as myConstClass from "../const";
+import {
+  AllSignWrapper,
+  SignupWrapper,
+  SigninWrapper,
+  SigninTitle,
+  SignupTitle,
+  SignInput,
+  SignUpRoleTypeWrapper,
+  SignUpRoleTypeLabel,
+  SignUpRoleTypeInput,
+  SignButtonWrapper,
+  SignButton,
+  SignButtonSpan,
+  NoAccount,
+} from "../styles/Login.module";
+import * as myConstClass from "../config";
 
-function Login(props) {
-
-  const [showSignWhat, setshowSignWhat] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const [userPassword, setUserPassword] = useState("");
+function Login({auth, isLogin}) {
+  const [isShowSignIn, setIsShowSignIn] = useState(false);
   const [userName, setUserName] = useState("");
-  const [userPhoto, setUserPhoto] = useState("");
+  const [userEmail, setUserEmail] = useState("test06@gmail.com");
+  const [userPassword, setUserPassword] = useState("test06");
   const [userRole, setUserRole] = useState("");
   const [userLink, setUserLink] = useState("");
 
   const redirect = useNavigate();
 
-  const app = initializeApp(props.firebaseConfig);
-  const auth = getAuth();
-  const db = getFirestore(app);
+  useEffect(() => {
+    isShowSignIn ? setUserEmail("") : setUserEmail("test06@gmail.com");
+    isShowSignIn ? setUserPassword("") : setUserPassword("test06");
+  }, [isShowSignIn]);
 
-  const showSignIn = () => {
-    setshowSignWhat(myConstClass.SIGN_IN);
-  };
-
-  const showSignUp = () => {
-    setshowSignWhat(myConstClass.SIGN_UP);
+  const handleIsShowSignIn = () => {
+    setIsShowSignIn((prev) => !prev);
   };
 
   const signUp = () => {
+    if (
+      !userEmail ||
+      !userPassword ||
+      userPassword.length < 6 ||
+      !userName ||
+      !userRole
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please check if all blanks are filled",
+      });
+      return;
+    }
     createUserWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         const user = userCredential.user;
-        writeUserData(user.uid);
-        getUserData(user.uid);
+
+        user && writeUserData(user.uid);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -52,157 +73,171 @@ function Login(props) {
 
         switch (errorCode) {
           case "auth/wrong-password":
-            alert(myConstClass.AUTH_WRONG_PASSWORD);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: myConstClass.AUTH_WRONG_PASSWORD,
+            });
             break;
           case "auth/user-not-found":
-            alert(myConstClass.AUTH_USER_NOT_FOUND);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: myConstClass.AUTH_USER_NOT_FOUND,
+            });
             break;
           case "auth/weak-password":
-            alert(myConstClass.AUTH_WEAK_PASSWORD);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: myConstClass.AUTH_WEAK_PASSWORD,
+            });
             break;
           default:
-            alert(myConstClass.AUTH_LOGIN_FAIL);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: myConstClass.AUTH_LOGIN_FAIL,
+            });
         }
       });
   };
 
   const signIn = () => {
-    signInWithEmailAndPassword(auth, userEmail, userPassword)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        getUserData(user.uid);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error("errorCode", errorCode);
-        console.error("errorMessage", errorMessage);
+    signInWithEmailAndPassword(auth, userEmail, userPassword).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error("errorCode", errorCode);
+      console.error("errorMessage", errorMessage);
 
-        switch (errorCode) {
-          case "auth/wrong-password":
-            alert("密碼錯誤喔");
-            break;
-          case "auth/user-not-found":
-            alert("帳號不存在喔");
-            break;
-          default:
-            alert("登入失敗QQ");
-        }
-      });
+      switch (errorCode) {
+        case "auth/wrong-password":
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "密碼錯誤喔",
+          });
+
+          break;
+        case "auth/user-not-found":
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "帳號不存在喔",
+          });
+          break;
+      }
+    });
   };
 
   const writeUserData = (userId) => {
-    setDoc(doc(db, `user/${userId}`), {
+    const newUserData = {
       email: userEmail,
       password: userPassword,
       name: userName,
       link: userLink,
-      uid: userId,
-      follower: [],
-      following: [],
-      pic: userPhoto,
       role: userRole,
-    });
-    console.log("data written to database");
-  };
-
-  const getUserData = (userId) => {
-    const handleUserData = onSnapshot(doc(db, `user/${userId}`), (doc) => {
-      localStorage.setItem(
-        "userInfo",
-        JSON.stringify({
-          name: doc.data().name,
-          email: doc.data().email,
-          role: doc.data().role,
-          following: doc.data().following,
-          follower: doc.data().follower,
-          pic: doc.data().pic,
-          id: doc.data().uid,
-          link: doc.data().link,
-        })
-      );
-      props.setUserData({
-        name: doc.data().name,
-        email: doc.data().email,
-        role: doc.data().role,
-        following: doc.data().following,
-        follower: doc.data().follower,
-        pic: doc.data().pic,
-        id: doc.data().uid,
-        link: doc.data().link,
-      });
-    });
+    };
+    api.createNewUser(userId, newUserData);
   };
 
   async function handleSignIn() {
     signIn();
-    props.isLogin && redirect("/profile");
+    isLogin && redirect("/profile");
   }
   async function handleSignUp() {
     signUp();
-    props.isLogin && redirect("/profile");
+    isLogin && redirect("/profile");
   }
 
   return (
-    <LoginWrapper>
-      <Button onClick={showSignIn}>Sign In</Button>
-      <Button onClick={showSignUp}>Sign Up</Button>
-      {/* elements below will be written in styled components */}
-      {showSignWhat === myConstClass.SIGN_IN && (
-        <>
-          <label>email</label>
-          <input
-            value={userEmail}
-            onChange={(e) => setUserEmail(e.target.value)}></input>
-
-          <label>password</label>
-          <input
-            value={userPassword}
-            onChange={(e) => setUserPassword(e.target.value)}></input>
-
-          <button onClick={handleSignIn}>Sign In</button>
-        </>
-      )}
-      {showSignWhat === myConstClass.SIGN_UP && (
-        <>
-          <label>name</label>
-          <input
+    <>
+      <AllSignWrapper>
+        <SignupWrapper>
+          <SignupTitle onClick={handleIsShowSignIn}>Sign up</SignupTitle>
+          <SignInput
+            placeholder='Name'
             value={userName}
-            onChange={(e) => setUserName(e.target.value)}></input>
-
-          <label>email</label>
-          <input
+            onChange={(e) => setUserName(e.target.value)}></SignInput>
+          <SignInput
+            placeholder='Email'
             value={userEmail}
-            onChange={(e) => setUserEmail(e.target.value)}></input>
-
-          <label>password</label>
-          <input
+            onChange={(e) => setUserEmail(e.target.value)}></SignInput>
+          <SignInput
+            type='password'
+            placeholder='Password (at least 6 characters)'
             value={userPassword}
-            onChange={(e) => setUserPassword(e.target.value)}></input>
-
-          {/* decide to give a picture as user's profile photo, users will be able to change it at edit-page */}
-          {/* <label>photo</label>
-          <input
-            type='file'
-            accept='image/gif, image/jpeg, image/png, image/webp'
-            value={userPhoto}
-            onChange={(e) => setUserPhoto(e.target.value)}></input> */}
-
-          <label>role</label>
-          <input
-            value={userRole}
-            onChange={(e) => setUserRole(e.target.value)}></input>
-
-          <label>link</label>
-          <input
+            onChange={(e) => setUserPassword(e.target.value)}></SignInput>
+          <SignInput
+            placeholder='Instagram Link (Optional)'
             value={userLink}
-            onChange={(e) => setUserLink(e.target.value)}></input>
+            onChange={(e) => setUserLink(e.target.value)}></SignInput>
+          <SignUpRoleTypeWrapper>
+            <SignUpRoleTypeLabel htmlFor='user'>
+              <SignUpRoleTypeInput
+                type='radio'
+                name='type'
+                value='user'
+                id='user'
+                defaultChecked={true}
+                onClick={() => {
+                  setUserRole("user");
+                }}
+              />
+              User
+            </SignUpRoleTypeLabel>
+            <SignUpRoleTypeLabel htmlFor='artist'>
+              <SignUpRoleTypeInput
+                type='radio'
+                name='type'
+                value='artist'
+                id='artist'
+                defaultChecked={false}
+                onClick={() => {
+                  setUserRole("artist");
+                }}
+              />
+              Artist
+            </SignUpRoleTypeLabel>
+          </SignUpRoleTypeWrapper>
+          <SignButtonWrapper>
+            <SignButton onClick={handleSignUp}>
+              <SignButtonSpan>Sign up</SignButtonSpan>
+            </SignButton>
+          </SignButtonWrapper>
+        </SignupWrapper>
 
-          <button onClick={handleSignUp}>Sign Up</button>
-        </>
-      )}
-    </LoginWrapper>
+        <SigninWrapper $isSignIn={isShowSignIn}>
+          <SigninTitle onClick={handleIsShowSignIn} $isSignIn={isShowSignIn}>
+            Sign in
+          </SigninTitle>
+          <SignInput
+            type='text'
+            placeholder='Email'
+            value={userEmail}
+            onChange={(e) => setUserEmail(e.target.value)}></SignInput>
+          <SignInput
+            type='password'
+            placeholder='password'
+            value={userPassword}
+            onChange={(e) => setUserPassword(e.target.value)}></SignInput>
+          <SignButtonWrapper>
+            <SignButton onClick={handleSignIn}>
+              <SignButtonSpan>Sign in</SignButtonSpan>
+            </SignButton>
+          </SignButtonWrapper>
+          <NoAccount onClick={handleIsShowSignIn}>
+            Do not have an account ?
+          </NoAccount>
+        </SigninWrapper>
+      </AllSignWrapper>
+    </>
   );
 }
+
+Login.propTypes = {
+  auth: PropTypes.object,
+  isLogin: PropTypes.bool,
+};
 
 export default Login;

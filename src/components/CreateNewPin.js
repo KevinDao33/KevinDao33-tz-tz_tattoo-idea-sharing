@@ -1,12 +1,15 @@
-/* eslint-disable no-undef */
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
-import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
-import {initializeApp} from "firebase/app";
+import {getStorage, ref, uploadBytes} from "firebase/storage";
 import imageCompression from "browser-image-compression";
-import {getFirestore, collection, addDoc} from "firebase/firestore";
+import Swal from "sweetalert2";
+import PropTypes from "prop-types";
+import {placements} from "../config";
+import "../styles/style.css";
+import api from "../util/api";
 
 import {
+  DarkBackgroundDisplay,
   CreateNewPinWrapper,
   PinDataUploadWrapper,
   NewPinDataWrapper,
@@ -16,26 +19,29 @@ import {
   UploadNewPinImageLabel,
   UploadNewPinImageInput,
   PreviewImage,
+  PlacementTitle,
+  PinTypeWrapper,
+  PinTypeLabel,
+  PinTypeInput,
 } from "../styles/CreateNewPin.module";
+import MultipleCombobox from "./MultipleCombobox";
 
-function CreateNewPin(props) {
+function CreateNewPin({app, uid}) {
   const [pinName, setPinName] = useState("");
   const [pinDescription, setPinDescription] = useState("");
   const [pinLink, setPinLink] = useState("");
+  const [pinTags, setPinTags] = useState([]);
+  const [pinType, setPinType] = useState("tattoo");
   const [pinImage, setPinImage] = useState("");
-  const [isGetPinImage, setIsGetPinImage] = useState(false);
+  const [pinPlacement, setPinPlacement] = useState("");
   const [selectedFile, setSelectedFile] = useState("");
   const [preview, setPreview] = useState("");
-  const [isPinCreated, setIsPinCreated] = useState(false);
+  const [userData, setUserData] = useState(null);
 
   const redirect = useNavigate();
-
-  // Initialize Firebase
-  const app = initializeApp(props.firebaseConfig);
-  const db = getFirestore(app);
+  const storage = getStorage(app);
 
   async function handleImageUpload(e) {
-    // show image preview
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
 
@@ -45,8 +51,6 @@ function CreateNewPin(props) {
     const imageFile = e.target.files[0];
     setSelectedFile(imageFile);
 
-    // compress image
-    console.log(`original size ${imageFile.size / 1024 / 1024} MB`);
     const imageName = imageFile.name.split(".");
     localStorage.setItem("uploadedImageName", imageName[0]);
 
@@ -55,19 +59,17 @@ function CreateNewPin(props) {
       maxWidthOrHeight: 1920,
       useWebWorker: true,
     };
+
     try {
       const compressedFile = await imageCompression(imageFile, options);
-      console.log(`compressed size ${compressedFile.size / 1024 / 1024} MB`);
 
-      // convert pinImage from Blob to string and store in localStorage
       const reader = new FileReader();
       reader.onload = (event) => {
         localStorage.setItem("uploadedImage", event.target.result);
       };
       reader.readAsDataURL(compressedFile);
-      setIsGetPinImage(true);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -85,88 +87,72 @@ function CreateNewPin(props) {
 
     let dataView = new DataView(arrayBuffer);
     let blob = new Blob([dataView], {type: mimeString});
-    console.log(`uploading size ${blob.size / 1024 / 1024} MB`);
 
     return blob;
   };
 
-  const successfullyCreatePin = (pinImageInLocal) => {
+  const successfullyCreatePin = async (pinImageInLocal) => {
     dataUrl2Blob(pinImageInLocal);
-    alert("pin successfully created!");
+    await Swal.fire(
+      "pin successfully created!",
+      "You just made tz-tz a better place :)",
+      "success"
+    );
+    redirect("/profile");
   };
 
-  const submitPinData = (dataUrl2Blob) => {
-    if (!pinName || !pinDescription || !pinLink) {
-      alert("please check if all fields are filled");
+  const submitPinData = async () => {
+    if (!pinName || !pinDescription || !pinLink || !pinTags || !pinPlacement) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please check if all fields are filled",
+      });
 
       return;
     } else if (!pinImage) {
-      alert("please upload and check the image for your pin");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please upload and check the image for your pin",
+      });
 
       return;
     }
     const pinImageInLocal = localStorage.getItem("uploadedImage");
     pinImageInLocal
       ? successfullyCreatePin(pinImageInLocal)
-      : alert("something went wrong, please try again :(");
+      : Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong, please try again :(",
+        });
   };
 
   const writeUserData = async () => {
-    const userInfo = await JSON.parse(localStorage.getItem("userInfo"));
-    const collectionRefPin = await collection(db, "pin");
-    const collectionRefUser = await collection(db, "user", userInfo.id, "pin");
+    if (!pinImage) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please check image before creating a pin",
+      });
 
-    try {
-      userInfo &&
-        (await addDoc(collectionRefUser, {
-          pinAutor: {
-            email: userInfo.email,
-            name: userInfo.name,
-            uid: userInfo.id,
-          },
-          pinDesc: pinDescription,
-          pinName: pinName,
-          pinImage: pinImage,
-          pinLink: pinLink,
-          pinTags: [
-            "vintage",
-            "arm ideas",
-            "black & white",
-            "dot-work",
-            "animal",
-          ],
-        }));
-      userInfo &&
-        (await addDoc(collectionRefPin, {
-          pinAutor: {
-            email: userInfo.email,
-            name: userInfo.name,
-            uid: userInfo.id,
-          },
-          pinDesc: pinDescription,
-          pinName: pinName,
-          pinImage: pinImage,
-          pinLink: pinLink,
-          pinTags: [
-            "vintage",
-            "arm ideas",
-            "black & white",
-            "dot-work",
-            "animal",
-          ],
-        }));
-      setIsPinCreated(true);
-    } catch (error) {
-      console.error(error);
+      return;
     }
-  };
 
-  const getPinImageUrl = (name) => {
-    const app = initializeApp(props.firebaseConfig);
-    const storage = getStorage(app);
-    getDownloadURL(ref(storage, `pinImages/${name}`)).then((url) => {
-      setPinImage(url);
-    });
+    const newPinData = {
+      pinDesc: pinDescription,
+      pinName: pinName,
+      pinImage: pinImage,
+      pinLink: pinLink,
+      pinTags: pinTags,
+      pinPlacement: pinPlacement,
+      pinType: pinType,
+    };
+
+    const returnedNewPinId = await api.setNewPinData(uid, newPinData);
+
+    return returnedNewPinId;
   };
 
   useEffect(() => {
@@ -179,7 +165,6 @@ function CreateNewPin(props) {
     const objectUrl = URL.createObjectURL(selectedFile);
     setPreview(objectUrl);
 
-    // prevent memory leak
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
@@ -187,72 +172,168 @@ function CreateNewPin(props) {
     const uploadedImage = localStorage.getItem("uploadedImage");
     const uploadedImageName = localStorage.getItem("uploadedImageName");
     const result = dataUrl2Blob(uploadedImage);
-    const storage = getStorage(app);
     const storageRef = ref(storage, `pinImages/${uploadedImageName}`);
 
     try {
-      uploadBytes(storageRef, result).then((snapshot) => {
-        console.log("Uploaded image to firebase storage!");
-        getPinImageUrl(uploadedImageName);
-      });
+      uploadBytes(storageRef, result)
+        .then(() => {
+          api.getPinImageUrl(storage, uploadedImageName, setPinImage);
+        })
+        .then(() => {
+          Swal.fire("Picture all set!", "good job! you're the best", "success");
+        });
     } catch (error) {
       console.error(error);
     }
   }
 
-  async function handleCeatePin() {
+  useEffect(() => {
+    api.getUserData(uid, setUserData);
+    // const userData = await api.getUserData(uid);
+    // setUserData(userData)
+  }, [uid]);
+
+  const sendNotification2Follower = (newCreatePinId) => {
+    if (!userData) {
+      return;
+    }
+
+    userData.follower.map((user) =>
+      api.sendNotification(user, uid, userData, newCreatePinId)
+    );
+  };
+
+  async function handleCreatePin() {
     try {
       submitPinData(dataUrl2Blob);
-      writeUserData();
-      isPinCreated && redirect("/profile");
+      console.log("before writeUserData");
+
+      const newPinId = await writeUserData();
+
+      console.log("newPinId", newPinId);
+      sendNotification2Follower(newPinId);
     } catch (error) {
       console.error(error);
     }
   }
 
   return (
-    <CreateNewPinWrapper>
-      {/* Pin Image */}
-      <PinImageUploadWrapper>
-        <UploadNewPinImageLabel>
-          Upload Pin Image
-          <UploadNewPinImageInput
-            placeholder='Upload your Pin Image'
-            type='file'
-            accept='image/gif, image/jpeg, image/png, image/webp'
-            multiple={false}
-            onChange={handleImageUpload}></UploadNewPinImageInput>
-          {selectedFile && <PreviewImage src={preview} />}
-        </UploadNewPinImageLabel>
-        <CreatePinButton onClick={uploadPinImage}>Check Image</CreatePinButton>
-      </PinImageUploadWrapper>
+    <DarkBackgroundDisplay>
+      <CreateNewPinWrapper>
+        <PinImageUploadWrapper>
+          <UploadNewPinImageLabel>
+            Upload Pin Image
+            <UploadNewPinImageInput
+              placeholder='Upload your Pin Image'
+              type='file'
+              accept='image/gif, image/jpeg, image/png, image/webp'
+              multiple={false}
+              onChange={handleImageUpload}></UploadNewPinImageInput>
+            {selectedFile && <PreviewImage src={preview} />}
+          </UploadNewPinImageLabel>
+          <CreatePinButton onClick={uploadPinImage}>
+            Check Image
+          </CreatePinButton>
+        </PinImageUploadWrapper>
 
-      {/* Pin Info */}
-      <PinDataUploadWrapper>
-        <NewPinDataWrapper>
-          <NewPinDataInput
-            placeholder='Enter Pin Name'
-            value={pinName}
-            onChange={(e) => setPinName(e.target.value)}></NewPinDataInput>
-        </NewPinDataWrapper>
-        <NewPinDataWrapper>
-          <NewPinDataInput
-            placeholder='Enter Pin Desc'
-            value={pinDescription}
-            onChange={(e) =>
-              setPinDescription(e.target.value)
-            }></NewPinDataInput>
-        </NewPinDataWrapper>
-        <NewPinDataWrapper>
-          <NewPinDataInput
-            placeholder='Enter Pin Link'
-            value={pinLink}
-            onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
-        </NewPinDataWrapper>
-        <CreatePinButton onClick={handleCeatePin}>Create</CreatePinButton>
-      </PinDataUploadWrapper>
-    </CreateNewPinWrapper>
+        <PinDataUploadWrapper>
+          <NewPinDataWrapper>
+            <PlacementTitle>Pin Name :</PlacementTitle>
+            <NewPinDataInput
+              value={pinName}
+              onChange={(e) => setPinName(e.target.value)}></NewPinDataInput>
+          </NewPinDataWrapper>
+          <NewPinDataWrapper>
+            <PlacementTitle>Description :</PlacementTitle>
+            <NewPinDataInput
+              value={pinDescription}
+              onChange={(e) =>
+                setPinDescription(e.target.value)
+              }></NewPinDataInput>
+          </NewPinDataWrapper>
+          <NewPinDataWrapper>
+            <PlacementTitle>Pin Link :</PlacementTitle>
+            <NewPinDataInput
+              value={pinLink}
+              onChange={(e) => setPinLink(e.target.value)}></NewPinDataInput>
+          </NewPinDataWrapper>
+
+          <NewPinDataWrapper>
+            <PlacementTitle>Type :</PlacementTitle>
+
+            <PinTypeWrapper>
+              <PinTypeLabel htmlFor='tattoo'>
+                <PinTypeInput
+                  type='radio'
+                  name='type'
+                  value='tattoo'
+                  id='tattoo'
+                  defaultChecked={true}
+                  onClick={() => {
+                    setPinType("tattoo");
+                  }}
+                />
+                Tattoo
+              </PinTypeLabel>
+              <PinTypeLabel htmlFor='flash'>
+                <PinTypeInput
+                  type='radio'
+                  name='type'
+                  value='flash'
+                  id='flash'
+                  onClick={() => {
+                    setPinType("flash");
+                  }}
+                />
+                Flash
+              </PinTypeLabel>
+            </PinTypeWrapper>
+          </NewPinDataWrapper>
+
+          <NewPinDataWrapper>
+            <PlacementTitle>Placement :</PlacementTitle>
+            <div className='list-choice'>
+              <div className='list-choice-title'>
+                {pinPlacement ? pinPlacement : "Choose Placement"}
+              </div>
+              <div className='list-choice-objects'>
+                {placements &&
+                  placements.map((option) => {
+                    return (
+                      <label key={option}>
+                        <input
+                          type='radio'
+                          name='placement'
+                          id={option}
+                          onClick={() => {
+                            document.getElementById(option).checked = true;
+                            setPinPlacement(option);
+                          }}
+                        />
+                        <span>{option}</span>
+                      </label>
+                    );
+                  })}
+              </div>
+            </div>
+          </NewPinDataWrapper>
+
+          <NewPinDataWrapper>
+            <MultipleCombobox
+              pinTags={pinTags}
+              setPinTags={setPinTags}></MultipleCombobox>
+          </NewPinDataWrapper>
+
+          <CreatePinButton onClick={handleCreatePin}>Create</CreatePinButton>
+        </PinDataUploadWrapper>
+      </CreateNewPinWrapper>
+    </DarkBackgroundDisplay>
   );
 }
+
+CreateNewPin.propTypes = {
+  uid: PropTypes.string,
+  app: PropTypes.object,
+};
 
 export default CreateNewPin;
