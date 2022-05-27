@@ -37,7 +37,7 @@ Users could delete a pin and arrange orders of the pins inside a collection.
 By selecting details for the next tattoo, users could create a tattoo plan.
 ![StartPlan-Demo](./REDAME/StartPlan-Demo-GIF2.gif)
 
-Artists could click on tattoo plans to view more details.
+Artists could click on tattoo plans to view more details and recommend themselves.
 ![Plan-Demo](./REDAME/TattooPlan-Demo-GIF.gif)
 
 
