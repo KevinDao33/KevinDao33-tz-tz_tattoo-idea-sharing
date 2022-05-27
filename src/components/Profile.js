@@ -384,7 +384,6 @@ function Profile({firebaseConfig, uid, app, setIsLogin, isLogin}) {
                   {userData.follower.length} follower
                 </ShowFollow>
                 <ButtonWrapper>
-                  <Button>share</Button>
                   <Button
                     onClick={() => {
                       redirect("/edit-profile");
