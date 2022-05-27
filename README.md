@@ -29,15 +29,19 @@ tz tz : https://tz-tz-fa8a7.web.app/
 
 ## Demo
 Various types of tattoo pins are displayed in waterfall flow; users could filter pins through placements, styles, and topics.
+
 ![Homepage-Demo](./REDAME/Homapega-Demo-GIF.gif)
 
 Users could delete a pin and arrange orders of the pins inside a collection.
+
 ![Collection-Demo](./REDAME/Collection-Demo-GIF.gif)
 
 By selecting details for the next tattoo, users could create a tattoo plan.
+
 ![StartPlan-Demo](./REDAME/StartPlan-Demo-GIF2.gif)
 
 Artists could click on tattoo plans to view more details and recommend themselves.
+
 ![Plan-Demo](./REDAME/TattooPlan-Demo-GIF.gif)
 
 
