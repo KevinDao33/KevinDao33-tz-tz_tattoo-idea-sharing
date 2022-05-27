@@ -3,8 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 import "react-calendar/dist/Calendar.css";
-import "./styles/style.css"
-
+import "./styles/style.css";
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
@@ -27,14 +27,18 @@ import * as myConstClass from "../config";
 
 function Login({auth, isLogin}) {
   const [isShowSignIn, setIsShowSignIn] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
-  const [userPassword, setUserPassword] = useState("");
   const [userName, setUserName] = useState("");
-  // const [userPhoto, setUserPhoto] = useState("");
+  const [userEmail, setUserEmail] = useState("test06@gmail.com");
+  const [userPassword, setUserPassword] = useState("test06");
   const [userRole, setUserRole] = useState("");
   const [userLink, setUserLink] = useState("");
 
   const redirect = useNavigate();
+
+  useEffect(() => {
+    isShowSignIn ? setUserEmail("") : setUserEmail("test06@gmail.com");
+    isShowSignIn ? setUserPassword("") : setUserPassword("test06");
+  }, [isShowSignIn]);
 
   const handleIsShowSignIn = () => {
     setIsShowSignIn((prev) => !prev);
