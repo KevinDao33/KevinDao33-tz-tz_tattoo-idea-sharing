@@ -4,7 +4,6 @@ __A tattoo-sharing platform that inspires people with tattoo ideas and matches t
 
 ![tztz intro video](./REDAME/tztz-README.gif)
 
-
 ## About The Project
 Because getting a tattoo should be a great experience. tztz provides various tattoo ideas and categorizes them with placements, styles, and topics, allowing users to save tattoo pins into the collections they've created. Moreover, users could start their own tattoo plans by specifying the placement, size, color, budget, and most importantly, selecting a tattoo pin they’ve saved as a reference. After a tattoo plan has been created, it shows up on the tattoo plan wall, and artists could check if any of the plans fit their professions and recommend themselves; on the other hand, users could check all the self-recommended artists on each of the tattoo plans they’ve created.
 
@@ -28,7 +27,7 @@ tz tz : https://tz-tz-fa8a7.web.app/
 ***
 ![Flow Chart](./REDAME/tztz-Flowchart.jpg)
 
-<!-- ## Demo
+## Demo
 Various types of tattoo pins are displayed in waterfall flow; users could filter pins through placements, styles, and topics.
 
 ![Homepage-Demo](./REDAME/Homapega-Demo-GIF.gif)
@@ -44,7 +43,6 @@ By selecting details for the next tattoo, users could create a tattoo plan.
 Artists could click on tattoo plans to view more details and recommend themselves.
 
 ![Plan-Demo](./REDAME/TattooPlan-Demo-GIF.gif)
-
 
 
 ## Future Features
