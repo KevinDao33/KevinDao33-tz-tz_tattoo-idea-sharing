@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useContext} from "react";
 import {useNavigate} from "react-router-dom";
 import {getStorage, ref, uploadBytes} from "firebase/storage";
 import imageCompression from "browser-image-compression";
@@ -25,6 +25,7 @@ import {
   PinTypeInput,
 } from "../styles/CreateNewPin.module";
 import MultipleCombobox from "./MultipleCombobox";
+import {UserContext} from "./App";
 
 function CreateNewPin({app, uid}) {
   const [pinName, setPinName] = useState("");
@@ -36,7 +37,8 @@ function CreateNewPin({app, uid}) {
   const [pinPlacement, setPinPlacement] = useState("");
   const [selectedFile, setSelectedFile] = useState("");
   const [preview, setPreview] = useState("");
-  const [userData, setUserData] = useState(null);
+
+  const userData = useContext(UserContext);
 
   const redirect = useNavigate();
   const storage = getStorage(app);
@@ -186,12 +188,6 @@ function CreateNewPin({app, uid}) {
       console.error(error);
     }
   }
-
-  useEffect(() => {
-    api.getUserData(uid, setUserData);
-    // const userData = await api.getUserData(uid);
-    // setUserData(userData)
-  }, [uid]);
 
   const sendNotification2Follower = (newCreatePinId) => {
     if (!userData) {

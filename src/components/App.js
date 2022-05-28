@@ -1,5 +1,5 @@
 import {getAuth} from "firebase/auth";
-import {useState, useEffect} from "react";
+import {useState, useEffect, createContext} from "react";
 import {initializeApp} from "firebase/app";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import GlobalStyle from "../styles/globalStyles";
@@ -31,13 +31,20 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-function App() {
+export const UserContext = createContext();
+
+export default function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [uid, setUid] = useState("");
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     api.checkLoginStatus(setUid, setIsLogin);
   }, []);
+
+  useEffect(() => {
+    uid && api.getUserData(uid, setUserData);
+  }, [uid]);
 
   const routeDataList = [
     {
@@ -102,16 +109,18 @@ function App() {
   ];
 
   return (
-    <BrowserRouter>
-      <GlobalStyle />
-      <Navbar uid={uid} />
-      <Routes>
-        {routeDataList.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
-        ))}
-      </Routes>
-    </BrowserRouter>
+    <UserContext.Provider value={userData}>
+      <BrowserRouter>
+        <GlobalStyle />
+        <Navbar uid={uid} />
+        <Routes>
+          {routeDataList.map((route) => (
+            <Route key={route.path} path={route.path} element={route.element} />
+          ))}
+        </Routes>
+      </BrowserRouter>
+    </UserContext.Provider>
   );
 }
 
-export default App;
+// export default App;

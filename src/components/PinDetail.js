@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import {v4 as uuid} from "uuid";
@@ -43,12 +43,12 @@ import {
   LoginReminder,
 } from "../styles/PinDetail.module";
 import Loader from "./Loader";
+import {UserContext} from "./App";
 
 function PinDetail({uid}) {
   const [pinId, setPinid] = useState("");
   const [pinData, setPinData] = useState("");
   const [authorData, setAuthorData] = useState("");
-  const [userData, setUserData] = useState(null);
   const [userCollection, setUserCollection] = useState("");
   const [selectedCollection, setSelectedCollection] = useState("");
   const [similiarPins, setSimiliarPins] = useState([]);
@@ -56,6 +56,8 @@ function PinDetail({uid}) {
   const [pinCommentData, setPinCommentData] = useState([]);
   const [pinCommentator, setPinCommentator] = useState([]);
   const [isShowSimilarPin, setIsShowSimilarPin] = useState(false);
+
+  const userData = useContext(UserContext);
 
   const redirect = useNavigate();
   const breakpointColumnsObj = {
@@ -81,24 +83,6 @@ function PinDetail({uid}) {
   useEffect(() => {
     pinData && api.getUserData(pinData.pinAutor.uid, setAuthorData);
   }, [pinData]);
-
-  const handleUserData = (data) => {
-    setUserData({
-      name: data.name,
-      email: data.email,
-      role: data.role,
-      following: data.following,
-      follower: data.follower,
-      pic: data.pic,
-      id: data.uid,
-      link: data.link,
-      desc: data.desc,
-    });
-  };
-
-  useEffect(() => {
-    uid && api.getUserData(uid, handleUserData);
-  }, [uid]);
 
   useEffect(() => {
     api.getUserCollection(uid, setUserCollection);

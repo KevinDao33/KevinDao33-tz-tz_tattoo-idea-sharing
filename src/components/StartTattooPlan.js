@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useContext} from "react";
 import {useNavigate} from "react-router-dom";
 import Masonry from "react-masonry-css";
 import Select from "react-select";
@@ -48,6 +48,7 @@ import {
   PinImage,
 } from "../styles/StartTattooPlan.module";
 import Profile from "./Profile";
+import {UserContext} from "./App";
 
 function StartTattooPlan({uid}) {
   const [selectedPlacement, setSelectedPlacement] = useState("");
@@ -61,7 +62,6 @@ function StartTattooPlan({uid}) {
   const [collectionPins, setCollectionPins] = useState([]);
   const [selectedReference, setSelectedReference] = useState(null);
   const [selectedCity, setSelectedCity] = useState("");
-  const [userData, setUserData] = useState([]);
 
   const redirect = useNavigate();
 
@@ -69,9 +69,7 @@ function StartTattooPlan({uid}) {
     default: 3,
   };
 
-  useEffect(() => {
-    api.getUserData(uid, setUserData);
-  }, [uid]);
+  const userData = useContext(UserContext);
 
   useEffect(() => {
     uid && api.getPinsInAllCollections(uid, setCollectionPins);
